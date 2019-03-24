@@ -1,0 +1,50 @@
+UserData: {
+	userID,
+	profilePicture,
+	dateOfBirth,
+	name: {
+		firstName,
+		lastName
+	},
+	contacts: {
+		phoneNumber,
+		address,
+		email
+	},
+	gender,
+	pointsBalance
+}
+
+TimeSlots: {
+	userID1,	//service supplier
+	status,		//	avaliable/booked/disabled
+	userID2,	//costumer - optional, mandatory when booked
+	startTime,
+	endTime
+}
+
+Skills: {
+	skillId,
+	category,
+	skillName
+}
+
+UserSkills: {
+	userID,
+	skillId,
+	level,
+	ranking,  //avg
+	address,
+	pointsValue
+}
+
+RankingsTable: {
+	userID1,	//the user being ranked
+	userID2,	//the ranking user
+	skillId,
+	rank,
+	dateOfservice,
+	details
+}
+
+
