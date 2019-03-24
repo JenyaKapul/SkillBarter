@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "948874972288",
+    "firebase_url": "https://skillbarter-8efe2.firebaseio.com",
+    "project_id": "skillbarter-8efe2",
+    "storage_bucket": "skillbarter-8efe2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948874972288:android:0700a2c903259779",
+        "android_client_info": {
+          "package_name": "com.example.user.skillbarter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948874972288-aedr2h7vmo45jpu8jkmrtqlddu0b59sf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvMVfvNs248x-B6sKuiiNHshn6Htq-X4w"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
