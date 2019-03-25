@@ -9,6 +9,8 @@
     </string-array>
 
     <string name="choose_domain">Choose domain</string>
+    
+    <string name="collection_user_data">User Data</string>
 
     <!--AUTHENTICATION-->
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
