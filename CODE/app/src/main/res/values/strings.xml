@@ -4,6 +4,8 @@
     <!-- Types of domains in the technion -->
     <string-array name="domains">
         <item>\@campus.technion.ac.il</item>
+        <item>\@ee.technion.ac.il</item>
+        <item>\@technion.ac.il</item>
     </string-array>
 
     <string name="choose_domain">Choose domain</string>

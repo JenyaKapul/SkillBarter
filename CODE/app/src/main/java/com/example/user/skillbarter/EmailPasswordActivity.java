@@ -29,6 +29,9 @@ public class EmailPasswordActivity extends BaseActivity implements
     private EditText mPasswordField;
     private Spinner mDomainsSpinner;
 
+    private String mEmail;
+    private String mPassword;
+
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
@@ -67,8 +70,7 @@ public class EmailPasswordActivity extends BaseActivity implements
     }
     // [END on_start_check_user]
 
-    private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
+    private void createAccount() {
         if (!validateForm()) {
             return;
         }
@@ -76,7 +78,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         showProgressDialog();
 
         // [START create_user_with_email]
-        mAuth.createUserWithEmailAndPassword(email, password)
+        mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -101,8 +103,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         // [END create_user_with_email]
     }
 
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
+    private void signIn() {
         if (!validateForm()) {
             return;
         }
@@ -110,7 +111,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         showProgressDialog();
 
         // [START sign_in_with_email]
-        mAuth.signInWithEmailAndPassword(email, password)
+        mAuth.signInWithEmailAndPassword(mEmail, mPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -177,18 +178,19 @@ public class EmailPasswordActivity extends BaseActivity implements
     private boolean validateForm() {
         boolean valid = true;
 
-        String email = mEmailField.getText().toString();
-        String domain = (String) mDomainsSpinner.getSelectedItem();
-        email += domain;
-        if (TextUtils.isEmpty(email)) {
+        mEmail = mEmailField.getText().toString();
+        mPassword = mPasswordField.getText().toString();
+
+        if (TextUtils.isEmpty(mEmail)) {
             mEmailField.setError("Required.");
             valid = false;
         } else {
             mEmailField.setError(null);
         }
-
-        String password = mPasswordField.getText().toString();
-        if (TextUtils.isEmpty(password)) {
+        String domain = (String) mDomainsSpinner.getSelectedItem();
+        mEmail += domain;
+        Log.d(TAG, "validateForm: " + mEmail);
+        if (TextUtils.isEmpty(mPassword)) {
             mPasswordField.setError("Required.");
             valid = false;
         } else {
@@ -224,13 +226,14 @@ public class EmailPasswordActivity extends BaseActivity implements
     public void onClick(View v) {
         int i = v.getId();
         if (i == R.id.emailCreateAccountButton) {
-            createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            createAccount();
         } else if (i == R.id.emailSignInButton) {
-            signIn(mEmailField.getText().toString(), mPasswordField.getText().toString());
+            signIn();
         } else if (i == R.id.signOutButton) {
             signOut();
         } else if (i == R.id.verifyEmailButton) {
             sendEmailVerification();
         }
     }
+
 }
