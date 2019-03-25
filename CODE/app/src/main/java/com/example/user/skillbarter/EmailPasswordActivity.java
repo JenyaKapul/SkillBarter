@@ -176,7 +176,6 @@ public class EmailPasswordActivity extends BaseActivity implements
 
     private boolean validateForm() {
         boolean valid = true;
-
         String email = mEmailField.getText().toString();
         String domain = (String) mDomainsSpinner.getSelectedItem();
         email += domain;
