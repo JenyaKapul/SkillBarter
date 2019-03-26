@@ -1,7 +1,5 @@
 package com.example.user.skillbarter;
 
-
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,25 +12,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-//import com.google.firebase.firestore.Query;
-import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
-import com.google.firebase.firestore.auth.User;
 
-import java.util.HashMap;
-import java.util.Map;
 
 public class EmailPasswordActivity extends BaseActivity implements
         View.OnClickListener {
@@ -50,11 +37,9 @@ public class EmailPasswordActivity extends BaseActivity implements
     private String mPassword;
 
 
-    // [START declare_auth]
     private FirebaseAuth mAuth;
-    // [END declare_auth]
 
-    private FirebaseFirestore mFireStore;
+    private FirebaseFirestore mFirestore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,17 +58,13 @@ public class EmailPasswordActivity extends BaseActivity implements
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
         findViewById(R.id.signOutButton).setOnClickListener(this);
-//        findViewById(R.id.verifyEmailButton).setOnClickListener(this);
 
-        // [START initialize_auth]
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
 
-        mFireStore = FirebaseFirestore.getInstance();
+        mFirestore = FirebaseFirestore.getInstance();
     }
 
-    // [START on_start_check_user]
     @Override
     public void onStart() {
         Log.d(TAG, "***** onStart");
@@ -92,7 +73,6 @@ public class EmailPasswordActivity extends BaseActivity implements
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
-    // [END on_start_check_user]
 
     private void createAccount() {
         Log.d(TAG, "***** createAccount");
@@ -102,7 +82,6 @@ public class EmailPasswordActivity extends BaseActivity implements
 
         showProgressDialog();
 
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(mEmail, mPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -113,8 +92,6 @@ public class EmailPasswordActivity extends BaseActivity implements
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             findViewById(R.id.emailCreateAccountButton).setEnabled(false);
-
-//                            updateUI(user);
                             sendEmailVerification();
                         } else {
                             // If sign in fails, display a message to the user.
@@ -124,12 +101,9 @@ public class EmailPasswordActivity extends BaseActivity implements
                             updateUI(null);
                         }
 
-                        // [START_EXCLUDE]
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END create_user_with_email]
     }
 
     private void signIn() {
@@ -140,7 +114,6 @@ public class EmailPasswordActivity extends BaseActivity implements
 
         showProgressDialog();
 
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(mEmail, mPassword)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -152,9 +125,8 @@ public class EmailPasswordActivity extends BaseActivity implements
 //                            updateUI(user);
                             findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
                             findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
-
                             FirebaseUser user = mAuth.getCurrentUser();
-                            createUser(user);
+                            directLoggedInUser(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -162,16 +134,12 @@ public class EmailPasswordActivity extends BaseActivity implements
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
-
-                        // [START_EXCLUDE]
                         if (!task.isSuccessful()) {
                             mStatusTextView.setText(R.string.auth_failed);
                         }
                         hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END sign_in_with_email]
     }
 
     private void signOut() {
@@ -182,17 +150,13 @@ public class EmailPasswordActivity extends BaseActivity implements
 
     private void sendEmailVerification() {
         Log.d(TAG, "***** sendEmailVerification");
-        // Disable button
 
         // Send verification email
-        // [START send_email_verification]
         final FirebaseUser user = mAuth.getCurrentUser();
         user.sendEmailVerification()
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // [START_EXCLUDE]
-                        // Re-enable button
 
                         if (task.isSuccessful()) {
                             Toast.makeText(EmailPasswordActivity.this,
@@ -204,17 +168,14 @@ public class EmailPasswordActivity extends BaseActivity implements
                                     "Failed to send verification email.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        // [END_EXCLUDE]
                     }
                 });
-        // [END send_email_verification]
     }
 
     private boolean validateForm() {
         Log.d(TAG, "***** validateForm");
         boolean valid = true;
 
-//        mEmail = mEmailField.getText().toString();
         mUserName = mEmailField.getText().toString();
         mPassword = mPasswordField.getText().toString();
 
@@ -266,27 +227,18 @@ public class EmailPasswordActivity extends BaseActivity implements
             createAccount();
         } else if (i == R.id.emailSignInButton) {
             signIn();
-//            createUser();
-
         } else if (i == R.id.signOutButton) {
             signOut();
-//        } else if (i == R.id.verifyEmailButton) {
-//            sendEmailVerification();
         }
     }
 
-
-
-
-    public void createUser(FirebaseUser user) {
+    public void directLoggedInUser(FirebaseUser user) {
         Log.d(TAG, "***** createUser");
-
         Log.d(TAG, "***** createUser: user= " + user + " userUid: " + user.getUid());
-//        UserData userData = new UserData(user.getUid(), mUserName, user.getEmail());
-        DocumentReference userRef = mFireStore
-                .collection(getString(R.string.collection_user_data))
-                .document(user.getUid());
 
+        DocumentReference userRef = mFirestore.collection(getString(R.string.collection_user_data)).document(user.getUid());
+
+//        UserData userData = new UserData(user.getUid(), mUserName, user.getEmail());
 //        userRef.set(userData);
 
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
