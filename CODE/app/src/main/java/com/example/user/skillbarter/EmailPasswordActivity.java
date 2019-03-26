@@ -2,6 +2,7 @@ package com.example.user.skillbarter;
 
 
 import android.app.DownloadManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -182,7 +183,6 @@ public class EmailPasswordActivity extends BaseActivity implements
     private void sendEmailVerification() {
         Log.d(TAG, "***** sendEmailVerification");
         // Disable button
-//        findViewById(R.id.verifyEmailButton).setEnabled(false);
 
         // Send verification email
         // [START send_email_verification]
@@ -193,7 +193,6 @@ public class EmailPasswordActivity extends BaseActivity implements
                     public void onComplete(@NonNull Task<Void> task) {
                         // [START_EXCLUDE]
                         // Re-enable button
-//                        findViewById(R.id.verifyEmailButton).setEnabled(true);
 
                         if (task.isSuccessful()) {
                             Toast.makeText(EmailPasswordActivity.this,
@@ -283,63 +282,32 @@ public class EmailPasswordActivity extends BaseActivity implements
         Log.d(TAG, "***** createUser");
 
         Log.d(TAG, "***** createUser: user= " + user + " userUid: " + user.getUid());
-        UserData userData = new UserData(user.getUid(), mUserName, user.getEmail());
+//        UserData userData = new UserData(user.getUid(), mUserName, user.getEmail());
         DocumentReference userRef = mFireStore
                 .collection(getString(R.string.collection_user_data))
                 .document(user.getUid());
 
-        userRef.set(userData);
+//        userRef.set(userData);
 
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-
+                    Intent intent;
                     //if the user is already in the database
                     if (document != null && document.exists()) {
-//                        UserData user = document.toObject(UserData.class);
                         Log.d(TAG, "***** createUser: User is already in database");
-
+                        intent = new Intent(EmailPasswordActivity.this, UserHomeProfile.class);
                     } else {
                         //check whether it's a new user
                         //if yes, create a new document containing the user details thru my User model
                         Log.d(TAG, "***** createUser: User is NOT in database");
+                        intent = new Intent(EmailPasswordActivity.this, RegisterActivity.class);
                     }
+                    startActivity(intent);
                 }
             }
         });
     }
-
-////                        btn_admin.setVisibility(View.GONE);
-////                        Map<String, Boolean> roles = new HashMap<>();
-////                        roles.put("editor", false);
-////                        roles.put("viewer", false);
-////                        roles.put("admin", false);
-//                        UserData userData = new UserData(mAuth.getUid(), mAuth.getCurrentUser().getDisplayName(), mEmail);
-////                        User user = new User(auth.getCurrentUser().getDisplayName(), auth.getCurrentUser().getUid(),auth.getCurrentUser().getEmail(), roles);
-//                        //you can add some action here
-//
-//                        mFireStore.collection("users").document(mAuth.getCurrentUser().getUid())
-//                                .set(userData, SetOptions.merge())
-//                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                    @Override
-//                                    public void onSuccess(Void aVoid) {
-//                                        Log.d(TAG, "*** DocumentSnapshot successfully written!");
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                        Log.w(TAG, "*** Error writing document", e);
-//                                    }
-//                                });
-//                        //Log.d(TAG, "Created credential");
-//                    }
-//                } else {
-//                    Log.d(TAG, "** get failed with ", task.getException());
-//                }
-//            }
-//        });
-//    }
 }
