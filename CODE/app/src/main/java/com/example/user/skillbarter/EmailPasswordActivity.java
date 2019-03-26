@@ -44,8 +44,10 @@ public class EmailPasswordActivity extends BaseActivity implements
     private EditText mPasswordField;
     private Spinner mDomainsSpinner;
 
+    private String mUserName;
     private String mEmail;
     private String mPassword;
+
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -55,6 +57,7 @@ public class EmailPasswordActivity extends BaseActivity implements
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "***** onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_password);
 
@@ -69,7 +72,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
         findViewById(R.id.signOutButton).setOnClickListener(this);
-        findViewById(R.id.verifyEmailButton).setOnClickListener(this);
+//        findViewById(R.id.verifyEmailButton).setOnClickListener(this);
 
         // [START initialize_auth]
         // Initialize Firebase Auth
@@ -82,15 +85,16 @@ public class EmailPasswordActivity extends BaseActivity implements
     // [START on_start_check_user]
     @Override
     public void onStart() {
+        Log.d(TAG, "***** onStart");
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        Log.d("onStart", "userid= "+mAuth.getCurrentUser().getEmail());
         updateUI(currentUser);
     }
     // [END on_start_check_user]
 
     private void createAccount() {
+        Log.d(TAG, "***** createAccount");
         if (!validateForm()) {
             return;
         }
@@ -106,7 +110,11 @@ public class EmailPasswordActivity extends BaseActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+
+                            findViewById(R.id.emailCreateAccountButton).setEnabled(false);
+
+//                            updateUI(user);
+                            sendEmailVerification();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -124,6 +132,7 @@ public class EmailPasswordActivity extends BaseActivity implements
     }
 
     private void signIn() {
+        Log.d(TAG, "***** signIn");
         if (!validateForm()) {
             return;
         }
@@ -138,20 +147,13 @@ public class EmailPasswordActivity extends BaseActivity implements
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
-//                            createUser();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+//                            FirebaseUser user = mAuth.getCurrentUser();
+//                            updateUI(user);
+                            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
+                            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
 
-//                            boolean flag = task.getResult().getAdditionalUserInfo().isNewUser();
-//                            if (flag) {
-//                                Toast.makeText(EmailPasswordActivity.this, "NEW USER.",
-//                                        Toast.LENGTH_SHORT).show();
-//
-//                            } else {
-//                                Toast.makeText(EmailPasswordActivity.this, "EXISTING USER.",
-//                                        Toast.LENGTH_SHORT).show();
-//
-//                            }
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            createUser(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -168,18 +170,19 @@ public class EmailPasswordActivity extends BaseActivity implements
                         // [END_EXCLUDE]
                     }
                 });
-//        Log.d(TAG, "userid= "+mAuth.getCurrentUser().getEmail());
         // [END sign_in_with_email]
     }
 
     private void signOut() {
+        Log.d(TAG, "***** signOut");
         mAuth.signOut();
         updateUI(null);
     }
 
     private void sendEmailVerification() {
+        Log.d(TAG, "***** sendEmailVerification");
         // Disable button
-        findViewById(R.id.verifyEmailButton).setEnabled(false);
+//        findViewById(R.id.verifyEmailButton).setEnabled(false);
 
         // Send verification email
         // [START send_email_verification]
@@ -190,7 +193,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                     public void onComplete(@NonNull Task<Void> task) {
                         // [START_EXCLUDE]
                         // Re-enable button
-                        findViewById(R.id.verifyEmailButton).setEnabled(true);
+//                        findViewById(R.id.verifyEmailButton).setEnabled(true);
 
                         if (task.isSuccessful()) {
                             Toast.makeText(EmailPasswordActivity.this,
@@ -209,19 +212,21 @@ public class EmailPasswordActivity extends BaseActivity implements
     }
 
     private boolean validateForm() {
+        Log.d(TAG, "***** validateForm");
         boolean valid = true;
 
-        mEmail = mEmailField.getText().toString();
+//        mEmail = mEmailField.getText().toString();
+        mUserName = mEmailField.getText().toString();
         mPassword = mPasswordField.getText().toString();
 
-        if (TextUtils.isEmpty(mEmail)) {
+        if (TextUtils.isEmpty(mUserName)) {
             mEmailField.setError("Required.");
             valid = false;
         } else {
             mEmailField.setError(null);
         }
         String domain = (String) mDomainsSpinner.getSelectedItem();
-        mEmail += domain;
+        mEmail = mUserName + domain;
         Log.d(TAG, "validateForm: " + mEmail);
         if (TextUtils.isEmpty(mPassword)) {
             mPasswordField.setError("Required.");
@@ -234,16 +239,18 @@ public class EmailPasswordActivity extends BaseActivity implements
     }
 
     private void updateUI(FirebaseUser user) {
+        Log.d(TAG, "***** updateUI");
+        Log.d(TAG, "***** updateUI: user= " + user);
         hideProgressDialog();
         if (user != null) {
             mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
                     user.getEmail(), user.isEmailVerified()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
-            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
-            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
+//            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
+//            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
 
-            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
+//            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
@@ -260,54 +267,50 @@ public class EmailPasswordActivity extends BaseActivity implements
             createAccount();
         } else if (i == R.id.emailSignInButton) {
             signIn();
-            createUser();
+//            createUser();
 
         } else if (i == R.id.signOutButton) {
             signOut();
-        } else if (i == R.id.verifyEmailButton) {
-            sendEmailVerification();
+//        } else if (i == R.id.verifyEmailButton) {
+//            sendEmailVerification();
         }
     }
 
 
 
 
-    public void createUser(){
-        Log.d(TAG, "CREATE USER");
+    public void createUser(FirebaseUser user) {
+        Log.d(TAG, "***** createUser");
 
-        UserData userData = new UserData("1", "2", "3");
-        DocumentReference dogRef = mFireStore
+        Log.d(TAG, "***** createUser: user= " + user + " userUid: " + user.getUid());
+        UserData userData = new UserData(user.getUid(), mUserName, user.getEmail());
+        DocumentReference userRef = mFireStore
                 .collection(getString(R.string.collection_user_data))
-                .document();
-        dogRef.set(userData);
-//        CollectionReference collection = mFireStore.collection("users");
+                .document(user.getUid());
 
-//        DocumentReference docRef = mFireStore.collection("users").document(mAuth.getCurrentUser().getUid());
-//        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//
-//                    //if the user is already in the database, check the user role
-//                    if (document != null && document.exists()) {
+        userRef.set(userData);
+
+        userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+
+                    //if the user is already in the database
+                    if (document != null && document.exists()) {
 //                        UserData user = document.toObject(UserData.class);
-////                        if(user.getRoles().get("admin")==true){
-////                            Log.d(TAG, "Admin: true");
-////                            btn_admin.setVisibility(View.VISIBLE);
-////                        }
-////
-////                        else{
-////                            Log.d(TAG, "Admin: false");
-////                            btn_admin.setVisibility(View.GONE);
-////                        }
-//
-//                        Log.d(TAG, "*** DocumentSnapshot data: " + document.getData());
-//                    } else {
-//                        //check whether it's a new user
-//                        //if yes, create a new document containing the user details thru my User model
-//
-//                        Log.d(TAG, "*** No such document");
+                        Log.d(TAG, "***** createUser: User is already in database");
+
+                    } else {
+                        //check whether it's a new user
+                        //if yes, create a new document containing the user details thru my User model
+                        Log.d(TAG, "***** createUser: User is NOT in database");
+                    }
+                }
+            }
+        });
+    }
+
 ////                        btn_admin.setVisibility(View.GONE);
 ////                        Map<String, Boolean> roles = new HashMap<>();
 ////                        roles.put("editor", false);
@@ -338,5 +341,5 @@ public class EmailPasswordActivity extends BaseActivity implements
 //                }
 //            }
 //        });
-    }
+//    }
 }
