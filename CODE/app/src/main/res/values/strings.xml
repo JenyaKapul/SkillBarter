@@ -28,6 +28,8 @@
         <item>@string/female</item>
         <item>@string/male</item>
     </string-array>
+    <string name="up_next">Up Next:</string>
+    <string name="search_button">Search</string>
 
 
 
