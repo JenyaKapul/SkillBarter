@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 //import org.joda.time.LocalDate;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -29,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     private static final String TAG = "RegisterActivity";
 
@@ -79,6 +81,22 @@ public class RegisterActivity extends AppCompatActivity {
     public void onStart() {
         Log.d(TAG, "***** onStart");
         super.onStart();
+    }
+
+    @OnClick(R.id.date_picker)
+    public void onDatePickerClicked() {
+        DialogFragment datePicker = new DatePickerFragment();
+        datePicker.show(getSupportFragmentManager(), "date picker");
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        String currDateString = DateFormat.getDateInstance().format(c.getTime());
+        birthdayView.setText(currDateString);
     }
 
     @OnClick(R.id.button_next)
