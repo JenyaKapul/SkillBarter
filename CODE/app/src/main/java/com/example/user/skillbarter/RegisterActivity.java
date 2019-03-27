@@ -1,10 +1,14 @@
 package com.example.user.skillbarter;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,11 +18,11 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -32,17 +36,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import com.bumptech.glide.Glide;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
-    private static final int GALLERY_INTENT = 0;
+    private static final int GALLERY_INTENT = 5;
 
-    private static final int CAMERA_INTENT = 1;
+    private static final int CAMERA_INTENT = 6;
+
+    private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 7;
 
     private static final int INITIAL_POINTS_BALANCE = 50;
+
 
 
     @BindView(R.id.input_first_name)
@@ -83,6 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "***** onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
@@ -100,21 +107,29 @@ public class RegisterActivity extends AppCompatActivity {
         super.onStart();
     }
 
+
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+        Log.d(TAG, "***** onActivityResult");
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        // Get the Uri of the image from the gallery intent data
-        if (requestCode == GALLERY_INTENT && resultCode == RESULT_OK) {
 
-            final Uri file = data.getData();
+        if (requestCode == CAMERA_INTENT || requestCode == GALLERY_INTENT) {
 
-            // Create a storage reference to the user's profile image
-            StorageReference storageRef = mStorage.getReference();
+            if (resultCode == RESULT_OK) {
 
-            final StorageReference imageRef = storageRef.child("image/" + file.getLastPathSegment());
+                // Get the Uri of the image from the gallery intent data
+                final Uri selectedImage = imageReturnedIntent.getData();
 
-            imageRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                // Set the selected image in the profile picture view
+                profilePictureView.setImageURI(selectedImage);
+
+                // Create a storage reference to the user's profile image
+                StorageReference storageRef = mStorage.getReference();
+
+                final StorageReference imageRef = storageRef.child("image/" + selectedImage.getLastPathSegment());
+
+                imageRef.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
@@ -122,11 +137,11 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             Log.d(TAG, "successfully uploaded user's image from gallery to Firebase Storage. uri= "+ uri.toString());
                             profilePictureURL = uri.toString();
-                            profilePictureView.setImageURI(file);
                         }
                     });
                 }
             });
+            }
         }
     }
 
@@ -152,6 +167,7 @@ public class RegisterActivity extends AppCompatActivity {
 //        if (!validateForm1()) {
 //            return;
 //        }
+
         // Switch user's interface to the next registration form.
         findViewById(R.id.register_page_1).setVisibility(View.GONE);
         findViewById(R.id.register_page_2).setVisibility(View.VISIBLE);
@@ -167,8 +183,9 @@ public class RegisterActivity extends AppCompatActivity {
     @OnClick(R.id.button_camera)
     public void onButtonCameraClicked() {
         Log.d(TAG, "***** onButtonCameraClicked");
+        requestRead();
         Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture, CAMERA_INTENT);//zero can be replaced with any action code
+        startActivityForResult(takePicture, CAMERA_INTENT);
     }
 
     private boolean validateForm1() {
@@ -213,12 +230,14 @@ public class RegisterActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_prev2)
     public void onPrev2Clicked() {
+        Log.d(TAG, "***** onPrev2Clicked");
         findViewById(R.id.register_page_1).setVisibility(View.VISIBLE);
         findViewById(R.id.register_page_2).setVisibility(View.GONE);
     }
 
     @OnClick(R.id.button_save)
     public void onSaveClicked() {
+        Log.d(TAG, "***** onSaveClicked");
         createUser();
         Intent intent = new Intent(RegisterActivity.this, UserHomeProfile.class);
         startActivity(intent);
@@ -226,7 +245,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Add current user to Firebase Firestore
     private void createUser() {
-
+        Log.d(TAG, "***** createUser");
         UserData userData = new UserData(userID, profilePictureURL, dateOfBirth, firstName,
                 lastName, phoneNumber, address, email, gender, pointsBalance);
 
@@ -236,5 +255,45 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * requestPermissions and do something
+     *
+     */
+    public void requestRead() {
+        Log.d(TAG, "***** requestRead");
 
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+//        } else {
+//            readFile();
+        }
+    }
+
+    /**
+     * do you want to do
+     */
+    public void readFile() {
+        // do something
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.d(TAG, "***** onRequestPermissionsResult");
+        if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                readFile();
+            } else {
+                // Permission Denied
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
 }
