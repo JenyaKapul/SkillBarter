@@ -1,6 +1,35 @@
 package com.example.user.skillbarter;
 
+import com.google.firebase.Timestamp;
+
 public class UserData {
+
+    private String userID;
+    private String profilePictureURL;
+    private Timestamp dateOfBirth;
+    private String firstName;
+    private String lastName;
+    private String phoneNumber;
+    private String address;
+    private String email;
+    private String gender;
+    private int pointsBalance;
+
+    public UserData(String userID, String profilePictureURL,
+                    Timestamp dateOfBirth, String firstName, String lastName,
+                    String phoneNumber, String address, String email,
+                    String gender, int pointsBalance) {
+        this.userID = userID;
+        this.profilePictureURL = profilePictureURL;
+        this.dateOfBirth = dateOfBirth;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.email = email;
+        this.gender = gender;
+        this.pointsBalance = pointsBalance;
+    }
 
     public String getUserID() {
         return userID;
@@ -10,12 +39,52 @@ public class UserData {
         this.userID = userID;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getProfilePictureURL() {
+        return profilePictureURL;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setProfilePictureURL(String profilePictureURL) {
+        this.profilePictureURL = profilePictureURL;
+    }
+
+    public Timestamp getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Timestamp dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public String getEmail() {
@@ -26,16 +95,19 @@ public class UserData {
         this.email = email;
     }
 
-    private String userID;
+    public String getGender() {
+        return gender;
+    }
 
-    private String userName;
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-    private String email;
+    public int getPointsBalance() {
+        return pointsBalance;
+    }
 
-
-    public UserData(String userID, String userName, String email) {
-        this.userID = userID;
-        this.userName = userName;
-        this.email = email;
+    public void setPointsBalance(int pointsBalance) {
+        this.pointsBalance = pointsBalance;
     }
 }

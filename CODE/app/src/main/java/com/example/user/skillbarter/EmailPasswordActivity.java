@@ -238,22 +238,19 @@ public class EmailPasswordActivity extends BaseActivity implements
 
         DocumentReference userRef = mFirestore.collection(getString(R.string.collection_user_data)).document(user.getUid());
 
-//        UserData userData = new UserData(user.getUid(), mUserName, user.getEmail());
-//        userRef.set(userData);
-
         userRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     Intent intent;
-                    //if the user is already in the database
+                    // the user is already in the database
                     if (document != null && document.exists()) {
                         Log.d(TAG, "***** createUser: User is already in database");
                         intent = new Intent(EmailPasswordActivity.this, UserHomeProfile.class);
                     } else {
-                        //check whether it's a new user
-                        //if yes, create a new document containing the user details thru my User model
+                        // the user is not in the database.
+                        // move to registration page
                         Log.d(TAG, "***** createUser: User is NOT in database");
                         intent = new Intent(EmailPasswordActivity.this, RegisterActivity.class);
                     }
