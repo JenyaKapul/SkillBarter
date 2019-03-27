@@ -127,6 +127,8 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         String currDateString = DateFormat.getDateInstance().format(c.getTime());
         birthdayView.setText(currDateString);
+
+        dateOfBirth = new Timestamp(c.getTime());
 	}
 
     @Override
@@ -178,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         address = addressView.getText().toString();
         email = mAuth.getCurrentUser().getEmail();
 
-        phoneNumber = phoneNumberView.getText().toString(); //TODO phonenumber + dateofbirth
+        phoneNumber = phoneNumberView.getText().toString(); // dateofbirth
 
         int checkedId = genderRadioGroup.getCheckedRadioButtonId();
         RadioButton b = genderRadioGroup.findViewById(checkedId);
