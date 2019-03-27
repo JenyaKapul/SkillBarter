@@ -64,19 +64,22 @@ public class EmailPasswordActivity extends BaseActivity implements
 
         mFirestore = FirebaseFirestore.getInstance();
 
-        signOut(); //DEBUG
+//        signOut(); //DEBUG
     }
 
     @Override
     public void onStart() {
         Log.d(TAG, "***** onStart");
         super.onStart();
-        // Check if user is signed in (non-null) and direct him to next intent accordingly
+        // Check if user is signed in (non-null) and verified
+        // direct him to next intent accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
+        if (currentUser != null && currentUser.isEmailVerified()) {
             showProgressDialog();
             findViewById(R.id.main_layout).setVisibility(View.GONE);
             directLoggedInUser(currentUser);
+        } else if (!currentUser.isEmailVerified()) {
+            findViewById(R.id.verifyAgainButton).setVisibility(View.VISIBLE);
         }
     }
 
