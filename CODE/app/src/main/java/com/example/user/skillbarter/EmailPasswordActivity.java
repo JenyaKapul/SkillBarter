@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,8 +25,6 @@ public class EmailPasswordActivity extends BaseActivity implements
 
     private static final String TAG = "EmailPassword";
 
-//    private TextView mStatusTextView;
-//    private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
     private Spinner mDomainsSpinner;
@@ -48,8 +45,6 @@ public class EmailPasswordActivity extends BaseActivity implements
         setContentView(R.layout.activity_email_password);
 
         // Views
-//        mStatusTextView = findViewById(R.id.status);
-//        mDetailTextView = findViewById(R.id.detail);
         mEmailField = findViewById(R.id.fieldEmail);
         mPasswordField = findViewById(R.id.fieldPassword);
         mDomainsSpinner = findViewById(R.id.domainsSpinner);
@@ -64,21 +59,22 @@ public class EmailPasswordActivity extends BaseActivity implements
 
         mFirestore = FirebaseFirestore.getInstance();
 
-//        signOut(); //DEBUG
+        signOut(); //DEBUG
     }
 
     @Override
     public void onStart() {
         Log.d(TAG, "***** onStart");
         super.onStart();
-        // Check if user is signed in (non-null) and verified
-        // direct him to next intent accordingly
+        // Check if user is signed in (non-null) and verified by email.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null && currentUser.isEmailVerified()) {
+            // User is signed in from earlier session.
             showProgressDialog();
             findViewById(R.id.main_layout).setVisibility(View.GONE);
             directLoggedInUser(currentUser);
-        } else if (!currentUser.isEmailVerified()) {
+        } else if (currentUser != null && !currentUser.isEmailVerified()) {
+            // User's account has already been created but is unverified
             findViewById(R.id.verifyAgainButton).setVisibility(View.VISIBLE);
         }
     }
@@ -145,8 +141,6 @@ public class EmailPasswordActivity extends BaseActivity implements
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-//                            mStatusTextView.setText(R.string.auth_failed);
                             hideProgressDialog();
                         }
                     }
@@ -156,7 +150,6 @@ public class EmailPasswordActivity extends BaseActivity implements
     private void signOut() {
         Log.d(TAG, "***** signOut");
         mAuth.signOut();
-//        updateUI(null);
     }
 
     private void sendEmailVerification() {
@@ -209,37 +202,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         return valid;
     }
 
-//    private void updateUI(FirebaseUser user) {
-//        Log.d(TAG, "***** updateUI");
-//        Log.d(TAG, "***** updateUI: user= " + user);
-//        hideProgressDialog();
-//        if (user != null) {
-//            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-//                    user.getEmail(), user.isEmailVerified()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//        } else {
-//            mStatusTextView.setText(R.string.signed_out);
-//            mDetailTextView.setText(null);
-//
-//            findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
-//            findViewById(R.id.signedInButtons).setVisibility(View.GONE);
-//        }
-//    }
-
-    @Override
-    public void onClick(View v) {
-        int i = v.getId();
-        if (i == R.id.emailCreateAccountButton) {
-            createAccount();
-        } else if (i == R.id.emailSignInButton) {
-            signIn();
-        } else if (i == R.id.verifyAgainButton) {
-            Log.d(TAG, "***** onClick: verifyAgainButton");
-            sendEmailVerification();
-        }
-    }
-
-    public void directLoggedInUser(FirebaseUser user) {
+    private void directLoggedInUser(FirebaseUser user) {
         Log.d(TAG, "***** directLoggedInUser");
         Log.d(TAG, "***** directLoggedInUser: user= " + user + " userUid: " + user.getUid());
 
@@ -266,5 +229,18 @@ public class EmailPasswordActivity extends BaseActivity implements
                 }
             }
         });
+    }
+
+    @Override
+    public void onClick(View v) {
+        int i = v.getId();
+        if (i == R.id.emailCreateAccountButton) {
+            createAccount();
+        } else if (i == R.id.emailSignInButton) {
+            signIn();
+        } else if (i == R.id.verifyAgainButton) {
+            Log.d(TAG, "***** onClick: verifyAgainButton");
+            sendEmailVerification();
+        }
     }
 }
