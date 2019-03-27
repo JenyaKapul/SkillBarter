@@ -26,8 +26,8 @@ public class EmailPasswordActivity extends BaseActivity implements
 
     private static final String TAG = "EmailPassword";
 
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
+//    private TextView mStatusTextView;
+//    private TextView mDetailTextView;
     private EditText mEmailField;
     private EditText mPasswordField;
     private Spinner mDomainsSpinner;
@@ -48,8 +48,8 @@ public class EmailPasswordActivity extends BaseActivity implements
         setContentView(R.layout.activity_email_password);
 
         // Views
-        mStatusTextView = findViewById(R.id.status);
-        mDetailTextView = findViewById(R.id.detail);
+//        mStatusTextView = findViewById(R.id.status);
+//        mDetailTextView = findViewById(R.id.detail);
         mEmailField = findViewById(R.id.fieldEmail);
         mPasswordField = findViewById(R.id.fieldPassword);
         mDomainsSpinner = findViewById(R.id.domainsSpinner);
@@ -57,21 +57,27 @@ public class EmailPasswordActivity extends BaseActivity implements
         // Buttons
         findViewById(R.id.emailSignInButton).setOnClickListener(this);
         findViewById(R.id.emailCreateAccountButton).setOnClickListener(this);
-        findViewById(R.id.signOutButton).setOnClickListener(this);
+        findViewById(R.id.verifyAgainButton).setOnClickListener(this);
 
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
         mFirestore = FirebaseFirestore.getInstance();
+
+        signOut(); //DEBUG
     }
 
     @Override
     public void onStart() {
         Log.d(TAG, "***** onStart");
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if user is signed in (non-null) and direct him to next intent accordingly
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        if (currentUser != null) {
+            showProgressDialog();
+            findViewById(R.id.main_layout).setVisibility(View.GONE);
+            directLoggedInUser(currentUser);
+        }
     }
 
     private void createAccount() {
@@ -92,15 +98,15 @@ public class EmailPasswordActivity extends BaseActivity implements
                             FirebaseUser user = mAuth.getCurrentUser();
 
                             findViewById(R.id.emailCreateAccountButton).setEnabled(false);
+                            findViewById(R.id.verifyAgainButton).setVisibility(View.VISIBLE);
+
                             sendEmailVerification();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
-
                         hideProgressDialog();
                     }
                 });
@@ -119,25 +125,27 @@ public class EmailPasswordActivity extends BaseActivity implements
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success
                             Log.d(TAG, "signInWithEmail:success");
-//                            FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
-                            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
-                            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
+
                             FirebaseUser user = mAuth.getCurrentUser();
+                            // if user is not verified, prevent from logging in and wait for verification
+                            if (!user.isEmailVerified()) {
+                                Toast.makeText(EmailPasswordActivity.this, "Email not verified",
+                                        Toast.LENGTH_SHORT).show();
+                                hideProgressDialog();
+                                return;
+                            }
                             directLoggedInUser(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+//                            updateUI(null);
+//                            mStatusTextView.setText(R.string.auth_failed);
+                            hideProgressDialog();
                         }
-                        if (!task.isSuccessful()) {
-                            mStatusTextView.setText(R.string.auth_failed);
-                        }
-                        hideProgressDialog();
                     }
                 });
     }
@@ -145,7 +153,7 @@ public class EmailPasswordActivity extends BaseActivity implements
     private void signOut() {
         Log.d(TAG, "***** signOut");
         mAuth.signOut();
-        updateUI(null);
+//        updateUI(null);
     }
 
     private void sendEmailVerification() {
@@ -198,27 +206,22 @@ public class EmailPasswordActivity extends BaseActivity implements
         return valid;
     }
 
-    private void updateUI(FirebaseUser user) {
-        Log.d(TAG, "***** updateUI");
-        Log.d(TAG, "***** updateUI: user= " + user);
-        hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
-                    user.getEmail(), user.isEmailVerified()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-//            findViewById(R.id.emailPasswordButtons).setVisibility(View.GONE);
-//            findViewById(R.id.signedInButtons).setVisibility(View.VISIBLE);
-
-//            findViewById(R.id.verifyEmailButton).setEnabled(!user.isEmailVerified());
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
-
-            findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
-            findViewById(R.id.signedInButtons).setVisibility(View.GONE);
-        }
-    }
+//    private void updateUI(FirebaseUser user) {
+//        Log.d(TAG, "***** updateUI");
+//        Log.d(TAG, "***** updateUI: user= " + user);
+//        hideProgressDialog();
+//        if (user != null) {
+//            mStatusTextView.setText(getString(R.string.emailpassword_status_fmt,
+//                    user.getEmail(), user.isEmailVerified()));
+//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+//        } else {
+//            mStatusTextView.setText(R.string.signed_out);
+//            mDetailTextView.setText(null);
+//
+//            findViewById(R.id.emailPasswordButtons).setVisibility(View.VISIBLE);
+//            findViewById(R.id.signedInButtons).setVisibility(View.GONE);
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
@@ -227,14 +230,15 @@ public class EmailPasswordActivity extends BaseActivity implements
             createAccount();
         } else if (i == R.id.emailSignInButton) {
             signIn();
-        } else if (i == R.id.signOutButton) {
-            signOut();
+        } else if (i == R.id.verifyAgainButton) {
+            Log.d(TAG, "***** onClick: verifyAgainButton");
+            sendEmailVerification();
         }
     }
 
     public void directLoggedInUser(FirebaseUser user) {
-        Log.d(TAG, "***** createUser");
-        Log.d(TAG, "***** createUser: user= " + user + " userUid: " + user.getUid());
+        Log.d(TAG, "***** directLoggedInUser");
+        Log.d(TAG, "***** directLoggedInUser: user= " + user + " userUid: " + user.getUid());
 
         DocumentReference userRef = mFirestore.collection(getString(R.string.collection_user_data)).document(user.getUid());
 
@@ -246,14 +250,15 @@ public class EmailPasswordActivity extends BaseActivity implements
                     Intent intent;
                     // the user is already in the database
                     if (document != null && document.exists()) {
-                        Log.d(TAG, "***** createUser: User is already in database");
+                        Log.d(TAG, "***** directLoggedInUser: User is already in database");
                         intent = new Intent(EmailPasswordActivity.this, UserHomeProfile.class);
                     } else {
                         // the user is not in the database.
                         // move to registration page
-                        Log.d(TAG, "***** createUser: User is NOT in database");
+                        Log.d(TAG, "***** directLoggedInUser: User is NOT in database");
                         intent = new Intent(EmailPasswordActivity.this, RegisterActivity.class);
                     }
+                    hideProgressDialog();
                     startActivity(intent);
                 }
             }

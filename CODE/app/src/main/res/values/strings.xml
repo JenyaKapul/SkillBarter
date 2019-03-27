@@ -22,6 +22,7 @@
     <string name="next_button">Next</string>
     <string name="save_button">Save</string>
     <string name="photo_request">Please attach recent and recognizable photo of yourself</string>
+    <string name="send_verification_email">Send Email Verification Again</string>
     <string name="female">Female</string>
     <string name="male">Male</string>
     <string-array name="genders">
