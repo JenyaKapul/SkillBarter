@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,19 +83,28 @@ public class RegisterActivity extends AppCompatActivity {
 
     @OnClick(R.id.button_next)
     public void onNextClicked() {
+        Log.d(TAG, "***** onNextClicked");
 
-        //firstname, lastname, birthday, gender, phonenumber, address
+        //birthday, phonenumber
         userID = mAuth.getUid();  //mAuth.getCurrentUser().getUid()
         firstName = firstNameView.getText().toString();
         lastName = lastNameView.getText().toString();
         address = addressView.getText().toString();
         email = mAuth.getCurrentUser().getEmail();
 
-        if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty()) {
+        phoneNumber = phoneNumberView.getText().toString(); //TODO
+//        dateOfBirth = birthdayView.getText().toString();
+
+        int checkedId = genderView.getCheckedRadioButtonId();
+        RadioButton b = genderView.findViewById(checkedId);
+        gender = (String) b.getText();
+
+        if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || gender.isEmpty()) {
             Toast.makeText(this, "You must fill all the details", Toast.LENGTH_SHORT).show();
             return;
         }
 
+        Log.d(TAG, "***** onNextClicked: full name: " + firstName + " " + lastName + " address: " + address + " email: " + email + " phone: " + phoneNumber + " gender: " + gender);
         findViewById(R.id.register_page_1).setVisibility(View.GONE);
         findViewById(R.id.register_page_2).setVisibility(View.VISIBLE);
     }
