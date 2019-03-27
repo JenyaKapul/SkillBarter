@@ -202,7 +202,7 @@ public class EmailPasswordActivity extends BaseActivity implements
         return valid;
     }
 
-    public void directLoggedInUser(FirebaseUser user) {
+    private void directLoggedInUser(FirebaseUser user) {
         Log.d(TAG, "***** directLoggedInUser");
         Log.d(TAG, "***** directLoggedInUser: user= " + user + " userUid: " + user.getUid());
 

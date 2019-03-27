@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -35,7 +38,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     private static final String TAG = "RegisterActivity";
 
-    private static final int GALLERY_INTENT = 2;
+    private static final int GALLERY_INTENT = 0;
+
+    private static final int CAMERA_INTENT = 1;
+
+    private static final int INITIAL_POINTS_BALANCE = 50;
+
 
     @BindView(R.id.input_first_name)
     EditText firstNameView;
@@ -66,8 +74,10 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     String userID, profilePictureURL, firstName, lastName, phoneNumber, address, email, gender;
+
     Timestamp dateOfBirth;
-    int pointsBalance;
+
+    int pointsBalance = INITIAL_POINTS_BALANCE;
 
 
 
@@ -132,30 +142,33 @@ public class RegisterActivity extends AppCompatActivity {
         address = addressView.getText().toString();
         email = mAuth.getCurrentUser().getEmail();
 
-        phoneNumber = phoneNumberView.getText().toString(); //TODO
+        phoneNumber = phoneNumberView.getText().toString(); //TODO phonenumber + dateofbirth
 
         int checkedId = genderRadioGroup.getCheckedRadioButtonId();
         RadioButton b = genderRadioGroup.findViewById(checkedId);
         if (b != null) {
             gender = (String) b.getText();
         }
-        if (!validateForm1()) {
-            return;
-        }
-
-        Log.d(TAG, "***** onNextClicked: full name: " + firstName + " " + lastName + " address: " + address + " email: " + email + " phone: " + phoneNumber + " gender: " + gender);
+//        if (!validateForm1()) {
+//            return;
+//        }
+        // Switch user's interface to the next registration form.
         findViewById(R.id.register_page_1).setVisibility(View.GONE);
         findViewById(R.id.register_page_2).setVisibility(View.VISIBLE);
     }
 
     @OnClick(R.id.button_gallery)
     public void onButtonGalleryClicked() {
-        Log.d(TAG, "launching gallery");
+        Log.d(TAG, "***** onButtonGalleryClicked");
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto, GALLERY_INTENT);
+    }
 
-        // Pick an image from storage
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, GALLERY_INTENT);
+    @OnClick(R.id.button_camera)
+    public void onButtonCameraClicked() {
+        Log.d(TAG, "***** onButtonCameraClicked");
+        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePicture, CAMERA_INTENT);//zero can be replaced with any action code
     }
 
     private boolean validateForm1() {
@@ -213,20 +226,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     // Add current user to Firebase Firestore
     private void createUser() {
-        //        UserData userData = new UserData(user.getUid(), mUserName, user.getEmail());
-//        userRef.set(userData);
 
+        UserData userData = new UserData(userID, profilePictureURL, dateOfBirth, firstName,
+                lastName, phoneNumber, address, email, gender, pointsBalance);
 
-
-
-        //, profilePictureURL, phoneNumber, gender, pointsBalance, dateOfBirth;
-
-//        // Get the dog's name
-//        name = mDogNameView.getText().toString();
-//        if (name.isEmpty()) {
-//            // No name is given. Notify the user he MUST specify name
-//            Toast.makeText(this, "You must specify your dog's name", Toast.LENGTH_SHORT).show();
-//            return;
+        DocumentReference userRef = mFirestore.collection(getString(R.string.collection_user_data))
+                .document(userID);
+        userRef.set(userData);
     }
 
 
