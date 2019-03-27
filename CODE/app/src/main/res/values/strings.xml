@@ -10,6 +10,28 @@
 
     <string name="choose_domain">Choose domain</string>
 
+    <string name="collection_user_data">User Data</string>
+
+    <string name="user_information_title">User Information</string>
+    <string name="user_first_name">First Name</string>
+    <string name="user_last_name">Last Name</string>
+    <string name="user_birthday">Birthday</string>
+    <string name="user_phone_number">Phone number</string>
+    <string name="user_address">Address</string>
+    <string name="prev_button">Prev</string>
+    <string name="next_button">Next</string>
+    <string name="save_button">Save</string>
+    <string name="photo_request">Please attach recent and recognizable photo of yourself</string>
+    <string name="female">Female</string>
+    <string name="male">Male</string>
+    <string-array name="genders">
+        <item>@string/female</item>
+        <item>@string/male</item>
+    </string-array>
+
+
+
+
     <!--AUTHENTICATION-->
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
