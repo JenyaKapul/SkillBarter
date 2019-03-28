@@ -139,7 +139,6 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         this.firstDatePicker = false;
         String currDateString = DateFormat.getDateInstance().format(c.getTime());
         birthdayView.setText(currDateString);
-
         dateOfBirth = new Timestamp(c.getTime());
 	}
 
