@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +32,7 @@ import com.google.firebase.storage.UploadTask;
 
 
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,11 +43,19 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     private static final String TAG = "RegisterActivity";
 
+    private static final int AGE_LIMIT = 17;
+
     private static final int GALLERY_INTENT = 0;
 
     private static final int CAMERA_INTENT = 1;
 
     private static final int INITIAL_POINTS_BALANCE = 50;
+
+    private boolean firstDatePicker = true;
+    private Calendar calendar = null;
+    private int year;
+    private int month;
+    private int dayOfMonth;
 
 
     @BindView(R.id.input_first_name)
@@ -105,7 +116,12 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
 
     @OnClick(R.id.date_picker)
     public void onDatePickerClicked() {
+        if (this.calendar != null){
+            DatePickerFragment.setCalendar(this.calendar);
+        }
         DialogFragment datePicker = new DatePickerFragment();
+//        String toastMsg = "Year is: " + year + "\nMonth is: " + month + "\nDay is: " + day;
+//        Toast.makeText(this, toastMsg, Toast.LENGTH_SHORT).show();
         datePicker.show(getSupportFragmentManager(), "date picker");
     }
 
@@ -115,6 +131,8 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        this.calendar = c;
+        this.firstDatePicker = false;
         String currDateString = DateFormat.getDateInstance().format(c.getTime());
         birthdayView.setText(currDateString);
 	}
@@ -168,9 +186,9 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         if (b != null) {
             gender = (String) b.getText();
         }
-//        if (!validateForm1()) {
-//            return;
-//        }
+        if (!validateForm1()) {
+            return;
+        }
         // Switch user's interface to the next registration form.
         findViewById(R.id.register_page_1).setVisibility(View.GONE);
         findViewById(R.id.register_page_2).setVisibility(View.VISIBLE);
@@ -190,6 +208,19 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         startActivityForResult(takePicture, CAMERA_INTENT);//zero can be replaced with any action code
     }
 
+    private boolean validateBirthDay(){
+        Calendar currentDate = Calendar.getInstance();
+        int yearDiff = currentDate.get(Calendar.YEAR) - this.calendar.get(Calendar.YEAR);
+        int monthDiff = currentDate.get(Calendar.MONTH) - this.calendar.get(Calendar.MONTH);
+        int dayDiff = currentDate.get(Calendar.DAY_OF_MONTH) - this.calendar.get(Calendar.DAY_OF_MONTH);
+        if ((yearDiff > AGE_LIMIT) ||
+                ((yearDiff == AGE_LIMIT) && (monthDiff > 0)) ||
+                ((yearDiff == AGE_LIMIT) && (monthDiff == 0) && (dayDiff > 0))) {
+            return true;
+        }
+        return false;
+    }
+
     private boolean validateForm1() {
         Log.d(TAG, "***** validateForm");
         boolean valid = true;
@@ -207,7 +238,18 @@ public class RegisterActivity extends AppCompatActivity implements DatePickerDia
         } else {
             lastNameView.setError(null);
         }
-        //TODO: require dateOfBirth not picked
+
+        if (this.calendar == null) {
+            birthdayView.setError("Required.");
+            valid = false;
+        } else if (!validateBirthDay()) {
+            birthdayView.setError("You must ne at least " + AGE_LIMIT + " years old.");
+            Toast.makeText(this, "You must ne at least " + AGE_LIMIT + " years old.", Toast.LENGTH_LONG).show();
+            valid = false;
+        }
+        else{
+            birthdayView.setError(null);
+        }
 
         if (gender == null) {
             lastRadioButton.setError("Required.");

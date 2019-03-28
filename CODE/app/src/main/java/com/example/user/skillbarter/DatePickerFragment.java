@@ -10,15 +10,34 @@ import android.support.v4.app.DialogFragment;
 import java.util.Calendar;
 
 public class DatePickerFragment extends DialogFragment {
+    private static Calendar calendar = null;
+
+    public static void setCalendar(Calendar calendar) {
+        DatePickerFragment.calendar = calendar;
+    }
+
+//    private static int year;
+//    private static int month;
+//    private static int dayOfMonth;
+
+//    public static void setAlreadyPicked(int year, int month, int dayOfMonth ) {
+//        DatePickerFragment.alreadyPicked = true;
+//        DatePickerFragment.year = year;
+//        DatePickerFragment.month = month;
+//        DatePickerFragment.dayOfMonth = dayOfMonth;
+//    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Calendar c = Calendar.getInstance();
-        int year = c.get(Calendar.YEAR);
-        int month = c.get(Calendar.MONTH);
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        return new DatePickerDialog(getActivity(), (DatePickerDialog.OnDateSetListener)getActivity(),
-                year, month, day);
+        if (DatePickerFragment.calendar == null){
+            DatePickerFragment.calendar = Calendar.getInstance();
+        }
 
+        int year = DatePickerFragment.calendar.get(Calendar.YEAR);
+        int month = DatePickerFragment.calendar.get(Calendar.MONTH);
+        int day = DatePickerFragment.calendar.get(Calendar.DAY_OF_MONTH);
+        return new DatePickerDialog(getActivity(),
+                (DatePickerDialog.OnDateSetListener)getActivity(), year, month, day);
     }
 }
