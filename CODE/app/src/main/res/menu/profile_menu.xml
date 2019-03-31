@@ -18,19 +18,19 @@
         app:showAsAction="always">
 
         <menu>
-            <item android:id="@+id/manage_skills"
+            <item android:id="@+id/menu_manage_skills"
                 android:title="Manage Skills"
                 app:showAsAction="never"/>
 
-            <item android:id="@+id/history"
+            <item android:id="@+id/menu_history"
                 android:title="History"
                 app:showAsAction="never"/>
 
-            <item android:id="@+id/edit_profile"
+            <item android:id="@+id/menu_edit_profile"
                 android:title="History"
                 app:showAsAction="never"/>
 
-            <item android:id="@+id/sign_out"
+            <item android:id="@+id/menu_sign_out"
                 android:title="Sign Out"
                 app:showAsAction="never"/>
         </menu>

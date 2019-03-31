@@ -7,12 +7,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class UserHomeProfile extends ActionBarMenuActivity {
+public class SearchEngine extends ActionBarMenuActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_home_profile);
+        setContentView(R.layout.activity_search_engine);
     }
 
 
