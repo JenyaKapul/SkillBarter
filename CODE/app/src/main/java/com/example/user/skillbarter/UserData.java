@@ -14,6 +14,8 @@ public class UserData {
     private String email;
     private String gender;
     private int pointsBalance;
+    private float personalRating;
+    private int numOfRatings;
 
     public UserData(String userID, String profilePictureURL,
                     Timestamp dateOfBirth, String firstName, String lastName,
@@ -29,7 +31,11 @@ public class UserData {
         this.email = email;
         this.gender = gender;
         this.pointsBalance = pointsBalance;
+        this.personalRating = 0;
+        this.numOfRatings = 0;
     }
+
+    public UserData() {}
 
     public String getUserID() {
         return userID;
@@ -109,5 +115,21 @@ public class UserData {
 
     public void setPointsBalance(int pointsBalance) {
         this.pointsBalance = pointsBalance;
+    }
+
+    public float getPersonalRating() {
+        return personalRating;
+    }
+
+    public void setPersonalRating(float personalRating) {
+        this.personalRating = personalRating;
+    }
+
+    public int getNumOfRatings() {
+        return numOfRatings;
+    }
+
+    public void setNumOfRatings(int numOfRatings) {
+        this.numOfRatings = numOfRatings;
     }
 }
