@@ -9,11 +9,11 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="159dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp">
-
         <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/profile_picture_holder"
             android:layout_width="250px"
             android:layout_height="250px"
             android:layout_gravity="left"
@@ -26,13 +26,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:orientation="vertical">
-
             <TextView
                 android:id="@+id/profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
+                android:textSize="20sp"
                 android:text="USER_NAME_MOCK"
                 android:textStyle="bold" />
 
@@ -57,19 +57,24 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="BALANCE_MOCK"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
+
+
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="150dp"
-                android:layout_height="40dp"
-                android:layout_gravity="left"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/ranking_icon" />
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:rating="2.5" />
 
 
         </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
