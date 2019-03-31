@@ -31,6 +31,14 @@
     </string-array>
     <string name="up_next">Up Next:</string>
     <string name="search_button">Search</string>
+    
+    <!--SEARCH ENGINE-->
+    <string name="distance_section">Distance From Me:</string>
+    <string name="distance_current">current</string>
+    <string name="distance_default">default</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+
 
 
     <!--AUTHENTICATION-->

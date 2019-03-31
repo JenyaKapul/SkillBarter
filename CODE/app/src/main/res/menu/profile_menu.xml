@@ -27,7 +27,7 @@
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_edit_profile"
-                android:title="History"
+                android:title="Edit Profile"
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_sign_out"

@@ -42,7 +42,13 @@ import butterknife.OnClick;
 import com.bumptech.glide.Glide;
 
 
-public class RegisterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class RegisterActivity extends ActionBarMenuActivity implements DatePickerDialog.OnDateSetListener {
+
+    //TODO: implement 2 different cases: 1.first registration 2. edit profile.
+    //TODO: when 1 - disable all the menu bar except "sign Out"
+    //TODO: when 2 - load all the data to the form
+
+
 
     private static final String TAG = "RegisterActivity";
 

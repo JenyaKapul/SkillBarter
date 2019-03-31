@@ -8,8 +8,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 enum ActivityName {
-    PROFILE_HOME, SEARCH, EDIT_PROFILE, HISTORY, SKILL_MANAGER
+    PROFILE_HOME, SEARCH, EDIT_PROFILE, HISTORY, SKILLS_MANAGER
 }
 
 public class ActionBarMenuActivity extends AppCompatActivity {
@@ -47,16 +49,33 @@ public class ActionBarMenuActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.menu_edit_profile:
-                Toast.makeText(this, "menu_edit_profile", Toast.LENGTH_SHORT).show();
+                //When current activity is not a RegisterActivity activity - we would want to start it
+                if (!(ActionBarMenuActivity.currActivity == ActivityName.EDIT_PROFILE)){
+                    ActionBarMenuActivity.currActivity = ActivityName.EDIT_PROFILE;
+                    Intent intent = new Intent(ActionBarMenuActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                }
                 return true;
             case R.id.menu_history:
-                Toast.makeText(this, "menu_history", Toast.LENGTH_SHORT).show();
+                //When current activity is not a history activity - we would want to start it
+                if (!(ActionBarMenuActivity.currActivity == ActivityName.HISTORY)){
+                    ActionBarMenuActivity.currActivity = ActivityName.HISTORY;
+                    Intent intent = new Intent(ActionBarMenuActivity.this, History.class);
+                    startActivity(intent);
+                }
                 return true;
             case R.id.menu_manage_skills:
-                Toast.makeText(this, "menu_manage_skills", Toast.LENGTH_SHORT).show();
+                //When current activity is not a skillsManager activity - we would want to start it
+                if (!(ActionBarMenuActivity.currActivity == ActivityName.SKILLS_MANAGER)){
+                    ActionBarMenuActivity.currActivity = ActivityName.SKILLS_MANAGER;
+                    Intent intent = new Intent(ActionBarMenuActivity.this, SkillsManager.class);
+                    startActivity(intent);
+                }
                 return true;
             case R.id.menu_sign_out:
-                Toast.makeText(this, "menu_sign_out", Toast.LENGTH_SHORT).show();
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(ActionBarMenuActivity.this, EmailPasswordActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
