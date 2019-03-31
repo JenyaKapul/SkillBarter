@@ -10,7 +10,6 @@ import android.support.v4.app.DialogFragment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -21,36 +20,43 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-//import org.joda.time.LocalDate;
-
 
 import java.text.DateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.bumptech.glide.Glide;
+import javax.annotation.Nullable;
 
 
-public class RegisterActivity extends ActionBarMenuActivity implements DatePickerDialog.OnDateSetListener {
+public class RegisterActivity extends ActionBarMenuActivity
+        implements DatePickerDialog.OnDateSetListener, EventListener<DocumentSnapshot> {
 
     //TODO: implement 2 different cases: 1.first registration 2. edit profile.
     //TODO: when 1 - disable all the menu bar except "sign Out"
     //TODO: when 2 - load all the data to the form
 
-
-
     private static final String TAG = "RegisterActivity";
+
+    public static final String KEY_USER_ID = "key_user_id";
+
 
     private static final int AGE_LIMIT = 17;
 
@@ -81,7 +87,10 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
     RadioGroup genderRadioGroup;
 
     @BindView(R.id.male_radio_button)
-    RadioButton lastRadioButton;
+    RadioButton maleRadioButton;
+
+    @BindView(R.id.female_radio_button)
+    RadioButton femaleRadioButton;
 
     @BindView(R.id.input_phone_number)
     EditText phoneNumberView;
@@ -95,6 +104,13 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
     private FirebaseFirestore mFirestore;
     private FirebaseStorage mStorage;
     private FirebaseAuth mAuth;
+
+    private String signedInUserID;
+
+    // listener to signed-in user's document from database.
+    private ListenerRegistration mListener;
+
+    private DocumentReference mUserRef;
 
     String userID, profilePictureURL, firstName, lastName, phoneNumber, address, email, gender;
 
@@ -114,15 +130,31 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
         mStorage = FirebaseStorage.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
+
+        // Get user ID from extras
+        signedInUserID = getIntent().getExtras().getString(KEY_USER_ID);
+        if (signedInUserID != null) {
+            showProgressDialog();
+            mUserRef = mFirestore.collection(getString(R.string.collection_user_data))
+                    .document(signedInUserID);
+        }
     }
 
     @Override
     public void onStart() {
         Log.d(TAG, "***** onStart");
         super.onStart();
+        mListener = mUserRef.addSnapshotListener(this);
     }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mListener != null) {
+            mListener.remove();
+            mListener = null;
+        }
+    }
 
     @OnClick(R.id.date_picker)
     public void onDatePickerClicked() {
@@ -130,8 +162,6 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
             DatePickerFragment.setCalendar(this.calendar);
         }
         DialogFragment datePicker = new DatePickerFragment();
-//        String toastMsg = "Year is: " + year + "\nMonth is: " + month + "\nDay is: " + day;
-//        Toast.makeText(this, toastMsg, Toast.LENGTH_SHORT).show();
         datePicker.show(getSupportFragmentManager(), "date picker");
     }
 
@@ -189,8 +219,7 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
     public void onNextClicked() {
         Log.d(TAG, "***** onNextClicked");
 
-        //birthday, phonenumber
-        userID = mAuth.getUid();  //mAuth.getCurrentUser().getUid()
+        userID = mAuth.getUid();
         firstName = firstNameView.getText().toString();
 
         lastName = lastNameView.getText().toString();
@@ -205,9 +234,9 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
             gender = (String) b.getText();
         }
 
-//        if (!validateForm1()) {
-//            return;
-//        }
+        if (!validateForm()) {
+            return;
+        }
 
         // Switch user's interface to the next registration form.
         findViewById(R.id.register_page_1).setVisibility(View.GONE);
@@ -242,9 +271,13 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
         return false;
     }
 
-    private boolean validateForm1() {
+    private boolean validateForm() {
         Log.d(TAG, "***** validateForm");
         boolean valid = true;
+
+        if (signedInUserID != null) {
+            return true;
+        }
 
         if (TextUtils.isEmpty(firstName)) {
             firstNameView.setError("Required.");
@@ -273,9 +306,9 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
         }
 
         if (gender == null) {
-            lastRadioButton.setError("Required.");
+            maleRadioButton.setError("Required.");
         } else {
-            lastRadioButton.setError(null);
+            maleRadioButton.setError(null);
         }
 
         if (TextUtils.isEmpty(phoneNumber)) {
@@ -319,6 +352,39 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
         userRef.set(userData);
     }
 
+    /**
+     * fill the registration form with the currently signed in user's details in order to
+     * let him edit his profile.
+     */
+    private void loadUserData(UserData userData) {
+        Log.d(TAG, "***** loadUserData");
+
+        firstNameView.setText(userData.getFirstName());
+        lastNameView.setText(userData.getLastName());
+        addressView.setText(userData.getAddress());
+        phoneNumberView.setText(userData.getPhoneNumber());
+
+        Log.d(TAG, "***** loadUserData: gender= " + userData.getGender());
+        if (userData.getGender().equals("Female")) {
+            femaleRadioButton.setChecked(true);
+            maleRadioButton.setChecked(false);
+        } else {
+            femaleRadioButton.setChecked(false);
+            maleRadioButton.setChecked(true);
+        }
+
+        dateOfBirth = userData.getDateOfBirth();
+        String dateString = DateFormat.getDateInstance().format(dateOfBirth.toDate());
+        birthdayView.setText(dateString);
+
+        Glide.with(profilePictureView.getContext())
+                .load(userData.getProfilePictureURL())
+                .into(profilePictureView);
+
+
+        hideProgressDialog();
+    }
+
 
     /**
      * requestPermissions and do something
@@ -360,5 +426,17 @@ public class RegisterActivity extends ActionBarMenuActivity implements DatePicke
             return;
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @Override
+    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+        if (e != null) {
+            Log.w(TAG, "user:onEvent", e);
+            return;
+        }
+
+        if (documentSnapshot.getReference().equals(mUserRef)) {
+            loadUserData(documentSnapshot.toObject(UserData.class));
+        }
     }
 }

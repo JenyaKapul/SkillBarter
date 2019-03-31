@@ -9,18 +9,22 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 enum ActivityName {
     PROFILE_HOME, SEARCH, EDIT_PROFILE, HISTORY, SKILLS_MANAGER
 }
 
-public class ActionBarMenuActivity extends AppCompatActivity {
+public class ActionBarMenuActivity extends BaseActivity {
     private static ActivityName currActivity = ActivityName.PROFILE_HOME;
+
+    private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,6 +57,7 @@ public class ActionBarMenuActivity extends AppCompatActivity {
                 if (!(ActionBarMenuActivity.currActivity == ActivityName.EDIT_PROFILE)){
                     ActionBarMenuActivity.currActivity = ActivityName.EDIT_PROFILE;
                     Intent intent = new Intent(ActionBarMenuActivity.this, RegisterActivity.class);
+                    intent.putExtra(RegisterActivity.KEY_USER_ID, currentUser.getUid());
                     startActivity(intent);
                 }
                 return true;
