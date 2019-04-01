@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -92,12 +93,16 @@
             android:textSize="30dp"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+        <com.polyak.iconswitch.IconSwitch
+            android:id="@+id/distance_type_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="100dp"
-            android:background="@drawable/toggle_button" />
+            app:isw_default_selection="left"
+            app:isw_icon_left="@drawable/ic_current_location"
+            app:isw_icon_right="@drawable/ic_home"
+            app:isw_icon_size="25dp" />
     </LinearLayout>
 
     <LinearLayout

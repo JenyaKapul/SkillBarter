@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -61,6 +63,7 @@ public class EmailPasswordActivity extends BaseActivity implements
 
 //        signOut(); //DEBUG
     }
+
 
     @Override
     public void onStart() {
