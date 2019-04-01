@@ -5,20 +5,23 @@ UserData: {
 	name: {
 		firstName,
 		lastName
-	},
+	},1
 	contacts: {
 		phoneNumber,
 		address,
 		email
 	},
 	gender,
-	pointsBalance
+	pointsBalance,
+	personalRating,
+	numOfRatings
 }
 
 TimeSlots: {
 	userID1,	//service supplier
-	status,		//	avaliable/booked/disabled
+	status,		//avaliable/booked/disabled
 	userID2,	//costumer - optional, mandatory when booked
+	skillId,	//optional, mandatory when booked
 	startTime,
 	endTime
 }

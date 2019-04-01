@@ -34,11 +34,20 @@
     
     <!--SEARCH ENGINE-->
     <string name="distance_section">Distance From Me:</string>
-    <string name="distance_current">current</string>
-    <string name="distance_default">default</string>
+    <string name="max_distance">Maximal Distance</string>
+    <string name="km">Km</string>
     <string name="from">From</string>
     <string name="to">To</string>
-
+    <string name="s">S</string>
+    <string name="m">M</string>
+    <string name="t">T</string>
+    <string name="w">W</string>
+    <string name="f">F</string>
+    <string name="point_limit_title">Limit By Points:</string>
+    <string name="clock_image_description">Time picker</string>
+    <string name="points_image_description">Points icon</string>
+    <string name="min">MIN</string>
+    <string name="max">MAX</string>
 
 
     <!--AUTHENTICATION-->

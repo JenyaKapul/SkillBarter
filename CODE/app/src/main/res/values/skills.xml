@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tutoring">Tutoring</string>
+    <string name="music">Music</string>
+    <string name="dance">Dance</string>
+    <string name="visual_arts">Arts and Crafts</string>
+    <string name="sports">Sport</string>
+    <string name="household">Household Services</string>
+    <string name="beauty">Beauty Care</string>
+    <string name="culinary">Culinary</string>
+    <string-array name="skills_categories">
+        <item>@string/tutoring</item>
+        <item>@string/music</item>
+        <item>@string/dance</item>
+        <item>@string/visual_arts</item>
+        <item>@string/sports</item>
+        <item>@string/household</item>
+        <item>@string/beauty</item>
+        <item>@string/culinary</item>
+    </string-array>
+
+    <string-array name="Tutoring">
+        <item>Mathematics</item>
+        <item>Computer Science</item>
+        <item>Physics</item>
+        <item>Biology</item>
+        <item>Chemistry</item>
+        <item>Civil and Environmental Engineering</item>
+        <item>Medicine</item>
+        <item>Industrial Engineering and Management</item>
+        <item>Electrical Engineering</item>
+        <item>Bio-Medical Engineering</item>
+        <item>Mechanical Engineering</item>
+        <item>Chemical Engineering</item>
+        <item>Aerospace Engineering</item>
+        <item>Materials Science and Engineering</item>
+        <item>Education in Science and Technology</item>
+        <item>Biotechnology and Food Engineering</item>
+        <item>Architecture and Town Planning</item>
+        <item>Humanities and Arts</item>
+    </string-array>
+
+    <string-array name="Music">
+        <item>Guitar</item>
+        <item>Piano</item>
+        <item>Violin</item>
+        <item>Cello</item>
+        <item>Drums</item>
+        <item>Harmonica</item>
+        <item>Bouzouki</item>
+    </string-array>
+
+    <string-array name="arts_and_crafts">
+        <item>Paint</item>
+        <item>Sketching</item>
+        <item>Sculpturing</item>
+        <item>Pottery</item>
+        <item>Tailoring</item>
+        <item>Knitting</item>
+        <item>Carpentry</item>
+    </string-array>
+
+    <string-array name="Dance">
+        <item>Modern</item>
+        <item>Hip-Hop</item>
+        <item>Ballet</item>
+        <item>Salsa</item>
+        <item>Ballroom</item>
+        <item>Tap</item>
+        <item>Pole Dance</item>
+    </string-array>
+    
+    <string-array name="sport">
+        <item>Yoga</item>
+        <item>Football</item>
+        <item>Tennis</item>
+        <item>Swimming</item>
+        <item>Basketball</item>
+        <item>Cycling</item>
+        <item>Pilates</item>
+        <item>Personal Training</item>
+    </string-array>
+    
+    <string-array name="household">
+        <item>Dog Waking</item>
+        <item>Babysitting</item>
+        <item>Gardening</item>
+        <item>Cleaning</item>
+        <item>Organizing</item>
+        <item>Handyman</item>
+    </string-array>
+    
+    <string-array name="beauty">
+        <item>Manicure</item>
+        <item>Pedicure</item>
+        <item>Brows</item>
+        <item>Wax Depilation</item>
+        <item>Make-Up</item>
+        <item>Haircut</item>
+        <item>Hairstyling</item>
+        <item>Beard Grooming</item>
+    </string-array>
+    
+    <string-array name="Culinary">
+        <item>Cooking</item>
+        <item>Baking</item>
+    </string-array>
+
+
+
+</resources>
