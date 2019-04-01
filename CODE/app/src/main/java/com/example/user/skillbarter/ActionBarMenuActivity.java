@@ -3,6 +3,7 @@ package com.example.user.skillbarter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,17 +12,17 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-enum ActivityName {
-    PROFILE_HOME, SEARCH, EDIT_PROFILE, HISTORY, SKILLS_MANAGER
-}
 
 public class ActionBarMenuActivity extends BaseActivity {
-    private static ActivityName currActivity = ActivityName.PROFILE_HOME;
+
+
+    private static final String TAG = "ActionBarMenuActivity";
 
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "***** onCreate");
         super.onCreate(savedInstanceState);
     }
 
@@ -35,55 +36,39 @@ public class ActionBarMenuActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "***** onOptionsItemSelected: ");
+
+
+        if (this.getClass().getSimpleName().equals(item.getTitleCondensed())) {
+            return true;
+        }
+        Intent intent;
+
         switch (item.getItemId()) {
             case R.id.app_bar_profile:
-                //When current activity is not an user home profile activity - we would want to start it
-                if (!(ActionBarMenuActivity.currActivity == ActivityName.PROFILE_HOME)){
-                    ActionBarMenuActivity.currActivity = ActivityName.PROFILE_HOME;
-                    Intent intent = new Intent(ActionBarMenuActivity.this, UserHomeProfile.class);
-                    startActivity(intent);
-                }
-                return true;
+                intent = new Intent(this, UserHomeProfile.class);
+                break;
             case R.id.app_bar_search:
-                //When current activity is not a search engine activity - we would want to start it
-                if (!(ActionBarMenuActivity.currActivity == ActivityName.SEARCH)){
-                    ActionBarMenuActivity.currActivity = ActivityName.SEARCH;
-                    Intent intent = new Intent(ActionBarMenuActivity.this, SearchEngine.class);
-                    startActivity(intent);
-                }
-                return true;
+                intent = new Intent(this, SearchEngine.class);
+                break;
             case R.id.menu_edit_profile:
-                //When current activity is not a RegisterActivity activity - we would want to start it
-                if (!(ActionBarMenuActivity.currActivity == ActivityName.EDIT_PROFILE)){
-                    ActionBarMenuActivity.currActivity = ActivityName.EDIT_PROFILE;
-                    Intent intent = new Intent(ActionBarMenuActivity.this, RegisterActivity.class);
-                    intent.putExtra(RegisterActivity.KEY_USER_ID, currentUser.getUid());
-                    startActivity(intent);
-                }
-                return true;
+                intent = new Intent(this, RegisterActivity.class);
+                intent.putExtra(RegisterActivity.KEY_USER_ID, currentUser.getUid());
+                break;
             case R.id.menu_history:
-                //When current activity is not a history activity - we would want to start it
-                if (!(ActionBarMenuActivity.currActivity == ActivityName.HISTORY)){
-                    ActionBarMenuActivity.currActivity = ActivityName.HISTORY;
-                    Intent intent = new Intent(ActionBarMenuActivity.this, History.class);
-                    startActivity(intent);
-                }
-                return true;
+                intent = new Intent(this, History.class);
+                break;
             case R.id.menu_manage_skills:
-                //When current activity is not a skillsManager activity - we would want to start it
-                if (!(ActionBarMenuActivity.currActivity == ActivityName.SKILLS_MANAGER)){
-                    ActionBarMenuActivity.currActivity = ActivityName.SKILLS_MANAGER;
-                    Intent intent = new Intent(ActionBarMenuActivity.this, SkillsManager.class);
-                    startActivity(intent);
-                }
-                return true;
+                intent = new Intent(this, SkillsManager.class);
+                break;
             case R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(ActionBarMenuActivity.this, EmailPasswordActivity.class);
-                startActivity(intent);
-                return true;
+                intent = new Intent(this, EmailPasswordActivity.class);
+                break;
             default:
                 return super.onOptionsItemSelected(item);
         }
+        startActivity(intent);
+        return true;
     }
 }

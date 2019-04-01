@@ -4,34 +4,41 @@
 
     <item android:id="@+id/app_bar_search"
         android:icon="@drawable/ic_search"
-        android:title="Item 1"
+        android:title="@string/search_button"
+        android:titleCondensed="SearchEngine"
         app:showAsAction="always"/>
 
     <item android:id="@+id/app_bar_profile"
         android:icon="@drawable/ic_profile"
-        android:title="Item 1"
+        android:title="user_profile"
+        android:titleCondensed="UserHomeProfile"
         app:showAsAction="always"/>
 
     <item android:id="@+id/app_bar_menu"
         android:icon="@drawable/ic_menu"
-        android:title="Item 2"
+        android:title="default"
+        android:titleCondensed="Default"
         app:showAsAction="always">
 
         <menu>
             <item android:id="@+id/menu_manage_skills"
                 android:title="Manage Skills"
+                android:titleCondensed="SkillsManager"
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_history"
                 android:title="History"
+                android:titleCondensed="History"
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_edit_profile"
                 android:title="Edit Profile"
+                android:titleCondensed="RegisterActivity"
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_sign_out"
                 android:title="Sign Out"
+                android:titleCondensed="EmailPasswordActivity"
                 app:showAsAction="never"/>
         </menu>
 

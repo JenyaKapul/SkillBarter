@@ -57,7 +57,6 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     public static final String KEY_USER_ID = "key_user_id";
 
-
     private static final int AGE_LIMIT = 17;
 
     private static final int GALLERY_INTENT = 5;
@@ -132,8 +131,8 @@ public class RegisterActivity extends ActionBarMenuActivity
         mAuth = FirebaseAuth.getInstance();
 
         // Get user ID from extras
-        signedInUserID = getIntent().getExtras().getString(KEY_USER_ID);
-        if (signedInUserID != null) {
+        if (getIntent().getExtras() != null) {
+            signedInUserID = getIntent().getExtras().getString(KEY_USER_ID);
             showProgressDialog();
             mUserRef = mFirestore.collection(getString(R.string.collection_user_data))
                     .document(signedInUserID);
@@ -144,7 +143,9 @@ public class RegisterActivity extends ActionBarMenuActivity
     public void onStart() {
         Log.d(TAG, "***** onStart");
         super.onStart();
-        mListener = mUserRef.addSnapshotListener(this);
+        if (mUserRef != null) {
+            mListener = mUserRef.addSnapshotListener(this);
+        }
     }
 
     @Override
@@ -298,7 +299,7 @@ public class RegisterActivity extends ActionBarMenuActivity
             valid = false;
         } else if (!validateBirthDay()) {
             birthdayView.setError("You must ne at least " + AGE_LIMIT + " years old.");
-            Toast.makeText(this, "You must ne at least " + AGE_LIMIT + " years old.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "You must need at least " + AGE_LIMIT + " years old.", Toast.LENGTH_LONG).show();
             valid = false;
         }
         else{
@@ -380,9 +381,6 @@ public class RegisterActivity extends ActionBarMenuActivity
         Glide.with(profilePictureView.getContext())
                 .load(userData.getProfilePictureURL())
                 .into(profilePictureView);
-
-
-        hideProgressDialog();
     }
 
 
@@ -437,6 +435,7 @@ public class RegisterActivity extends ActionBarMenuActivity
 
         if (documentSnapshot.getReference().equals(mUserRef)) {
             loadUserData(documentSnapshot.toObject(UserData.class));
+            hideProgressDialog();
         }
     }
 }

@@ -225,6 +225,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                         intent = new Intent(EmailPasswordActivity.this, RegisterActivity.class);
                     }
                     hideProgressDialog();
+
                     startActivity(intent);
                 }
             }
