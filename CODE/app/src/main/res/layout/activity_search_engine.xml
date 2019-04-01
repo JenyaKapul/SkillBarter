@@ -11,12 +11,13 @@
         android:layout_width="264dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="8dp"
         android:dropDownWidth="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:entries="@array/skills_categories"/>
 
     <Spinner
         android:id="@+id/skills_spinner"
@@ -102,24 +103,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="@string/s"
         app:layout_constraintEnd_toStartOf="@+id/monday"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/category_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/distance_max_wrapper"
         tools:layout_constraintTop_toBottomOf="@+id/distance_max_wrapper"
-        tools:layout_editor_absoluteY="276dp"
-        tools:layout_marginTop="20dp" />
+        tools:layout_marginTop="40dp" />
 
     <CheckBox
         android:id="@+id/monday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/m"
+        app:layout_constraintBottom_toBottomOf="@+id/sunday"
         app:layout_constraintEnd_toStartOf="@+id/tuesday"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/sunday"
+        app:layout_constraintTop_toTopOf="@+id/sunday"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_constraintTop_toBottomOf="@+id/distance_max_wrapper"
-        tools:layout_editor_absoluteY="276dp"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -127,11 +131,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/t"
+        app:layout_constraintBottom_toBottomOf="@+id/sunday"
         app:layout_constraintEnd_toStartOf="@+id/wednesday"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/monday"
+        app:layout_constraintTop_toTopOf="@+id/sunday"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_constraintTop_toBottomOf="@+id/distance_max_wrapper"
-        tools:layout_editor_absoluteY="276dp"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -139,11 +145,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/w"
+        app:layout_constraintBottom_toBottomOf="@+id/sunday"
         app:layout_constraintEnd_toStartOf="@+id/thursday"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/tuesday"
+        app:layout_constraintTop_toTopOf="@+id/sunday"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_constraintTop_toBottomOf="@+id/distance_max_wrapper"
-        tools:layout_editor_absoluteY="276dp"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -151,11 +159,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/t"
+        app:layout_constraintBottom_toBottomOf="@+id/sunday"
         app:layout_constraintEnd_toStartOf="@+id/friday"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/wednesday"
+        app:layout_constraintTop_toTopOf="@+id/sunday"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_constraintTop_toBottomOf="@+id/distance_max_wrapper"
-        tools:layout_editor_absoluteY="276dp"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -163,11 +173,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/f"
+        app:layout_constraintBottom_toBottomOf="@+id/sunday"
         app:layout_constraintEnd_toStartOf="@+id/saturday"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/thursday"
+        app:layout_constraintTop_toTopOf="@+id/sunday"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_constraintTop_toBottomOf="@+id/distance_max_wrapper"
-        tools:layout_editor_absoluteY="276dp"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -175,11 +187,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/s"
+        app:layout_constraintBottom_toBottomOf="@+id/sunday"
         app:layout_constraintEnd_toEndOf="@+id/category_spinner"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/friday"
+        app:layout_constraintTop_toTopOf="@+id/sunday"
+        app:layout_constraintVertical_bias="1.0"
         tools:layout_constraintTop_toBottomOf="@+id/distance_max_wrapper"
-        tools:layout_editor_absoluteY="276dp"
         tools:layout_marginTop="20dp" />
 
 
@@ -320,7 +334,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
         android:layout_marginEnd="162dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/search_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
