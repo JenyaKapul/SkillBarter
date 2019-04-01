@@ -44,36 +44,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="124dp"
+        android:enabled="false"
         android:text="@string/add_button"
-        app:layout_constraintBottom_toTopOf="@+id/button_next"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/button_prev"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginBottom="60dp"
-        android:background="@color/colorPrimary"
-        android:enabled="false"
-        android:text="@string/prev_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button_next"
-        style="@style/Base.Widget.AppCompat.Button.Borderless"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="60dp"
-        android:background="@color/colorPrimary"
-        android:enabled="false"
-        android:text="@string/next_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 </android.support.constraint.ConstraintLayout>
 
