@@ -21,10 +21,7 @@ public class SearchEngine extends ActionBarMenuActivity implements AdapterView.O
 
     private static final String TAG = "SearchEngine";
 
-    private Spinner mMainSpinner;
-    private Spinner mSecondarySpinner;
-
-
+    private Spinner mMainSpinner, mSecondarySpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +32,6 @@ public class SearchEngine extends ActionBarMenuActivity implements AdapterView.O
 
         mMainSpinner = findViewById(R.id.category_spinner);
         mSecondarySpinner = findViewById(R.id.skills_spinner);
-
-//        mSecondarySpinner.setEnabled(false);
 
         // add listener to the first spinner in order to load the correct data
         // for secondary spinner.
@@ -59,9 +54,6 @@ public class SearchEngine extends ActionBarMenuActivity implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
-        Toast.makeText(parent.getContext(),
-                "OnItemSelectedListener : " + parent.getItemAtPosition(position).toString(),
-                Toast.LENGTH_SHORT).show();
 
         int skillArrayID = R.array.Empty;
         String categoryLabel = parent.getItemAtPosition(position).toString();
@@ -91,7 +83,6 @@ public class SearchEngine extends ActionBarMenuActivity implements AdapterView.O
                 skillArrayID = R.array.Culinary;
                 break;
             default:
-                //TODO: implement 'choose category selected'
                 mSecondarySpinner.setEnabled(false);
         }
 
@@ -106,21 +97,8 @@ public class SearchEngine extends ActionBarMenuActivity implements AdapterView.O
 
         mSecondarySpinner.setAdapter(adapter);
 
-        // show hint
+        // show hint.
         mSecondarySpinner.setSelection(adapter.getCount());
-
-//        if (skillArrayID != -1) {
-//            mSecondarySpinner.setEnabled(true);
-//            // Create an ArrayAdapter using the string array and a default spinner layout
-//            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                    skillArrayID, android.R.layout.simple_spinner_item);
-//
-//            // Specify the layout to use when the list of choices appears
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//            // Apply the adapter to the spinner
-//            mSecondarySpinner.setAdapter(adapter);
-//        }
     }
 
     @Override

@@ -3,7 +3,6 @@ import android.content.Context;
 import android.widget.ArrayAdapter;
 
 import java.util.List;
-import java.util.Objects;
 
 public class HintAdapter extends ArrayAdapter<CharSequence> {
 
