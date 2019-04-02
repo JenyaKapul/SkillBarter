@@ -39,6 +39,11 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Problem: hide keyboard when clicked outside of EditText
+     * Solution from:
+     * https://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
+     * **/
     public void setupUI(final View view) {
 
         // Set up touch listener for non-text box views to hide keyboard.
@@ -65,6 +70,23 @@ public class BaseActivity extends AppCompatActivity {
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public String formatTime(int hourOfDay, int minute){
+        String time;
+        if (hourOfDay < 10){
+            time = "0" + hourOfDay + ":";
+        }
+        else{
+            time = hourOfDay + ":";
+        }
+        if (minute < 10){
+            time += "0" + minute;
+        }
+        else{
+            time += minute;
+        }
+        return time;
     }
 
 

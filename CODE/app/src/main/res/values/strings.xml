@@ -18,6 +18,7 @@
     <string name="user_last_name">Last Name</string>
     <string name="user_birthday">Birthday</string>
     <string name="user_phone_number">Phone number</string>
+    <string name="phone_mask">###-###-####</string>
     <string name="user_address">Address</string>
     <string name="prev_button">Prev</string>
     <string name="next_button">Next</string>

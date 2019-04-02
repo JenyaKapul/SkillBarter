@@ -38,7 +38,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,11 +66,7 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     private static final int INITIAL_POINTS_BALANCE = 50;
 
-    private boolean firstDatePicker = true;
-    private Calendar calendar = null;
-    private int year;
-    private int month;
-    private int dayOfMonth;
+    private Calendar userBirthDay = null;
 
     @BindView(R.id.input_first_name)
     EditText firstNameView;
@@ -159,8 +154,8 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     @OnClick(R.id.date_picker)
     public void onDatePickerClicked() {
-        if (this.calendar != null){
-            DatePickerFragment.setCalendar(this.calendar);
+        if (this.userBirthDay != null){
+            DatePickerFragment.setCalendar(this.userBirthDay);
         }
         DialogFragment datePicker = new DatePickerFragment();
         datePicker.show(getSupportFragmentManager(), "date picker");
@@ -172,8 +167,7 @@ public class RegisterActivity extends ActionBarMenuActivity
         c.set(Calendar.YEAR, year);
         c.set(Calendar.MONTH, month);
         c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        this.calendar = c;
-        this.firstDatePicker = false;
+        this.userBirthDay = c;
         String currDateString = DateFormat.getDateInstance().format(c.getTime());
         birthdayView.setText(currDateString);
         dateOfBirth = new Timestamp(c.getTime());
@@ -261,9 +255,9 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     private boolean validateBirthDay(){
         Calendar currentDate = Calendar.getInstance();
-        int yearDiff = currentDate.get(Calendar.YEAR) - this.calendar.get(Calendar.YEAR);
-        int monthDiff = currentDate.get(Calendar.MONTH) - this.calendar.get(Calendar.MONTH);
-        int dayDiff = currentDate.get(Calendar.DAY_OF_MONTH) - this.calendar.get(Calendar.DAY_OF_MONTH);
+        int yearDiff = currentDate.get(Calendar.YEAR) - this.userBirthDay.get(Calendar.YEAR);
+        int monthDiff = currentDate.get(Calendar.MONTH) - this.userBirthDay.get(Calendar.MONTH);
+        int dayDiff = currentDate.get(Calendar.DAY_OF_MONTH) - this.userBirthDay.get(Calendar.DAY_OF_MONTH);
         if ((yearDiff > AGE_LIMIT) ||
                 ((yearDiff == AGE_LIMIT) && (monthDiff > 0)) ||
                 ((yearDiff == AGE_LIMIT) && (monthDiff == 0) && (dayDiff > 0))) {
@@ -294,11 +288,11 @@ public class RegisterActivity extends ActionBarMenuActivity
             lastNameView.setError(null);
         }
 
-        if (this.calendar == null) {
+        if (this.userBirthDay == null) {
             birthdayView.setError("Required.");
             valid = false;
         } else if (!validateBirthDay()) {
-            birthdayView.setError("You must ne at least " + AGE_LIMIT + " years old.");
+            birthdayView.setError("You must be at least " + AGE_LIMIT + " years old.");
             Toast.makeText(this, "You must need at least " + AGE_LIMIT + " years old.", Toast.LENGTH_LONG).show();
             valid = false;
         }
