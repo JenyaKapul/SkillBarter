@@ -11,6 +11,7 @@
     <string name="choose_domain">Choose domain</string>
 
     <string name="collection_user_data">User Data</string>
+    <string name="collection_user_skills">User Skills</string>
 
     <string name="user_information_title">User Information</string>
     <string name="user_first_name">First Name</string>

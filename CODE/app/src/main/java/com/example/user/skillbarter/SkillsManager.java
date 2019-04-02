@@ -1,115 +1,118 @@
 package com.example.user.skillbarter;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Spinner;
+import android.widget.Button;
 
-import java.util.Arrays;
-import java.util.List;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+
+import butterknife.ButterKnife;
+
 
 public class SkillsManager extends ActionBarMenuActivity {
+    private ArrayList<SkillItem> mSkillList;
 
-    private static final String TAG = "SkillsManager";
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
-    private Spinner mMainSpinner, mSecondarySpinner;
+    private Button buttonAdd;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private CollectionReference userRef = db.collection("User Data");
+
+
+//    private Button buttonRemove;
+//    private EditText editTextInsert;
+//    private EditText editTextRemove;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skills_manager);
+        ButterKnife.bind(this);
 
-        List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
+        loadUserSkills();
 
-        HintAdapter adapter = new HintAdapter(this, categories,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mMainSpinner = findViewById(R.id.category_spinner);
-        mMainSpinner.setAdapter(adapter);
+        buildRecyclerView();
 
-        // show hint
-        mMainSpinner.setSelection(adapter.getCount());
+        buttonAdd = findViewById(R.id.button_add);
 
-        // add listener to the first spinner in order to load the correct data
-        // for secondary spinner.
-        mMainSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                firstSpinnerChooser(parent, view, position, id);
+            public void onClick(View v) {
+                Intent intent = new Intent(SkillsManager.this, AddSkillActivity.class);
+                startActivity(intent);
             }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        mSecondarySpinner = findViewById(R.id.skills_spinner);
-        mSecondarySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                secondSpinnerChooser(parent, view, position, id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
-        });
+        //TODO: implement remove and edit buttons per SkillItem
+//        buttonRemove.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                int position = Integer.parseInt(editTextRemove.getText().toString());
+//                removeItem(position);
+//            }
+//        });
     }
 
-    private void firstSpinnerChooser(AdapterView<?> parent, View view, int position, long id) {
-        // An item was selected. You can retrieve the selected item using
-        // parent.getItemAtPosition(pos)
+//    public void insertItem(int position) {
+//        mSkillList.add(position, new ExampleItem(R.drawable.ic_android, "New Item At Position" + position, "This is Line 2"));
+//        mAdapter.notifyItemInserted(position);
+//    }
 
-        int skillArrayID = R.array.Empty;
-        String categoryLabel = parent.getItemAtPosition(position).toString();
+//    @OnClick(R.id.clearView)
+//    public void onClearClicked() {
+//
+//    }
 
-        switch (categoryLabel) {
-            case "Tutoring":
-                skillArrayID = R.array.Tutoring;
-                break;
-            case "Music":
-                skillArrayID = R.array.Music;
-                break;
-            case "Dance":
-                skillArrayID = R.array.Dance;
-                break;
-            case "Arts and Crafts":
-                skillArrayID = R.array.arts_and_crafts;
-                break;
-            case "Sport":
-                skillArrayID = R.array.Sport;
-                break;
-            case "Household Services":
-                skillArrayID = R.array.Household;
-                break;
-            case "Beauty Care":
-                skillArrayID = R.array.Beauty;
-                break;
-            case "Culinary":
-                skillArrayID = R.array.Culinary;
-                break;
-            default:
-                mSecondarySpinner.setEnabled(false);
-        }
-
-        if (skillArrayID != R.array.Empty) {
-            mSecondarySpinner.setEnabled(true);
-        }
-        List<CharSequence> skillsList = Arrays.asList(this.getResources().getTextArray(skillArrayID));
-
-        HintAdapter adapter = new HintAdapter(this, skillsList,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSecondarySpinner.setAdapter(adapter);
-
-        // show hint.
-        mSecondarySpinner.setSelection(adapter.getCount());
+    public void removeItem(int position) {
+        mSkillList.remove(position);
+        mAdapter.notifyItemRemoved(position);
     }
 
-    private void secondSpinnerChooser(AdapterView<?> parent, View view, int position, long id) {
-        String skillLabel = parent.getItemAtPosition(position).toString();
-        if (!skillLabel.startsWith("Choose")) {
-            findViewById(R.id.button_add).setEnabled(true);
-            findViewById(R.id.button_add).setBackgroundColor(0xFF039BE5); // primary background color
-        }
+    // load user's skills from database.
+    public void loadUserSkills() {
+        mSkillList = new ArrayList<>();
+        mSkillList.add(new SkillItem("Piano"));
+        mSkillList.add(new SkillItem("Cooking"));
+        mSkillList.add(new SkillItem("Cooking"));
+        mSkillList.add(new SkillItem("Cooking"));
+        mSkillList.add(new SkillItem("Cooking"));
+        mSkillList.add(new SkillItem("Cooking"));
+        mSkillList.add(new SkillItem("Cooking"));
+        mSkillList.add(new SkillItem("Cooking"));
+
+
+
+//        // get currently signed in user's id
+//        String uID = FirebaseAuth.getInstance().getUid();
+//        userRef.document(uID).collection("User Skills").get()
+//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//
+//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+//                            String skill = documentSnapshot.getString("skill");
+////                            UserSkills userSkill = documentSnapshot.toObject(UserSkills.class);
+//                            mSkillList.add(new SkillItem(skill));
+//                        }
+//                    }
+//                });
+    }
+
+    public void buildRecyclerView() {
+        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mAdapter = new SkillAdapter(mSkillList);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
     }
 }

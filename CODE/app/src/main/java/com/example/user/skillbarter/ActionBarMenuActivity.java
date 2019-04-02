@@ -2,12 +2,10 @@ package com.example.user.skillbarter;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -59,7 +57,7 @@ public class ActionBarMenuActivity extends BaseActivity {
                 intent = new Intent(this, History.class);
                 break;
             case R.id.menu_manage_skills:
-                intent = new Intent(this, DisplaySkillsActivity.class);
+                intent = new Intent(this, SkillsManager.class);
                 break;
             case R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();
