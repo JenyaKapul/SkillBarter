@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="choose_category">Choose Category</string>
     <string name="tutoring">Tutoring</string>
     <string name="music">Music</string>
     <string name="dance">Dance</string>
-    <string name="visual_arts">Arts and Crafts</string>
+    <string name="arts_and_crafts">Arts and Crafts</string>
     <string name="sports">Sport</string>
     <string name="household">Household Services</string>
     <string name="beauty">Beauty Care</string>
     <string name="culinary">Culinary</string>
+
     <string-array name="skills_categories">
         <item>@string/tutoring</item>
         <item>@string/music</item>
         <item>@string/dance</item>
-        <item>@string/visual_arts</item>
+        <item>@string/arts_and_crafts</item>
         <item>@string/sports</item>
         <item>@string/household</item>
         <item>@string/beauty</item>
         <item>@string/culinary</item>
+        <item>@string/choose_category</item>
     </string-array>
 
     <string-array name="Tutoring">
@@ -38,6 +41,7 @@
         <item>Biotechnology and Food Engineering</item>
         <item>Architecture and Town Planning</item>
         <item>Humanities and Arts</item>
+        <item>Choose Tutoring...</item>
     </string-array>
 
     <string-array name="Music">
@@ -48,6 +52,7 @@
         <item>Drums</item>
         <item>Harmonica</item>
         <item>Bouzouki</item>
+        <item>Choose Music</item>
     </string-array>
 
     <string-array name="arts_and_crafts">
@@ -58,6 +63,7 @@
         <item>Tailoring</item>
         <item>Knitting</item>
         <item>Carpentry</item>
+        <item>Choose Arts and Crafts...</item>
     </string-array>
 
     <string-array name="Dance">
@@ -68,9 +74,10 @@
         <item>Ballroom</item>
         <item>Tap</item>
         <item>Pole Dance</item>
+        <item>Choose Dance...</item>
     </string-array>
     
-    <string-array name="sport">
+    <string-array name="Sport">
         <item>Yoga</item>
         <item>Football</item>
         <item>Tennis</item>
@@ -79,18 +86,20 @@
         <item>Cycling</item>
         <item>Pilates</item>
         <item>Personal Training</item>
+        <item>Choose Sport...</item>
     </string-array>
     
-    <string-array name="household">
+    <string-array name="Household">
         <item>Dog Waking</item>
         <item>Babysitting</item>
         <item>Gardening</item>
         <item>Cleaning</item>
         <item>Organizing</item>
         <item>Handyman</item>
+        <item>Choose Household Service...</item>
     </string-array>
     
-    <string-array name="beauty">
+    <string-array name="Beauty">
         <item>Manicure</item>
         <item>Pedicure</item>
         <item>Brows</item>
@@ -99,13 +108,19 @@
         <item>Haircut</item>
         <item>Hairstyling</item>
         <item>Beard Grooming</item>
+        <item>Choose Beauty Care...</item>
     </string-array>
     
     <string-array name="Culinary">
         <item>Cooking</item>
         <item>Baking</item>
+        <item>Choose Culinary...</item>
     </string-array>
 
+    <string-array name="Empty">
+        <item>Dummy Item</item>
+        <item>Choose Skill</item>
+    </string-array>
 
 
 </resources>

@@ -1,6 +1,5 @@
 package com.example.user.skillbarter;
 
-import com.google.common.primitives.UnsignedInteger;
 
 public class UserSkills {
 

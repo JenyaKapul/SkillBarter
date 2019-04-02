@@ -17,8 +17,7 @@
         android:dropDownWidth="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        android:entries="@array/skills_categories"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <Spinner
         android:id="@+id/skills_spinner"

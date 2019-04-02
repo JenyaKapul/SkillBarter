@@ -61,7 +61,7 @@ public class EmailPasswordActivity extends BaseActivity implements
 
         mFirestore = FirebaseFirestore.getInstance();
 
-        signOut(); //DEBUG
+//        signOut(); //DEBUG
     }
 
 

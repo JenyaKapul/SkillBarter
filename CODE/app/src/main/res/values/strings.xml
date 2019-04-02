@@ -22,6 +22,7 @@
     <string name="prev_button">Prev</string>
     <string name="next_button">Next</string>
     <string name="save_button">Save</string>
+    <string name="add_button">Add</string>
     <string name="photo_request">Please attach recent and recognizable photo of yourself</string>
     <string name="send_verification_email">Send Email Verification Again</string>
     <string name="female">Female</string>
@@ -32,7 +33,7 @@
     </string-array>
     <string name="up_next">Up Next:</string>
     <string name="search_button">Search</string>
-    
+
     <!--SEARCH ENGINE-->
     <string name="distance_section">Distance From Me:</string>
     <string name="max_distance">Maximal Distance</string>

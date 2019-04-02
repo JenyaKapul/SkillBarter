@@ -106,7 +106,7 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     private DocumentReference mUserRef;
 
-    String userID, profilePictureURL, firstName, lastName, phoneNumber, address, email, gender;
+    private String userID, profilePictureURL, firstName, lastName, phoneNumber, address, email, gender;
 
     Timestamp dateOfBirth;
 
