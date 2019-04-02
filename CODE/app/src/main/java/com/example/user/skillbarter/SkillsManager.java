@@ -35,6 +35,9 @@ public class SkillsManager extends ActionBarMenuActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference skillsRef = db.collection("User Skills");
 
+    // keep the number of elements that are displayed on screen.
+    private int size;
+
 
 //    private Button buttonRemove;
 //    private EditText editTextInsert;
@@ -46,9 +49,10 @@ public class SkillsManager extends ActionBarMenuActivity {
         setContentView(R.layout.activity_skills_manager);
         ButterKnife.bind(this);
 
-        loadUserSkills();
+        // initialize number of elements to display on screen.
+        size = 0;
 
-//        buildRecyclerView();
+        loadUserSkills();
 
         buttonAdd = findViewById(R.id.button_add);
 
@@ -73,11 +77,13 @@ public class SkillsManager extends ActionBarMenuActivity {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "***** onResume: ");
-        Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        Log.d(TAG, "***** onResume ");
+        String str = "size " + mSkillList.size();
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
 
         if (mAdapter != null) {
-//            mAdapter.notifyItemInserted(mSkillList.size()-1);
+            Log.d(TAG, String.valueOf(size) );
+            mAdapter.notifyItemInserted(size);
         }
 
 //        setupUI(findViewById(R.id.main_layout));
@@ -102,37 +108,28 @@ public class SkillsManager extends ActionBarMenuActivity {
 
     // load user's skills from database.
     public void loadUserSkills() {
-//        mSkillList = new ArrayList<>();
+        Log.d(TAG, "***** loadUserSkills");
+
         final String uID = FirebaseAuth.getInstance().getUid();
 
         skillsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                Log.d(TAG, "***** loadUserSkills: onSuccess");
                 //TODO: consider for optimizing this with querying the documents' key
                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+
                     if (documentSnapshot.getString("userID").equals(uID)) {
                         String skill = documentSnapshot.getString("skill");
                         mSkillList.add(new SkillItem(skill));
+//                        size ++;
                     }
                 }
+                size = mSkillList.size();
+                Log.d(TAG, "***** loadUserSkills: document at size " + size);
                 buildRecyclerView();
             }
         });
-
-//        // **** get currently signed in user's id from sub-collection
-//        String uID = FirebaseAuth.getInstance().getUid();
-//        userRef.document(uID).collection("User Skills").get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//
-//                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-//                            String skill = documentSnapshot.getString("skill");
-////                            UserSkills userSkill = documentSnapshot.toObject(UserSkills.class);
-//                            mSkillList.add(new SkillItem(skill));
-//                        }
-//                    }
-//                });
     }
 
     public void buildRecyclerView() {
