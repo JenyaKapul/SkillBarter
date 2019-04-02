@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 //        Intent intent = new Intent(this, UserHomeProfile.class);
-        Intent intent = new Intent(this, SearchEngine.class);
+        Intent intent = new Intent(this, EmailPasswordActivity.class);
         startActivity(intent);
     }
 }
