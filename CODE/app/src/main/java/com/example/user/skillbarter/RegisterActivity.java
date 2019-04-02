@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -94,6 +95,9 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     @BindView(R.id.input_address)
     EditText addressView;
+
+    @BindView(R.id.date_picker)
+    ImageButton datePickerButton;
 
     private FirebaseFirestore mFirestore;
     private FirebaseStorage mStorage;
@@ -377,6 +381,8 @@ public class RegisterActivity extends ActionBarMenuActivity
         dateOfBirth = userData.getDateOfBirth();
         String dateString = DateFormat.getDateInstance().format(dateOfBirth.toDate());
         birthdayView.setText(dateString);
+        datePickerButton.setVisibility(View.INVISIBLE);
+
 
         Glide.with(profilePictureView.getContext())
                 .load(userData.getProfilePictureURL())
