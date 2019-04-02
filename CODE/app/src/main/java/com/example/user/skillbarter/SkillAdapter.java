@@ -1,47 +1,42 @@
 package com.example.user.skillbarter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+
 import java.util.ArrayList;
 
-public class SkillAdapter extends RecyclerView.Adapter<SkillAdapter.SkillViewHolder> {
-    private ArrayList<SkillItem> mSkillList;
+public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkills, SkillAdapter.SkillHolder> {
 
-    public static class SkillViewHolder extends RecyclerView.ViewHolder {
-        public TextView mSkillView;
+    public SkillAdapter(@NonNull FirestoreRecyclerOptions<UserSkills> options) {
+        super(options);
+    }
 
-        public SkillViewHolder(View itemView) {
+    @Override
+    protected void onBindViewHolder(@NonNull SkillHolder holder, int position, @NonNull UserSkills model) {
+        holder.textViewSkill.setText(model.getSkill());
+    }
+
+    @NonNull
+    @Override
+    public SkillHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.skill_item,
+                parent, false);
+        return new SkillHolder(v);
+    }
+
+    class SkillHolder extends RecyclerView.ViewHolder {
+        TextView textViewSkill;
+
+        public SkillHolder(View itemView) {
             super(itemView);
-            mSkillView = itemView.findViewById(R.id.textView);
+            textViewSkill = itemView.findViewById(R.id.textView);
         }
-    }
-
-    public SkillAdapter(ArrayList<SkillItem> skillList) {
-        mSkillList = skillList;
-    }
-
-    @Override
-    public SkillViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.skill_item, parent, false);
-        SkillViewHolder evh = new SkillViewHolder(v);
-        return evh;
-    }
-
-    @Override
-    public void onBindViewHolder(SkillViewHolder holder, int position) {
-        SkillItem currentItem = mSkillList.get(position);
-
-//        holder.mImageView.setImageResource(currentItem.getImageResource());
-        holder.mSkillView.setText(currentItem.getSkill());
-//        holder.mTextView2.setText(currentItem.getText2());
-    }
-
-    @Override
-    public int getItemCount() {
-        return mSkillList.size();
     }
 }

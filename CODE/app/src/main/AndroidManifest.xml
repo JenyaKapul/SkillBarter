@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SkillsManager"></activity>
-        <activity android:name=".SkillItem" />
         <activity android:name=".AddSkillActivity" />
         <activity android:name=".History" />
         <activity android:name=".SearchEngine" />

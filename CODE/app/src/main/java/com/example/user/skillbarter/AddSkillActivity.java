@@ -1,25 +1,20 @@
 package com.example.user.skillbarter;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.List;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -84,8 +79,16 @@ public class AddSkillActivity extends ActionBarMenuActivity {
     @OnClick(R.id.button_add)
     public void onAddClicked() {
         Log.d(TAG, "***** onAddClicked");
+        saveUserSkill();
+    }
 
-        showProgressDialog();
+
+
+    /**
+     * add skill to database. Each skill is added to the child collection 'User Skills'
+     * under collection 'User Data'
+     */
+    private void saveUserSkill() {
         mUserID = FirebaseAuth.getInstance().getUid();
 
         if (TextUtils.isEmpty(mPointsView.getText().toString())) {
@@ -95,30 +98,6 @@ public class AddSkillActivity extends ActionBarMenuActivity {
         }
 
         mPointsValue = Integer.parseInt(mPointsView.getText().toString());
-
-        addUserSkill();
-
-
-        // return to prev activity.
-        onBackPressed();
-
-//        Intent intent = new Intent(this, .class);
-//        intent.putExtra(RegisterActivity.KEY_USER_ID, currentUser.getUid());
-    }
-
-//    @Override
-//    public void onBackPressed() {
-//        Intent intent = new Intent(this, SkillsManager.class);
-////        intent.addCategory(Intent.CATEGORY_HOME);
-////        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(intent);
-//    }
-
-    /**
-     * add skill to database. Each skill is added to the child collection 'User Skills'
-     * under collection 'User Data'
-     */
-    private void addUserSkill() {
         UserSkills userSkill = new UserSkills(mUserID, mCategory, mSkill, mPointsValue);
         String docID = userSkill.getSkillId();
 
@@ -129,6 +108,8 @@ public class AddSkillActivity extends ActionBarMenuActivity {
         // add user's skill to database.
         CollectionReference skillsCollection = FirebaseFirestore.getInstance().collection("User Skills");
         skillsCollection.document(docID).set(userSkill);
+
+        finish();
     }
 
     private void firstSpinnerChooser(AdapterView<?> parent, View view, int position, long id) {
