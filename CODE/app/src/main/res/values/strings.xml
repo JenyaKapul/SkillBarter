@@ -32,7 +32,7 @@
     </string-array>
     <string name="up_next">Up Next:</string>
     <string name="search_button">Search</string>
-    
+
     <!--SEARCH ENGINE-->
     <string name="distance_section">Distance From Me:</string>
     <string name="max_distance">Maximal Distance</string>

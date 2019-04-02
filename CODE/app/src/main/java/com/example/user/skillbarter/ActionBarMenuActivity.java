@@ -59,7 +59,7 @@ public class ActionBarMenuActivity extends BaseActivity {
                 intent = new Intent(this, History.class);
                 break;
             case R.id.menu_manage_skills:
-                intent = new Intent(this, SkillsManager.class);
+                intent = new Intent(this, DisplaySkillsActivity.class);
                 break;
             case R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();

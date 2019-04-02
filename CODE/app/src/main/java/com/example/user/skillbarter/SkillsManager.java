@@ -98,7 +98,7 @@ public class SkillsManager extends ActionBarMenuActivity {
         HintAdapter adapter = new HintAdapter(this, skillsList,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        
+
         mSecondarySpinner.setAdapter(adapter);
 
         // show hint.
