@@ -18,6 +18,8 @@ public class ActionBarMenuActivity extends BaseActivity {
 
     private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+    private boolean enable = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(TAG, "***** onCreate");
@@ -29,6 +31,22 @@ public class ActionBarMenuActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.profile_menu, menu);
+        return true;
+    }
+
+    /**
+     * disable search, user home page and all menu options except sign out when user is in
+     * registration phase
+     */
+    @Override
+    public boolean onPrepareOptionsMenu (Menu menu) {
+        if (!isEnable()) {
+            menu.findItem(R.id.app_bar_search).setEnabled(false);
+            menu.findItem(R.id.app_bar_profile).setEnabled(false);
+            menu.findItem(R.id.menu_manage_skills).setEnabled(false);
+            menu.findItem(R.id.menu_history).setEnabled(false);
+            menu.findItem(R.id.menu_edit_profile).setEnabled(false);
+        }
         return true;
     }
 
@@ -68,5 +86,13 @@ public class ActionBarMenuActivity extends BaseActivity {
         }
         startActivity(intent);
         return true;
+    }
+
+    public boolean isEnable() {
+        return enable;
+    }
+
+    public void setEnable(boolean enable) {
+        this.enable = enable;
     }
 }

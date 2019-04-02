@@ -1,17 +1,30 @@
 package com.example.user.skillbarter;
 
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class AddSkillActivity extends ActionBarMenuActivity {
+
+    //TODO: add validate function
 
     private static final String TAG = "AddSkillActivity";
 
@@ -19,8 +32,8 @@ public class AddSkillActivity extends ActionBarMenuActivity {
 
     private EditText mPointsView;
 
-    private String mCategory, mSkill;
-
+    // args for creating a new UserSkills object
+    private String mCategory, mSkill, mUserID;
     private int mPointsValue;
 
 
@@ -28,6 +41,9 @@ public class AddSkillActivity extends ActionBarMenuActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_skill);
+        ButterKnife.bind(this);
+
+        mPointsView = findViewById(R.id.points);
 
         List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
 
@@ -62,6 +78,44 @@ public class AddSkillActivity extends ActionBarMenuActivity {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
+    }
+
+    @OnClick(R.id.button_add)
+    public void onAddClicked() {
+        Log.d(TAG, "***** onAddClicked");
+
+        showProgressDialog();
+        mUserID = FirebaseAuth.getInstance().getUid();
+
+        if (TextUtils.isEmpty(mPointsView.getText().toString())) {
+            // user did not specify points value for his skill.
+            mPointsView.setError("Required.");
+            return;
+        }
+
+        mPointsValue = Integer.parseInt(mPointsView.getText().toString());
+
+        addUserSkill();
+
+        // return to prev activity.
+        onBackPressed();
+    }
+
+    /**
+     * add skill to database. Each skill is added to the child collection 'User Skills'
+     * under collection 'User Data'
+     */
+    private void addUserSkill() {
+        UserSkills userSkill = new UserSkills(mUserID, mCategory, mSkill, mPointsValue);
+        String docID = userSkill.getSkillId();
+
+        // add sub-collection
+//        CollectionReference userRef = FirebaseFirestore.getInstance().collection("User Data");
+//        userRef.document(mUserID).collection("User Skills").document(docID).set(userSkill);
+
+        // add user's skill to database.
+        CollectionReference skillsCollection = FirebaseFirestore.getInstance().collection("User Skills");
+        skillsCollection.document(docID).set(userSkill);
     }
 
     private void firstSpinnerChooser(AdapterView<?> parent, View view, int position, long id) {

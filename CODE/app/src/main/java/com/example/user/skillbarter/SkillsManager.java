@@ -7,8 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
@@ -24,7 +28,7 @@ public class SkillsManager extends ActionBarMenuActivity {
 
     private Button buttonAdd;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference userRef = db.collection("User Data");
+    private CollectionReference skillsRef = db.collection("User Skills");
 
 
 //    private Button buttonRemove;
@@ -39,7 +43,7 @@ public class SkillsManager extends ActionBarMenuActivity {
 
         loadUserSkills();
 
-        buildRecyclerView();
+//        buildRecyclerView();
 
         buttonAdd = findViewById(R.id.button_add);
 
@@ -79,18 +83,23 @@ public class SkillsManager extends ActionBarMenuActivity {
     // load user's skills from database.
     public void loadUserSkills() {
         mSkillList = new ArrayList<>();
-        mSkillList.add(new SkillItem("Piano"));
-        mSkillList.add(new SkillItem("Cooking"));
-        mSkillList.add(new SkillItem("Cooking"));
-        mSkillList.add(new SkillItem("Cooking"));
-        mSkillList.add(new SkillItem("Cooking"));
-        mSkillList.add(new SkillItem("Cooking"));
-        mSkillList.add(new SkillItem("Cooking"));
-        mSkillList.add(new SkillItem("Cooking"));
+        final String uID = FirebaseAuth.getInstance().getUid();
 
+        skillsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                //TODO: consider for optimizing this with querying the documents' key
+                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                    if (documentSnapshot.getString("userID").equals(uID)) {
+                        String skill = documentSnapshot.getString("skill");
+                        mSkillList.add(new SkillItem(skill));
+                    }
+                }
+                buildRecyclerView();
+            }
+        });
 
-
-//        // get currently signed in user's id
+//        // **** get currently signed in user's id from sub-collection
 //        String uID = FirebaseAuth.getInstance().getUid();
 //        userRef.document(uID).collection("User Skills").get()
 //                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {

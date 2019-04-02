@@ -49,8 +49,7 @@ public class RegisterActivity extends ActionBarMenuActivity
         implements DatePickerDialog.OnDateSetListener, EventListener<DocumentSnapshot> {
 
     //TODO: implement 2 different cases: 1.first registration 2. edit profile.
-    //TODO: when 1 - disable all the menu bar except "sign Out"
-    //TODO: when 2 - load all the data to the form
+    //TODO: remove calendar picker when 2
 
     private static final String TAG = "RegisterActivity";
 
@@ -127,10 +126,16 @@ public class RegisterActivity extends ActionBarMenuActivity
 
         // Get user ID from extras
         if (getIntent().getExtras() != null) {
+            // user reached this intent by clicking on edit profile button.
             signedInUserID = getIntent().getExtras().getString(KEY_USER_ID);
             showProgressDialog();
             mUserRef = mFirestore.collection(getString(R.string.collection_user_data))
                     .document(signedInUserID);
+        } else {
+            // user reached this intent by signing in for the first time.
+            // disable all options menu bar except for sign out.
+            setEnable(false);
+
         }
     }
 
@@ -270,9 +275,9 @@ public class RegisterActivity extends ActionBarMenuActivity
         Log.d(TAG, "***** validateForm");
         boolean valid = true;
 
-        if (signedInUserID != null) {
-            return true;
-        }
+//        if (signedInUserID != null) {
+//            return true;
+//        }
 
         if (TextUtils.isEmpty(firstName)) {
             firstNameView.setError("Required.");

@@ -17,10 +17,11 @@ public class UserSkills {
         //public no-arg constructor needed
     }
 
-    public UserSkills(String userID, String category, String skill, int level, int pointsValue, String address) {
+    public UserSkills(String userID, String category, String skill, int pointsValue) {
         this.userID = userID;
         this.category = category;
         this.skill = skill;
+        this.skillId = userID + "." + category + "." + skill;
 //        this.level = level;
         this.pointsValue = pointsValue;
 //        this.address = address;
