@@ -16,17 +16,6 @@ public class DatePickerFragment extends DialogFragment {
         DatePickerFragment.calendar = calendar;
     }
 
-//    private static int year;
-//    private static int month;
-//    private static int dayOfMonth;
-
-//    public static void setAlreadyPicked(int year, int month, int dayOfMonth ) {
-//        DatePickerFragment.alreadyPicked = true;
-//        DatePickerFragment.year = year;
-//        DatePickerFragment.month = month;
-//        DatePickerFragment.dayOfMonth = dayOfMonth;
-//    }
-
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

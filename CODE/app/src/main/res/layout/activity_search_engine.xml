@@ -78,7 +78,7 @@
         app:layout_constraintTop_toBottomOf="@+id/distance_title">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/distance_from"
+            android:id="@+id/max_distance"
             android:layout_width="336dp"
             android:layout_height="wrap_content"
             android:hint="@string/max_distance"
@@ -210,9 +210,10 @@
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/time_from"
-            android:layout_width="336dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/from" />
+            android:hint="@string/from"
+            android:enabled="false"/>
     </android.support.design.widget.TextInputLayout>
 
     <ImageButton
@@ -221,6 +222,7 @@
         android:layout_height="0dp"
         android:background="@drawable/ic_time"
         android:contentDescription="@string/clock_image_description"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="@+id/time_from_wrapper"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toStartOf="@+id/time_to_wrapper"
@@ -241,7 +243,8 @@
             android:id="@+id/time_to"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/to" />
+            android:hint="@string/to"
+            android:enabled="false"/>
     </android.support.design.widget.TextInputLayout>
 
     <ImageButton
@@ -330,7 +333,7 @@
         app:layout_constraintVertical_bias="0.482" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"

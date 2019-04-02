@@ -98,13 +98,14 @@
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <android.support.design.widget.TextInputEditText
+            <com.santalu.maskedittext.MaskEditText
                 android:id="@+id/input_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="@string/user_phone_number"
                 android:inputType="phone"
                 android:digits="0123456789+"
-                android:hint="@string/user_phone_number" />
+                app:met_mask="@string/phone_mask"/>
         </android.support.design.widget.TextInputLayout>
 
         <!--Input Address-->
