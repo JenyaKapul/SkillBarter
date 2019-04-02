@@ -50,6 +50,7 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     //TODO: implement 2 different cases: 1.first registration 2. edit profile.
     //TODO: remove calendar picker when 2
+    //TODO: force phone's next button to move to the next editText input
 
     private static final String TAG = "RegisterActivity";
 

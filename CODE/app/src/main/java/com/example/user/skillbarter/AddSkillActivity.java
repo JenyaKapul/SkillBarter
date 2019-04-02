@@ -1,5 +1,6 @@
 package com.example.user.skillbarter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -97,9 +98,21 @@ public class AddSkillActivity extends ActionBarMenuActivity {
 
         addUserSkill();
 
+
         // return to prev activity.
         onBackPressed();
+
+//        Intent intent = new Intent(this, .class);
+//        intent.putExtra(RegisterActivity.KEY_USER_ID, currentUser.getUid());
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        Intent intent = new Intent(this, SkillsManager.class);
+////        intent.addCategory(Intent.CATEGORY_HOME);
+////        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        startActivity(intent);
+//    }
 
     /**
      * add skill to database. Each skill is added to the child collection 'User Skills'

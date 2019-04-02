@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,7 +22,10 @@ import butterknife.ButterKnife;
 
 
 public class SkillsManager extends ActionBarMenuActivity {
-    private ArrayList<SkillItem> mSkillList;
+
+    private static final String TAG = "SkillsManager";
+
+    private ArrayList<SkillItem> mSkillList = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -65,6 +70,21 @@ public class SkillsManager extends ActionBarMenuActivity {
 //        });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "***** onResume: ");
+        Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+
+        if (mAdapter != null) {
+//            mAdapter.notifyItemInserted(mSkillList.size()-1);
+        }
+
+//        setupUI(findViewById(R.id.main_layout));
+    }
+
+
+
 //    public void insertItem(int position) {
 //        mSkillList.add(position, new ExampleItem(R.drawable.ic_android, "New Item At Position" + position, "This is Line 2"));
 //        mAdapter.notifyItemInserted(position);
@@ -82,7 +102,7 @@ public class SkillsManager extends ActionBarMenuActivity {
 
     // load user's skills from database.
     public void loadUserSkills() {
-        mSkillList = new ArrayList<>();
+//        mSkillList = new ArrayList<>();
         final String uID = FirebaseAuth.getInstance().getUid();
 
         skillsRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
