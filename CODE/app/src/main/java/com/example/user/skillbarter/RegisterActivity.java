@@ -140,7 +140,6 @@ public class RegisterActivity extends ActionBarMenuActivity
             // user reached this intent by signing in for the first time.
             // disable all options menu bar except for sign out.
             setEnable(false);
-
         }
     }
 

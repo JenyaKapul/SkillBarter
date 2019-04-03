@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -60,18 +59,16 @@ public class SkillsManager extends ActionBarMenuActivity {
         adapter.setOnItemClickListener(new SkillAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position, String buttonClicked) {
-                UserSkills skill = documentSnapshot.toObject(UserSkills.class);
-                String id = documentSnapshot.getId();
-                String path = documentSnapshot.getReference().getPath();
-                Toast.makeText(SkillsManager.this,
-                        "Position: " + position + " Path: " + path, Toast.LENGTH_SHORT).show();
 
                 if (buttonClicked.equals("delete")) {
                     documentSnapshot.getReference().delete();
-                    //TODO: delete the document
-
                 } else if (buttonClicked.equals("edit")) {
                     //TODO: edit the document
+                    String skillPath = documentSnapshot.getReference().getPath();
+                    Intent intent = new Intent(SkillsManager.this, NewSkillActivity.class);
+                    intent.putExtra(NewSkillActivity.KEY_SKILL_PATH, skillPath);
+                    startActivity(intent);
+
                 }
             }
         });
