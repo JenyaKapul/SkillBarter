@@ -2,17 +2,24 @@ package com.example.user.skillbarter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-import java.util.ArrayList;
 
 public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkills, SkillAdapter.SkillHolder> {
+
+    private static final String TAG = "SkillAdapter";
+
+    private OnItemClickListener listener;
 
     public SkillAdapter(@NonNull FirestoreRecyclerOptions<UserSkills> options) {
         super(options);
@@ -37,10 +44,42 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkills, SkillAdap
 
     class SkillHolder extends RecyclerView.ViewHolder {
         TextView textViewSkill;
+        ImageView imageViewDelete;
+        ImageView imageViewEdit;
 
         public SkillHolder(View itemView) {
             super(itemView);
             textViewSkill = itemView.findViewById(R.id.textView);
+            imageViewDelete = itemView.findViewById(R.id.clearView);
+            imageViewEdit = itemView.findViewById(R.id.editView);
+
+            imageViewDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    Log.d(TAG, "onClick: ");
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(getSnapshots().getSnapshot(position), position, "delete");
+                    }
+                }
+            });
+
+            imageViewEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(getSnapshots().getSnapshot(position), position, "edit");
+                    }
+                }
+            });
         }
+    }
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position, String buttonClicked);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 }

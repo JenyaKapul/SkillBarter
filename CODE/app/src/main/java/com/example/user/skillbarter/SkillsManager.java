@@ -7,23 +7,22 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 
     // TODO: consider optimizing this with querying the documents' key
-    // TODO: change the action bar menu activity to save and close: https://www.youtube.com/watch?v=1YMK2SatG8o&list=PLrnPJCHvNZuBf5KH4XXOthtgo6E4Epjl8&index=31
-
 
 public class SkillsManager extends ActionBarMenuActivity {
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference skillsRef = db.collection("User Skills");
-    private String uID = FirebaseAuth.getInstance().getUid();
 
     private SkillAdapter adapter;
 
@@ -32,15 +31,62 @@ public class SkillsManager extends ActionBarMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skills_manager);
 
-        FloatingActionButton buttonAddSkill = findViewById(R.id.button_add);
-        buttonAddSkill.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton buttonAdd = findViewById(R.id.button_add);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
                 startActivity(new Intent(SkillsManager.this, NewSkillActivity.class));
             }
         });
 
         setUpRecyclerView();
+    }
+
+    private void setUpRecyclerView() {
+        String uID = FirebaseAuth.getInstance().getUid();
+        Query query = skillsRef.whereEqualTo("userID", uID);
+
+        FirestoreRecyclerOptions<UserSkills> options = new FirestoreRecyclerOptions.Builder<UserSkills>()
+                .setQuery(query, UserSkills.class)
+                .build();
+
+        adapter = new SkillAdapter(options);
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+//        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new SkillAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position, String buttonClicked) {
+                UserSkills skill = documentSnapshot.toObject(UserSkills.class);
+                String id = documentSnapshot.getId();
+                String path = documentSnapshot.getReference().getPath();
+                Toast.makeText(SkillsManager.this,
+                        "Position: " + position + " Path: " + path, Toast.LENGTH_SHORT).show();
+
+                if (buttonClicked.equals("delete")) {
+                    documentSnapshot.getReference().delete();
+                    //TODO: delete the document
+
+                } else if (buttonClicked.equals("edit")) {
+                    //TODO: edit the document
+                }
+            }
+        });
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                adapter.deleteItem(viewHolder.getAdapterPosition());
+            }
+        }).attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -53,36 +99,5 @@ public class SkillsManager extends ActionBarMenuActivity {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
-    }
-
-    private void setUpRecyclerView() {
-        Query query = skillsRef.whereEqualTo("userID", uID)
-                .orderBy("skill", Query.Direction.ASCENDING);
-
-        FirestoreRecyclerOptions<UserSkills> options = new FirestoreRecyclerOptions
-                .Builder<UserSkills>().setQuery(query, UserSkills.class)
-                .build();
-
-        adapter = new SkillAdapter(options);
-
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-//        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-        // functionality for swiping left or right to delete user's skill.
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
-                                  RecyclerView.ViewHolder target) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                adapter.deleteItem(viewHolder.getAdapterPosition());
-            }
-        }).attachToRecyclerView(recyclerView);
     }
 }

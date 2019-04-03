@@ -3,10 +3,14 @@ package com.example.user.skillbarter;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
@@ -21,7 +25,7 @@ import butterknife.OnClick;
 //TODO: add validate function
 
 
-public class NewSkillActivity extends ActionBarMenuActivity {
+public class NewSkillActivity extends BaseActivity {
 
     private static final String TAG = "NewSkillActivity";
 
@@ -36,14 +40,19 @@ public class NewSkillActivity extends ActionBarMenuActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "***** onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_skill);
         ButterKnife.bind(this);
+
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
+        setTitle("Add Skill");
 
         mPointsView = findViewById(R.id.points);
 
         List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
 
+        // adapter for displaying hint 'Choose Category' in the first spinner.
         HintAdapter adapter = new HintAdapter(this, categories,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -77,10 +86,22 @@ public class NewSkillActivity extends ActionBarMenuActivity {
         });
     }
 
-    @OnClick(R.id.button_add)
-    public void onAddClicked() {
-        Log.d(TAG, "***** onAddClicked");
-        saveUserSkill();
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.new_skill_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.save_skill:
+                saveUserSkill();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
@@ -88,6 +109,7 @@ public class NewSkillActivity extends ActionBarMenuActivity {
      * under collection 'User Data'
      */
     private void saveUserSkill() {
+        Log.d(TAG, "***** saveUserSkill: ");
         mUserID = FirebaseAuth.getInstance().getUid();
 
         if (TextUtils.isEmpty(mPointsView.getText().toString())) {
@@ -101,8 +123,11 @@ public class NewSkillActivity extends ActionBarMenuActivity {
         String docID = userSkill.getSkillId();
 
         // add user's skill to database.
-        CollectionReference skillsCollection = FirebaseFirestore.getInstance().collection("User Skills");
+        CollectionReference skillsCollection = FirebaseFirestore.getInstance()
+                .collection("User Skills");
         skillsCollection.document(docID).set(userSkill);
+
+        Toast.makeText(this, "Skill added", Toast.LENGTH_SHORT).show();
 
         finish();
     }
@@ -162,8 +187,9 @@ public class NewSkillActivity extends ActionBarMenuActivity {
     private void secondSpinnerChooser(AdapterView<?> parent, View view, int position, long id) {
         String skillLabel = parent.getItemAtPosition(position).toString();
         if (!skillLabel.startsWith("Choose")) {
-            findViewById(R.id.button_add).setEnabled(true);
-            findViewById(R.id.button_add).setBackgroundColor(0xFF039BE5); // primary background color
+            //TODO: set save button enabled here (it should be disabled by default)
+//            findViewById(R.id.button_add).setEnabled(true);
+//            findViewById(R.id.button_add).setBackgroundColor(0xFF039BE5); // primary background color
 
             mSkill = skillLabel;
         }
