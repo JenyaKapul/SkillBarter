@@ -14,10 +14,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 
+    // TODO: consider optimizing this with querying the documents' key
+    // TODO: change the action bar menu activity to save and close: https://www.youtube.com/watch?v=1YMK2SatG8o&list=PLrnPJCHvNZuBf5KH4XXOthtgo6E4Epjl8&index=31
+
+
 public class SkillsManager extends ActionBarMenuActivity {
-
-    //TODO: consider for optimizing this with querying the documents' key
-
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference skillsRef = db.collection("User Skills");
@@ -34,27 +35,11 @@ public class SkillsManager extends ActionBarMenuActivity {
         buttonAddSkill.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SkillsManager.this, AddSkillActivity.class));
+                startActivity(new Intent(SkillsManager.this, NewSkillActivity.class));
             }
         });
 
         setUpRecyclerView();
-    }
-
-    private void setUpRecyclerView() {
-        Query query = skillsRef.orderBy("skill", Query.Direction.ASCENDING)
-                .whereEqualTo("userID", uID);
-
-        FirestoreRecyclerOptions<UserSkills> options = new FirestoreRecyclerOptions
-                .Builder<UserSkills>().setQuery(query, UserSkills.class)
-                .build();
-
-        adapter = new SkillAdapter(options);
-
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
     }
 
     @Override
@@ -67,5 +52,20 @@ public class SkillsManager extends ActionBarMenuActivity {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+    }
+
+    private void setUpRecyclerView() {
+        Query query = skillsRef.whereEqualTo("userID", uID)
+                .orderBy("skill", Query.Direction.ASCENDING);
+
+        FirestoreRecyclerOptions<UserSkills> options = new FirestoreRecyclerOptions
+                .Builder<UserSkills>().setQuery(query, UserSkills.class)
+                .build();
+
+        adapter = new SkillAdapter(options);
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
     }
 }

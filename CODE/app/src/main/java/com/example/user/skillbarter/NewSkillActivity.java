@@ -18,17 +18,18 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddSkillActivity extends ActionBarMenuActivity {
+//TODO: add validate function
 
-    //TODO: add validate function
 
-    private static final String TAG = "AddSkillActivity";
+public class NewSkillActivity extends ActionBarMenuActivity {
+
+    private static final String TAG = "NewSkillActivity";
 
     private Spinner mMainSpinner, mSecondarySpinner;
 
     private EditText mPointsView;
 
-    // args for creating a new UserSkills object
+    // args for creating a new UserSkills object.
     private String mCategory, mSkill, mUserID;
     private int mPointsValue;
 
@@ -36,7 +37,7 @@ public class AddSkillActivity extends ActionBarMenuActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_skill);
+        setContentView(R.layout.activity_new_skill);
         ButterKnife.bind(this);
 
         mPointsView = findViewById(R.id.points);
@@ -49,7 +50,7 @@ public class AddSkillActivity extends ActionBarMenuActivity {
         mMainSpinner = findViewById(R.id.category_spinner);
         mMainSpinner.setAdapter(adapter);
 
-        // show hint
+        // show hint.
         mMainSpinner.setSelection(adapter.getCount());
 
         // add listener to the first spinner in order to load the correct data
@@ -82,8 +83,6 @@ public class AddSkillActivity extends ActionBarMenuActivity {
         saveUserSkill();
     }
 
-
-
     /**
      * add skill to database. Each skill is added to the child collection 'User Skills'
      * under collection 'User Data'
@@ -100,10 +99,6 @@ public class AddSkillActivity extends ActionBarMenuActivity {
         mPointsValue = Integer.parseInt(mPointsView.getText().toString());
         UserSkills userSkill = new UserSkills(mUserID, mCategory, mSkill, mPointsValue);
         String docID = userSkill.getSkillId();
-
-        // add sub-collection
-//        CollectionReference userRef = FirebaseFirestore.getInstance().collection("User Data");
-//        userRef.document(mUserID).collection("User Skills").document(docID).set(userSkill);
 
         // add user's skill to database.
         CollectionReference skillsCollection = FirebaseFirestore.getInstance().collection("User Skills");
