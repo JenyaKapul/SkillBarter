@@ -280,10 +280,6 @@ public class RegisterActivity extends ActionBarMenuActivity
         Log.d(TAG, "***** validateForm");
         boolean valid = true;
 
-//        if (signedInUserID != null) {
-//            return true;
-//        }
-
         if (TextUtils.isEmpty(firstName)) {
             firstNameView.setError("Required.");
             valid = false;

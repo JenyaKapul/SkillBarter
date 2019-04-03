@@ -31,6 +31,10 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkills, SkillAdap
         return new SkillHolder(v);
     }
 
+    public void deleteItem(int position) {
+        getSnapshots().getSnapshot(position).getReference().delete();
+    }
+
     class SkillHolder extends RecyclerView.ViewHolder {
         TextView textViewSkill;
 
