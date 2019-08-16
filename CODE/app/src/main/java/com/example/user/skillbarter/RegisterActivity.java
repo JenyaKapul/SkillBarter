@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -178,7 +177,6 @@ public class RegisterActivity extends ActionBarMenuActivity
     }
 
 
-
     private void setProfilePictureBackgroundInvisible(){
         ImageView imageView = findViewById(R.id.profile_picture_holder);
         imageView.setBackground(null);
@@ -309,13 +307,6 @@ public class RegisterActivity extends ActionBarMenuActivity
             /* a new image picked as a profile picture for a new user */
             saveProfileImageInFirebase(mUri);
         }
-//        if (profilePictureURL == null && mUri == null) {
-//            Toast.makeText(this, R.string.missing_profile_picture_toast, Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        saveUser();
-//        Intent intent = new Intent(RegisterActivity.this, UserHomeProfile.class);
-//        startActivity(intent);
     }
 
 
@@ -420,9 +411,6 @@ public class RegisterActivity extends ActionBarMenuActivity
         }
 
         dateOfBirth = userData.getDateOfBirth();
-//        String dateString = DateFormat.getDateInstance().format(dateOfBirth.toDate());
-//        birthdayView.setText(dateString);
-//        datePickerButton.setVisibility(View.INVISIBLE);
 
         if (dateOfBirth != null) {
             String dateString = DateFormat.getDateInstance().format(dateOfBirth.toDate());
