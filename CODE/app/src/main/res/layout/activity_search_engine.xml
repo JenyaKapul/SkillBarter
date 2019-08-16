@@ -288,6 +288,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/points_image_description"
+            android:inputType="number"
             android:hint="@string/min" />
     </android.support.design.widget.TextInputLayout>
 
@@ -315,7 +316,8 @@
             android:id="@+id/points_max"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="@string/max" />
+            android:hint="@string/max"
+            android:inputType="number"/>
     </android.support.design.widget.TextInputLayout>
 
     <ImageView

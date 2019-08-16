@@ -34,13 +34,13 @@ public class SearchEngine extends ActionBarMenuActivity implements TimePickerDia
 	private static final int TIME_NONE = 0;
     private static final int TIME_FROM = 1;
     private static final int TIME_TO = 2;
-	
-	private Spinner mMainSpinner, mSecondarySpinner;
-
     private Calendar time_from = null;
     private Calendar time_to = null;
     private int currentTimePicker = SearchEngine.TIME_NONE;
-
+	
+	private Spinner mMainSpinner, mSecondarySpinner;
+    private int pointsMin = -1;
+    private int pointsMax = -1;
 
     @BindView(R.id.max_distance)
     EditText maxDistance;
@@ -108,6 +108,7 @@ public class SearchEngine extends ActionBarMenuActivity implements TimePickerDia
 
         // show hint
         mMainSpinner.setSelection(adapter.getCount());
+
     }
 	
 	@Override
@@ -204,6 +205,12 @@ public class SearchEngine extends ActionBarMenuActivity implements TimePickerDia
         validateTimeRange(this.time_from, this.time_to);
     }
 
+    @OnClick(R.id.search_button)
+    public void onSearchButtonClicked(){
+
+    }
+
+
     private boolean validateTimeRange(Calendar from, Calendar to){
         if ((from != null) && (to != null) ){
             int hoursDiff = to.get(Calendar.HOUR_OF_DAY) - from.get(Calendar.HOUR_OF_DAY);
@@ -214,6 +221,21 @@ public class SearchEngine extends ActionBarMenuActivity implements TimePickerDia
                 timeToView.setError("Time must be later than bottom range limit");
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean validatePointsRange(){
+        if(!pointsMinView.getText().toString().isEmpty()){
+            pointsMin = Integer.parseInt(pointsMinView.getText().toString());
+        }
+        if(!pointsMaxView.getText().toString().isEmpty()){
+            pointsMax = Integer.parseInt(pointsMaxView.getText().toString());
+        }
+
+        if ((pointsMin != -1) && (pointsMax != -1) && (pointsMin > pointsMax) ){
+
+            return false;
         }
         return true;
     }
