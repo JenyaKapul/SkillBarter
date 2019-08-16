@@ -1,26 +1,13 @@
 package com.example.user.skillbarter;
 
-import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -75,6 +62,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
     @Override
     public void onStart() {
         super.onStart();
+        hideProgressDialog();
         mListener = mUserRef.addSnapshotListener(this);
     }
 
@@ -85,6 +73,12 @@ public class UserHomeProfile extends ActionBarMenuActivity
             mListener.remove();
             mListener = null;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideProgressDialog();
     }
 
     @Override
@@ -100,25 +94,29 @@ public class UserHomeProfile extends ActionBarMenuActivity
     }
 
 
+    private void setProfilePictureBackgroundInvisible(){
+        ImageView imageView = findViewById(R.id.profile_picture_holder);
+        imageView.setBackground(null);
+    }
+
+
     private void onUserLoaded(UserData userData) {
         String userName, userPoints, profilePictureURL;
-
 
         userName = userData.getFirstName() + " " + userData.getLastName();
         userPoints = Integer.toString(userData.getPointsBalance());
         profilePictureURL = userData.getProfilePictureURL();
+        if(profilePictureURL != null){
+            setProfilePictureBackgroundInvisible();
+        }
+
+        Glide.with(this).load(profilePictureURL).apply(new RequestOptions().centerCrop()
+                .circleCrop().placeholder(R.drawable.incognito)).into(profilePictureView);
 
         nameView.setText(userName);
 
         balanceView.setText(userPoints);
 
-        Glide.with(profilePictureView.getContext())
-                .load(profilePictureURL)
-                .into(profilePictureView);
-
         ratingBarView.setRating(userData.getPersonalRating());
-
-
-
     }
 }

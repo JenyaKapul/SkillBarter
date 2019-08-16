@@ -97,7 +97,6 @@ public class EmailPasswordActivity extends BaseActivity implements
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
 
                             findViewById(R.id.emailCreateAccountButton).setEnabled(false);
                             findViewById(R.id.verifyAgainButton).setVisibility(View.VISIBLE);
@@ -150,11 +149,6 @@ public class EmailPasswordActivity extends BaseActivity implements
                 });
     }
 
-    private void signOut() {
-        Log.d(TAG, "***** signOut");
-        mAuth.signOut();
-    }
-
     private void sendEmailVerification() {
         Log.d(TAG, "***** sendEmailVerification");
 
@@ -178,6 +172,7 @@ public class EmailPasswordActivity extends BaseActivity implements
                     }
                 });
     }
+
 
     private boolean validateForm() {
         Log.d(TAG, "***** validateForm");
@@ -228,7 +223,6 @@ public class EmailPasswordActivity extends BaseActivity implements
                         intent = new Intent(EmailPasswordActivity.this, RegisterActivity.class);
                     }
                     hideProgressDialog();
-
                     startActivity(intent);
                 }
             }

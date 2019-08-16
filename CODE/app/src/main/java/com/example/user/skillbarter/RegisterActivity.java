@@ -57,8 +57,6 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     private static final int AGE_LIMIT = 17;
 
-    private static final int CAMERA_INTENT = 6;
-
     private static final int INITIAL_POINTS_BALANCE = 50;
 
     private Calendar userBirthDay = null;
@@ -144,7 +142,7 @@ public class RegisterActivity extends ActionBarMenuActivity
             setEnable(false);
         }
         cameraService = new CameraService(this, this);
-
+        hideSoftKeyboard();
     }
 
 
@@ -168,40 +166,29 @@ public class RegisterActivity extends ActionBarMenuActivity
     }
 
 
+    @OnClick(R.id.button_gallery)
+    public void  onButtonGalleryClicked() {
+        cameraService.handleUserProfilePicture(false);
+    }
+
+
+    @OnClick(R.id.button_camera)
+    public void onButtonCameraClicked() {
+        cameraService.handleUserProfilePicture(true);
+    }
+
+
+
     private void setProfilePictureBackgroundInvisible(){
         ImageView imageView = findViewById(R.id.profile_picture_holder);
         imageView.setBackground(null);
     }
 
 
-    @OnClick(R.id.date_picker)
-    public void onDatePickerClicked() {
-        if (this.userBirthDay != null){
-            DatePickerFragment.setCalendar(this.userBirthDay);
-        }
-        DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(), "date picker");
-    }
-
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        this.userBirthDay = c;
-        String currDateString = DateFormat.getDateInstance().format(c.getTime());
-        birthdayView.setText(currDateString);
-        dateOfBirth = new Timestamp(c.getTime());
-	}
-
-
     /* get the result of the camera or file picker activity invoked in the CameraService class! */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "***** onActivityResult");
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == RESULT_OK) {
 
             if (requestCode == CameraService.REQUEST_TAKE_PHOTO) {
@@ -235,7 +222,7 @@ public class RegisterActivity extends ActionBarMenuActivity
     }
 
 
-    private void saveProfileImageInFirebase(Uri imageUri) {
+    private void saveProfileImageInFirebase(Uri imageUri){
         showProgressDialog();
         /* Create a storage reference to the user's profile image */
         StorageReference storageRef = mStorage.getReference();
@@ -250,7 +237,7 @@ public class RegisterActivity extends ActionBarMenuActivity
                         Log.d(TAG, "successfully uploaded image. uri= "+ uri.toString());
                         profilePictureURL = uri.toString();
 
-                        saveUser();
+                        createUser();
                         hideProgressDialog();
                         if (signedInUserID != null) {
                             onBackPressed();
@@ -263,13 +250,33 @@ public class RegisterActivity extends ActionBarMenuActivity
         });
     }
 
+
+    @OnClick(R.id.date_picker)
+    public void onDatePickerClicked() {
+        if (this.userBirthDay != null){
+            DatePickerFragment.setCalendar(this.userBirthDay);
+        }
+        DialogFragment datePicker = new DatePickerFragment();
+        datePicker.show(getSupportFragmentManager(), "date picker");
+    }
+
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, year);
+        c.set(Calendar.MONTH, month);
+        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        this.userBirthDay = c;
+        String currDateString = DateFormat.getDateInstance().format(c.getTime());
+        birthdayView.setText(currDateString);
+        dateOfBirth = new Timestamp(c.getTime());
+	}
+
+
     @OnClick(R.id.button_next)
     public void onNextClicked() {
-        Log.d(TAG, "***** onNextClicked");
-
         userID = mAuth.getUid();
         firstName = firstNameView.getText().toString();
-
         lastName = lastNameView.getText().toString();
         address = addressView.getText().toString();
         email = mAuth.getCurrentUser().getEmail();
@@ -292,15 +299,23 @@ public class RegisterActivity extends ActionBarMenuActivity
     }
 
 
-    @OnClick(R.id.button_gallery)
-    public void  onButtonGalleryClicked() {
-        cameraService.handleUserProfilePicture(false);
-    }
-
-
-    @OnClick(R.id.button_camera)
-    public void onButtonCameraClicked() {
-        cameraService.handleUserProfilePicture(true);
+    @OnClick(R.id.button_save)
+    public void onSaveClicked() {
+        if (mUri == null) {
+            /* user was edited and his profile picture didn't change */
+            createUser();
+            onBackPressed();
+        } else {
+            /* a new image picked as a profile picture for a new user */
+            saveProfileImageInFirebase(mUri);
+        }
+//        if (profilePictureURL == null && mUri == null) {
+//            Toast.makeText(this, R.string.missing_profile_picture_toast, Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        saveUser();
+//        Intent intent = new Intent(RegisterActivity.this, UserHomeProfile.class);
+//        startActivity(intent);
     }
 
 
@@ -355,10 +370,6 @@ public class RegisterActivity extends ActionBarMenuActivity
             addressView.setError(null);
         }
 
-//        if (profilePictureURL == null && mUri == null) {
-//            Toast.makeText(this, R.string.missing_profile_picture_toast, Toast.LENGTH_SHORT).show();
-//            valid = false;
-//        }
         return valid;
     }
 
@@ -368,34 +379,6 @@ public class RegisterActivity extends ActionBarMenuActivity
         Log.d(TAG, "***** onPrev2Clicked");
         findViewById(R.id.register_page_1).setVisibility(View.VISIBLE);
         findViewById(R.id.register_page_2).setVisibility(View.GONE);
-    }
-
-
-    @OnClick(R.id.button_save)
-    public void onSaveClicked() {
-        Log.d(TAG, "***** onSaveClicked");
-        if (profilePictureURL == null && mUri == null) {
-            Toast.makeText(this, R.string.missing_profile_picture_toast, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        saveUser();
-        Intent intent = new Intent(RegisterActivity.this, UserHomeProfile.class);
-        startActivity(intent);
-    }
-
-
-    // Add current user to Firebase Firestore
-    private void saveUser() {
-        Log.d(TAG, "***** saveUser");
-
-        if (mUri == null) {
-            /* user was edited and his profile picture didn't change */
-            createUser();
-            onBackPressed();
-        } else {
-            /* a new image picked as a profile picture for a new user */
-            saveProfileImageInFirebase(mUri);
-        }
     }
 
 
@@ -426,8 +409,6 @@ public class RegisterActivity extends ActionBarMenuActivity
         addressView.setText(userData.getAddress());
         phoneNumberView.setText(userData.getPhoneNumber());
 
-        Log.d(TAG, "***** loadUserData: gender= " + userData.getGender());
-
         gender = userData.getGender();
 
         if (gender != null && gender.equals(getString(R.string.female))) {
@@ -439,9 +420,14 @@ public class RegisterActivity extends ActionBarMenuActivity
         }
 
         dateOfBirth = userData.getDateOfBirth();
-        String dateString = DateFormat.getDateInstance().format(dateOfBirth.toDate());
-        birthdayView.setText(dateString);
-        datePickerButton.setVisibility(View.INVISIBLE);
+//        String dateString = DateFormat.getDateInstance().format(dateOfBirth.toDate());
+//        birthdayView.setText(dateString);
+//        datePickerButton.setVisibility(View.INVISIBLE);
+
+        if (dateOfBirth != null) {
+            String dateString = DateFormat.getDateInstance().format(dateOfBirth.toDate());
+            birthdayView.setText(dateString);
+        }
 
         profilePictureURL = userData.getProfilePictureURL();
 
@@ -451,7 +437,6 @@ public class RegisterActivity extends ActionBarMenuActivity
                     .apply(new RequestOptions().centerCrop().circleCrop()
                             .placeholder(R.drawable.incognito)).into(profilePictureView);
         }
-
     }
 
 
