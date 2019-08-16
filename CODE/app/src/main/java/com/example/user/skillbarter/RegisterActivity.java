@@ -1,15 +1,10 @@
 package com.example.user.skillbarter;
 
-import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,6 +33,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Calendar;
 
@@ -59,11 +57,7 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     private static final int AGE_LIMIT = 17;
 
-    private static final int GALLERY_INTENT = 5;
-
     private static final int CAMERA_INTENT = 6;
-
-    private static final int PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 7;
 
     private static final int INITIAL_POINTS_BALANCE = 50;
 
@@ -105,6 +99,9 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     private String signedInUserID;
 
+    /* indicate if user's info needs to be loaded from database */
+    private boolean shouldLoadUser = false;
+
     // listener to signed-in user's document from database.
     private ListenerRegistration mListener;
 
@@ -115,6 +112,11 @@ public class RegisterActivity extends ActionBarMenuActivity
     Timestamp dateOfBirth;
 
     int pointsBalance = INITIAL_POINTS_BALANCE;
+
+    private CameraService cameraService;
+
+    private Uri mUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,15 +135,18 @@ public class RegisterActivity extends ActionBarMenuActivity
         if (getIntent().getExtras() != null) {
             // user reached this intent by clicking on edit profile button.
             signedInUserID = getIntent().getExtras().getString(KEY_USER_ID);
-            showProgressDialog();
             mUserRef = mFirestore.collection(getString(R.string.collection_user_data))
                     .document(signedInUserID);
+            shouldLoadUser = true;
         } else {
             // user reached this intent by signing in for the first time.
             // disable all options menu bar except for sign out.
             setEnable(false);
         }
+        cameraService = new CameraService(this, this);
+
     }
+
 
     @Override
     public void onStart() {
@@ -152,6 +157,7 @@ public class RegisterActivity extends ActionBarMenuActivity
         }
     }
 
+
     @Override
     public void onStop() {
         super.onStop();
@@ -160,6 +166,13 @@ public class RegisterActivity extends ActionBarMenuActivity
             mListener = null;
         }
     }
+
+
+    private void setProfilePictureBackgroundInvisible(){
+        ImageView imageView = findViewById(R.id.profile_picture_holder);
+        imageView.setBackground(null);
+    }
+
 
     @OnClick(R.id.date_picker)
     public void onDatePickerClicked() {
@@ -182,41 +195,72 @@ public class RegisterActivity extends ActionBarMenuActivity
         dateOfBirth = new Timestamp(c.getTime());
 	}
 
+
+    /* get the result of the camera or file picker activity invoked in the CameraService class! */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "***** onActivityResult");
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if (resultCode == RESULT_OK) {
 
-        if (requestCode == CAMERA_INTENT || requestCode == GALLERY_INTENT) {
-
-            if (resultCode == RESULT_OK) {
-
-                // Get the Uri of the image from the gallery intent data
-                final Uri selectedImage = imageReturnedIntent.getData();
-
-                // Set the selected image in the profile picture view
-                profilePictureView.setImageURI(selectedImage);
-
-                // Create a storage reference to the user's profile image
-                StorageReference storageRef = mStorage.getReference();
-
-                final StorageReference imageRef = storageRef.child("image/" + selectedImage.getLastPathSegment());
-
-                imageRef.putFile(selectedImage).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            Log.d(TAG, "successfully uploaded user's image from gallery to Firebase Storage. uri= "+ uri.toString());
-                            profilePictureURL = uri.toString();
-                        }
-                    });
+            if (requestCode == CameraService.REQUEST_TAKE_PHOTO) {
+                try {
+                    cameraService.setmPhotoFile(cameraService.getmCompressor()
+                            .compressToFile(cameraService.getmPhotoFile()));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
+
+                mUri =  Uri.fromFile(cameraService.getmPhotoFile());
+                setProfilePictureBackgroundInvisible();
+                Glide.with(this).load(cameraService.getmPhotoFile())
+                        .apply(new RequestOptions().centerCrop().circleCrop()
+                                .placeholder(R.drawable.incognito)).into(profilePictureView);
+            } else if (requestCode == CameraService.REQUEST_GALLERY_PHOTO) {
+                Uri selectedImage = data.getData();
+                try {
+                    cameraService.setmPhotoFile(cameraService.getmCompressor()
+                            .compressToFile(new File(cameraService.getRealPathFromUri(selectedImage))));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mUri =  Uri.fromFile(cameraService.getmPhotoFile());
+                setProfilePictureBackgroundInvisible();
+                Glide.with(this).load(cameraService.getmPhotoFile())
+                        .apply(new RequestOptions().centerCrop().circleCrop()
+                                .placeholder(R.drawable.incognito)).into(profilePictureView);
             }
         }
+    }
+
+
+    private void saveProfileImageInFirebase(Uri imageUri) {
+        showProgressDialog();
+        /* Create a storage reference to the user's profile image */
+        StorageReference storageRef = mStorage.getReference();
+
+        final StorageReference imageRef = storageRef.child("image/" + imageUri.getLastPathSegment());
+        imageRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Log.d(TAG, "successfully uploaded image. uri= "+ uri.toString());
+                        profilePictureURL = uri.toString();
+
+                        saveUser();
+                        hideProgressDialog();
+                        if (signedInUserID != null) {
+                            onBackPressed();
+                        } else {
+                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @OnClick(R.id.button_next)
@@ -230,7 +274,7 @@ public class RegisterActivity extends ActionBarMenuActivity
         address = addressView.getText().toString();
         email = mAuth.getCurrentUser().getEmail();
 
-        phoneNumber = phoneNumberView.getText().toString(); // dateofbirth
+        phoneNumber = phoneNumberView.getText().toString();
 
         int checkedId = genderRadioGroup.getCheckedRadioButtonId();
         RadioButton b = genderRadioGroup.findViewById(checkedId);
@@ -247,20 +291,18 @@ public class RegisterActivity extends ActionBarMenuActivity
         findViewById(R.id.register_page_2).setVisibility(View.VISIBLE);
     }
 
+
     @OnClick(R.id.button_gallery)
-    public void onButtonGalleryClicked() {
-        Log.d(TAG, "***** onButtonGalleryClicked");
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto, GALLERY_INTENT);
+    public void  onButtonGalleryClicked() {
+        cameraService.handleUserProfilePicture(false);
     }
+
 
     @OnClick(R.id.button_camera)
     public void onButtonCameraClicked() {
-        Log.d(TAG, "***** onButtonCameraClicked");
-        requestRead();
-        Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(takePicture, CAMERA_INTENT);
+        cameraService.handleUserProfilePicture(true);
     }
+
 
     private boolean validateBirthDay(){
         Calendar currentDate = Calendar.getInstance();
@@ -293,18 +335,6 @@ public class RegisterActivity extends ActionBarMenuActivity
             lastNameView.setError(null);
         }
 
-        if (this.userBirthDay == null) {
-            birthdayView.setError("Required.");
-            valid = false;
-        } else if (!validateBirthDay()) {
-            birthdayView.setError("You must be at least " + AGE_LIMIT + " years old.");
-            Toast.makeText(this, "You must need at least " + AGE_LIMIT + " years old.", Toast.LENGTH_LONG).show();
-            valid = false;
-        }
-        else{
-            birthdayView.setError(null);
-        }
-
         if (gender == null) {
             maleRadioButton.setError("Required.");
         } else {
@@ -317,14 +347,21 @@ public class RegisterActivity extends ActionBarMenuActivity
         } else {
             phoneNumberView.setError(null);
         }
+
         if (TextUtils.isEmpty(address)) {
             addressView.setError("Required.");
             valid = false;
         } else {
             addressView.setError(null);
         }
+
+//        if (profilePictureURL == null && mUri == null) {
+//            Toast.makeText(this, R.string.missing_profile_picture_toast, Toast.LENGTH_SHORT).show();
+//            valid = false;
+//        }
         return valid;
     }
+
 
     @OnClick(R.id.button_prev2)
     public void onPrev2Clicked() {
@@ -333,24 +370,49 @@ public class RegisterActivity extends ActionBarMenuActivity
         findViewById(R.id.register_page_2).setVisibility(View.GONE);
     }
 
+
     @OnClick(R.id.button_save)
     public void onSaveClicked() {
         Log.d(TAG, "***** onSaveClicked");
-        createUser();
+        if (profilePictureURL == null && mUri == null) {
+            Toast.makeText(this, R.string.missing_profile_picture_toast, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        saveUser();
         Intent intent = new Intent(RegisterActivity.this, UserHomeProfile.class);
         startActivity(intent);
     }
 
+
     // Add current user to Firebase Firestore
+    private void saveUser() {
+        Log.d(TAG, "***** saveUser");
+
+        if (mUri == null) {
+            /* user was edited and his profile picture didn't change */
+            createUser();
+            onBackPressed();
+        } else {
+            /* a new image picked as a profile picture for a new user */
+            saveProfileImageInFirebase(mUri);
+        }
+    }
+
+
+    /*
+     * create a new User instance and add current user to database.
+     */
     private void createUser() {
-        Log.d(TAG, "***** createUser");
         UserData userData = new UserData(userID, profilePictureURL, dateOfBirth, firstName,
                 lastName, phoneNumber, address, email, gender, pointsBalance);
 
         DocumentReference userRef = mFirestore.collection(getString(R.string.collection_user_data))
                 .document(userID);
         userRef.set(userData);
+
+        hideProgressDialog();
     }
+
 
     /**
      * fill the registration form with the currently signed in user's details in order to
@@ -365,10 +427,13 @@ public class RegisterActivity extends ActionBarMenuActivity
         phoneNumberView.setText(userData.getPhoneNumber());
 
         Log.d(TAG, "***** loadUserData: gender= " + userData.getGender());
-        if (userData.getGender().equals("Female")) {
+
+        gender = userData.getGender();
+
+        if (gender != null && gender.equals(getString(R.string.female))) {
             femaleRadioButton.setChecked(true);
             maleRadioButton.setChecked(false);
-        } else {
+        } else if (gender != null && gender.equals(getString(R.string.male))) {
             femaleRadioButton.setChecked(false);
             maleRadioButton.setChecked(true);
         }
@@ -378,54 +443,17 @@ public class RegisterActivity extends ActionBarMenuActivity
         birthdayView.setText(dateString);
         datePickerButton.setVisibility(View.INVISIBLE);
 
+        profilePictureURL = userData.getProfilePictureURL();
 
-        Glide.with(profilePictureView.getContext())
-                .load(userData.getProfilePictureURL())
-                .into(profilePictureView);
-    }
-
-
-    /**
-     * requestPermissions and do something
-     *
-     */
-    public void requestRead() {
-        Log.d(TAG, "***** requestRead");
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-//        } else {
-//            readFile();
+        if (profilePictureURL != null) {
+            setProfilePictureBackgroundInvisible();
+            Glide.with(this).load(profilePictureURL)
+                    .apply(new RequestOptions().centerCrop().circleCrop()
+                            .placeholder(R.drawable.incognito)).into(profilePictureView);
         }
+
     }
 
-    /**
-     * do you want to do
-     */
-    public void readFile() {
-        // do something
-    }
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        Log.d(TAG, "***** onRequestPermissionsResult");
-        if (requestCode == PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                readFile();
-            } else {
-                // Permission Denied
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
-            }
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
 
     @Override
     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
@@ -435,8 +463,10 @@ public class RegisterActivity extends ActionBarMenuActivity
         }
 
         if (documentSnapshot.getReference().equals(mUserRef)) {
-            loadUserData(documentSnapshot.toObject(UserData.class));
-            hideProgressDialog();
+            if (shouldLoadUser) {
+                loadUserData(documentSnapshot.toObject(UserData.class));
+                shouldLoadUser = false;
+            }
         }
     }
 }
