@@ -147,5 +147,6 @@
 
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
-
+    <string name="error_toast">Error occurred! </string>
+    <string name="missing_profile_picture_toast">You must set profile picture</string>
 </resources>
