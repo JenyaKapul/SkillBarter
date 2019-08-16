@@ -240,7 +240,7 @@ public class RegisterActivity extends ActionBarMenuActivity
                         if (signedInUserID != null) {
                             onBackPressed();
                         } else {
-                            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+                            startActivity(new Intent(RegisterActivity.this, UserHomeProfile.class));
                         }
                     }
                 });
