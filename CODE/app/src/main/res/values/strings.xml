@@ -52,6 +52,13 @@
     <string name="min">MIN</string>
     <string name="max">MAX</string>
 
+    <!--SEARCH ITEM DETAILS-->
+    <string name="skill">SKILL:</string>
+    <string name="level">LEVEL:</string>
+    <string name="details">Details:</string>
+    <string name="location">Location:</string>
+    <string name="review">Reviews:</string>
+
 
     <!--ADD SKILL-->
     <string name="add_skill_title">Add New Skill:</string>

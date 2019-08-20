@@ -6,7 +6,8 @@
     android:layout_marginEnd="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
-    app:cardBackgroundColor="#FFFFE8">
+    app:cardCornerRadius="12dp"
+    app:cardBackgroundColor="#AFEEEE">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -24,25 +25,6 @@
             android:text="Skill"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-
-        <!--<ImageView-->
-            <!--android:id="@+id/editView"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:background="@drawable/ic_edit"-->
-            <!--android:textAppearance="@style/TextAppearance.AppCompat.Large" />-->
-
-        <!--<ImageView-->
-            <!--android:id="@+id/deleteView"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentTop="true"-->
-            <!--android:background="@drawable/ic_clear"-->
-            <!--android:layout_marginRight="10dp"-->
-            <!--android:layout_toLeftOf="@+id/editView"-->
-            <!--android:textAppearance="@style/TextAppearance.AppCompat.Large" />-->
         <ImageView
             android:id="@+id/editView"
             android:layout_width="50dp"

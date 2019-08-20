@@ -9,11 +9,9 @@
 
     <ImageView
         android:id="@+id/profile_picture_holder"
-        android:contentDescription="Profi"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="8dp"
-
         android:layout_marginTop="8dp"
         android:background="@drawable/incognito"
         app:layout_constraintDimensionRatio="1:1"
