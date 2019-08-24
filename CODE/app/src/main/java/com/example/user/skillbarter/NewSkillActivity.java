@@ -118,7 +118,7 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.new_skill_menu, menu);
+        menuInflater.inflate(R.menu.save_item_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
