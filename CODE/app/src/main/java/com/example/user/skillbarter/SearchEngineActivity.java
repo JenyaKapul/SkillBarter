@@ -42,8 +42,8 @@ public class SearchEngineActivity extends ActionBarMenuActivity implements TimeP
     private int mPointsMin, mPointsMax;
 
 
-    @BindView(R.id.max_distance)
-    EditText maxDistance;
+//    @BindView(R.id.max_distance)
+//    EditText maxDistance;
 
     @BindView(R.id.sunday)
     CheckBox sunday;
@@ -258,7 +258,7 @@ public class SearchEngineActivity extends ActionBarMenuActivity implements TimeP
 
         FilterSearchResult filterSearchResult = new FilterSearchResult(mCategory, mSkill, mPointsMin, mPointsMax);
 
-        Intent intent = new Intent(this, skillsSearchResultActivity.class);
+        Intent intent = new Intent(this, SearchResultActivity.class);
 
         intent.putExtra("parcel_data", filterSearchResult);
         startActivity(intent);
