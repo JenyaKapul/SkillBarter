@@ -214,8 +214,6 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
             mSecondarySpinner.setEnabled(false);
         }
 
-//        setSecondSpinnerAdapter(skillArrayID);
-        ///////////////////SECOND
         List<CharSequence> skillsList = Arrays.asList(this.getResources().getTextArray(skillArrayID));
 
         HintAdapter adapter = new HintAdapter(this, skillsList,
@@ -232,9 +230,6 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         String skillLabel = parent.getItemAtPosition(position).toString();
         if (!skillLabel.startsWith("Choose")) {
             //TODO: set save button enabled here (it should be disabled by default)
-//            findViewById(R.id.button_add).setEnabled(true);
-//            findViewById(R.id.button_add).setBackgroundColor(0xFF039BE5); // primary background color
-
             mSkill = skillLabel;
         }
     }
