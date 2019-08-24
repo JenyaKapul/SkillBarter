@@ -9,12 +9,14 @@ public class FilterSearchResult implements Parcelable {
     private String skill;
     private int minPoints;
     private int maxPoints;
+    private int minLevel;
 
-    public FilterSearchResult(String category, String skill, int minPoints, int maxPoints) {
+    public FilterSearchResult(String category, String skill, int minPoints, int maxPoints, int minLevel) {
         this.category = category;
         this.skill = skill;
         this.minPoints = minPoints;
         this.maxPoints = maxPoints;
+        this.minLevel = minLevel;
     }
 
     protected FilterSearchResult(Parcel in) {
@@ -22,6 +24,7 @@ public class FilterSearchResult implements Parcelable {
         skill = in.readString();
         minPoints = in.readInt();
         maxPoints = in.readInt();
+        minLevel = in.readInt();
     }
 
     @Override
@@ -30,6 +33,7 @@ public class FilterSearchResult implements Parcelable {
         dest.writeString(skill);
         dest.writeInt(minPoints);
         dest.writeInt(maxPoints);
+        dest.writeInt(minLevel);
     }
 
     @Override
@@ -79,5 +83,13 @@ public class FilterSearchResult implements Parcelable {
 
     public void setMaxPoints(int maxPoints) {
         this.maxPoints = maxPoints;
+    }
+
+    public int getMinLevel() {
+        return minLevel;
+    }
+
+    public void setMinLevel(int minLevel) {
+        this.minLevel = minLevel;
     }
 }

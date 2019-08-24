@@ -1,5 +1,6 @@
 package com.example.user.skillbarter;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -54,6 +55,9 @@ public class SearchResultActivity extends ActionBarMenuActivity {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position, String buttonClicked) {
                 //TODO: move to intent presenting the skill
+                Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
+                intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, documentSnapshot.getId());
+                startActivity(intent);
             }
         });
     }

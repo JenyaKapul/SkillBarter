@@ -30,6 +30,30 @@
         app:layout_constraintStart_toStartOf="@+id/category_spinner"
         app:layout_constraintTop_toBottomOf="@+id/category_spinner" />
 
+    <TextView
+        android:id="@+id/skill_level_title"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center_vertical"
+        android:text="MINIMUM LEVEL OF EXPERTISE:"
+        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/category_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/skills_spinner" />
+
+    <SeekBar
+        android:id="@+id/skillLevelSeekBar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:max="4"
+        app:layout_constraintEnd_toEndOf="@+id/category_spinner"
+        app:layout_constraintStart_toStartOf="@+id/category_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/skill_level_title" />
+
     <!--<TextView-->
         <!--android:id="@+id/distance_title"-->
         <!--android:layout_width="wrap_content"-->
@@ -108,8 +132,8 @@
         app:layout_constraintEnd_toStartOf="@+id/monday"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="@+id/category_spinner"
-        app:layout_constraintTop_toBottomOf="@+id/skills_spinner"
-        tools:layout_constraintTop_toBottomOf="@+id/skills_spinner"
+        app:layout_constraintTop_toBottomOf="@+id/skillLevelSeekBar"
+        tools:layout_constraintTop_toBottomOf="@+id/skillLevelSeekBar"
         tools:layout_marginTop="40dp" />
 
     <CheckBox
@@ -123,7 +147,7 @@
         app:layout_constraintStart_toEndOf="@+id/sunday"
         app:layout_constraintTop_toTopOf="@+id/sunday"
         app:layout_constraintVertical_bias="1.0"
-        tools:layout_constraintTop_toBottomOf="@+id/skills_spinner"
+        tools:layout_constraintTop_toBottomOf="@+id/skillLevelSeekBar"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -137,7 +161,7 @@
         app:layout_constraintStart_toEndOf="@+id/monday"
         app:layout_constraintTop_toTopOf="@+id/sunday"
         app:layout_constraintVertical_bias="1.0"
-        tools:layout_constraintTop_toBottomOf="@+id/skills_spinner"
+        tools:layout_constraintTop_toBottomOf="@+id/skillLevelSeekBar"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -151,7 +175,7 @@
         app:layout_constraintStart_toEndOf="@+id/tuesday"
         app:layout_constraintTop_toTopOf="@+id/sunday"
         app:layout_constraintVertical_bias="1.0"
-        tools:layout_constraintTop_toBottomOf="@+id/skills_spinner"
+        tools:layout_constraintTop_toBottomOf="@+id/skillLevelSeekBar"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -165,7 +189,7 @@
         app:layout_constraintStart_toEndOf="@+id/wednesday"
         app:layout_constraintTop_toTopOf="@+id/sunday"
         app:layout_constraintVertical_bias="1.0"
-        tools:layout_constraintTop_toBottomOf="@+id/skills_spinner"
+        tools:layout_constraintTop_toBottomOf="@+id/skillLevelSeekBar"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -179,7 +203,7 @@
         app:layout_constraintStart_toEndOf="@+id/thursday"
         app:layout_constraintTop_toTopOf="@+id/sunday"
         app:layout_constraintVertical_bias="1.0"
-        tools:layout_constraintTop_toBottomOf="@+id/skills_spinner"
+        tools:layout_constraintTop_toBottomOf="@+id/skillLevelSeekBar"
         tools:layout_marginTop="20dp" />
 
     <CheckBox
@@ -193,7 +217,7 @@
         app:layout_constraintStart_toEndOf="@+id/friday"
         app:layout_constraintTop_toTopOf="@+id/sunday"
         app:layout_constraintVertical_bias="1.0"
-        tools:layout_constraintTop_toBottomOf="@+id/skills_spinner"
+        tools:layout_constraintTop_toBottomOf="@+id/skillLevelSeekBar"
         tools:layout_marginTop="20dp" />
 
 

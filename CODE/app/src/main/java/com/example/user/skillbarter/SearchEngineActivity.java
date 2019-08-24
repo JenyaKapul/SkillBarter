@@ -13,6 +13,7 @@ import java.util.Calendar;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.CheckBox;
@@ -31,6 +32,7 @@ public class SearchEngineActivity extends ActionBarMenuActivity implements TimeP
     private static final int TIME_TO = 2;
 	
 	private Spinner categorySpinner, skillSpinner;
+    private SeekBar mLevelSeekBar;
 
     private Calendar time_from = null;
     private Calendar time_to = null;
@@ -40,10 +42,9 @@ public class SearchEngineActivity extends ActionBarMenuActivity implements TimeP
     // args for creating a new FilterSearchResult object.
     private String mCategory, mSkill;
     private int mPointsMin, mPointsMax;
+    private int mMinLevel;
 
 
-//    @BindView(R.id.max_distance)
-//    EditText maxDistance;
 
     @BindView(R.id.sunday)
     CheckBox sunday;
@@ -89,6 +90,7 @@ public class SearchEngineActivity extends ActionBarMenuActivity implements TimeP
 
         categorySpinner = findViewById(R.id.category_spinner);
         skillSpinner = findViewById(R.id.skills_spinner);
+        mLevelSeekBar = findViewById(R.id.skillLevelSeekBar);
 
         List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
 
@@ -243,6 +245,7 @@ public class SearchEngineActivity extends ActionBarMenuActivity implements TimeP
     @OnClick(R.id.search_button)
     public void onSearchClicked() {
         String minPointsStr = pointsMinView.getText().toString();
+        mMinLevel = mLevelSeekBar.getProgress() + 1;
         if (TextUtils.isEmpty(minPointsStr)) {
             mPointsMin = 0;
         } else {
@@ -256,10 +259,9 @@ public class SearchEngineActivity extends ActionBarMenuActivity implements TimeP
             mPointsMax = Integer.parseInt(maxPointsStr);
         }
 
-        FilterSearchResult filterSearchResult = new FilterSearchResult(mCategory, mSkill, mPointsMin, mPointsMax);
+        FilterSearchResult filterSearchResult = new FilterSearchResult(mCategory, mSkill, mPointsMin, mPointsMax, mMinLevel);
 
         Intent intent = new Intent(this, SearchResultActivity.class);
-
         intent.putExtra("parcel_data", filterSearchResult);
         startActivity(intent);
     }
