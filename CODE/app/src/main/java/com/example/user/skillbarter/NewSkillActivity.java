@@ -50,34 +50,7 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
 
     private ListenerRegistration mListener;
     private DocumentReference mSkillRef;
-
-
-//    private void setFirstSpinnerAdapter() {
-//        List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
-//
-//        // adapter for displaying hint 'Choose Category' in the first spinner.
-//        HintAdapter adapter = new HintAdapter(this, categories,
-//                android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        mMainSpinner = findViewById(R.id.category_spinner);
-//        mMainSpinner.setAdapter(adapter);
-//
-//        // show hint.
-//        mMainSpinner.setSelection(adapter.getCount());
-//    }
-//
-//    private void setSecondSpinnerAdapter(int skillArrID) {
-//        List<CharSequence> skillsList = Arrays.asList(this.getResources().getTextArray(skillArrID));
-//
-//        HintAdapter adapter = new HintAdapter(this, skillsList,
-//                android.R.layout.simple_spinner_item);
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//        mSecondarySpinner.setAdapter(adapter);
-//
-//        // show hint.
-//        mSecondarySpinner.setSelection(adapter.getCount());
-//    }
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
