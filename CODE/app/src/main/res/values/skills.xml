@@ -41,7 +41,7 @@
         <item>Biotechnology and Food Engineering</item>
         <item>Architecture and Town Planning</item>
         <item>Humanities and Arts</item>
-        <item>Choose Tutoring...</item>
+        <item>Choose Tutoring</item>
     </string-array>
 
     <string-array name="Music">
@@ -63,7 +63,7 @@
         <item>Tailoring</item>
         <item>Knitting</item>
         <item>Carpentry</item>
-        <item>Choose Arts and Crafts...</item>
+        <item>Choose Arts and Crafts</item>
     </string-array>
 
     <string-array name="Dance">
@@ -74,7 +74,7 @@
         <item>Ballroom</item>
         <item>Tap</item>
         <item>Pole Dance</item>
-        <item>Choose Dance...</item>
+        <item>Choose Dance</item>
     </string-array>
     
     <string-array name="Sport">
@@ -86,7 +86,7 @@
         <item>Cycling</item>
         <item>Pilates</item>
         <item>Personal Training</item>
-        <item>Choose Sport...</item>
+        <item>Choose Sport</item>
     </string-array>
     
     <string-array name="Household">
@@ -96,7 +96,7 @@
         <item>Cleaning</item>
         <item>Organizing</item>
         <item>Handyman</item>
-        <item>Choose Household Service...</item>
+        <item>Choose Household Service</item>
     </string-array>
     
     <string-array name="Beauty">
@@ -108,13 +108,13 @@
         <item>Haircut</item>
         <item>Hairstyling</item>
         <item>Beard Grooming</item>
-        <item>Choose Beauty Care...</item>
+        <item>Choose Beauty Care</item>
     </string-array>
     
     <string-array name="Culinary">
         <item>Cooking</item>
         <item>Baking</item>
-        <item>Choose Culinary...</item>
+        <item>Choose Culinary</item>
     </string-array>
 
     <string-array name="Empty">

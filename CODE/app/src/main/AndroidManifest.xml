@@ -23,15 +23,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchItemDetailsActivity"></activity>
+        <activity android:name=".skillsSearchResultActivity"></activity>
+        <activity android:name=".SearchItemDetailsActivity" />
         <activity
-            android:name=".SkillsManager"
-            android:launchMode="singleTop"></activity>
+            android:name=".SkillsManagerActivity"
+            android:launchMode="singleTop" />
         <activity
             android:name=".NewSkillActivity"
-            android:parentActivityName=".SkillsManager" />
+            android:parentActivityName=".SkillsManagerActivity" />
         <activity android:name=".History" />
-        <activity android:name=".SearchEngine" />
+        <activity android:name=".SearchEngineActivity" />
         <activity android:name=".UserHomeProfile" />
 
         <provider

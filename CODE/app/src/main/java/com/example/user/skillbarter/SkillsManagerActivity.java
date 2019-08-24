@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,7 +18,7 @@ import com.google.firebase.firestore.Query;
 
     // TODO: consider optimizing this with querying the documents' key
 
-public class SkillsManager extends ActionBarMenuActivity {
+public class SkillsManagerActivity extends ActionBarMenuActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference skillsRef = db.collection("User Skills");
 
@@ -34,7 +33,7 @@ public class SkillsManager extends ActionBarMenuActivity {
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SkillsManager.this, NewSkillActivity.class));
+                startActivity(new Intent(SkillsManagerActivity.this, NewSkillActivity.class));
             }
         });
 
@@ -65,7 +64,7 @@ public class SkillsManager extends ActionBarMenuActivity {
                 } else if (buttonClicked.equals("edit")) {
                     //TODO: edit the document
                     String skillPath = documentSnapshot.getReference().getPath();
-                    Intent intent = new Intent(SkillsManager.this, NewSkillActivity.class);
+                    Intent intent = new Intent(SkillsManagerActivity.this, NewSkillActivity.class);
                     intent.putExtra(NewSkillActivity.KEY_SKILL_PATH, skillPath);
                     startActivity(intent);
 
