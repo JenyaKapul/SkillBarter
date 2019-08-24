@@ -108,7 +108,6 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         mDetailsView = findViewById(R.id.skill_details);
         mPointsView = findViewById(R.id.points);
 
-//        setFirstSpinnerAdapter();
 
         List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
 
