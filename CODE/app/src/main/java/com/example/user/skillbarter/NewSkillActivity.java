@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -40,43 +41,43 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
     private static final String TAG = "NewSkillActivity";
 
     private Spinner mMainSpinner, mSecondarySpinner;
-
-    private EditText mPointsView;
+    private SeekBar mLevelSeekBar;
+    private EditText mPointsView, mDetailsView;
 
     // args for creating a new UserSkills object.
-    private String mCategory, mSkill, mUserID;
-    private int mPointsValue;
+    private String mCategory, mSkill, mUserID, mDetails;
+    private int mPointsValue, mLevel;
 
     private ListenerRegistration mListener;
     private DocumentReference mSkillRef;
 
 
-    private void setFirstSpinnerAdapter() {
-        List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
-
-        // adapter for displaying hint 'Choose Category' in the first spinner.
-        HintAdapter adapter = new HintAdapter(this, categories,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mMainSpinner = findViewById(R.id.category_spinner);
-        mMainSpinner.setAdapter(adapter);
-
-        // show hint.
-        mMainSpinner.setSelection(adapter.getCount());
-    }
-
-    private void setSecondSpinnerAdapter(int skillArrID) {
-        List<CharSequence> skillsList = Arrays.asList(this.getResources().getTextArray(skillArrID));
-
-        HintAdapter adapter = new HintAdapter(this, skillsList,
-                android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSecondarySpinner.setAdapter(adapter);
-
-        // show hint.
-        mSecondarySpinner.setSelection(adapter.getCount());
-    }
+//    private void setFirstSpinnerAdapter() {
+//        List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
+//
+//        // adapter for displaying hint 'Choose Category' in the first spinner.
+//        HintAdapter adapter = new HintAdapter(this, categories,
+//                android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        mMainSpinner = findViewById(R.id.category_spinner);
+//        mMainSpinner.setAdapter(adapter);
+//
+//        // show hint.
+//        mMainSpinner.setSelection(adapter.getCount());
+//    }
+//
+//    private void setSecondSpinnerAdapter(int skillArrID) {
+//        List<CharSequence> skillsList = Arrays.asList(this.getResources().getTextArray(skillArrID));
+//
+//        HintAdapter adapter = new HintAdapter(this, skillsList,
+//                android.R.layout.simple_spinner_item);
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//
+//        mSecondarySpinner.setAdapter(adapter);
+//
+//        // show hint.
+//        mSecondarySpinner.setSelection(adapter.getCount());
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +104,8 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
             // user reached this intent by clicking the '+' sign in order to add a new skill.
         }
 
+        mLevelSeekBar = findViewById(R.id.skillLevelSeekBar);
+        mDetailsView = findViewById(R.id.skill_details);
         mPointsView = findViewById(R.id.points);
 
 //        setFirstSpinnerAdapter();
@@ -176,7 +179,9 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         }
 
         mPointsValue = Integer.parseInt(mPointsView.getText().toString());
-        UserSkills userSkill = new UserSkills(mUserID, mCategory, mSkill, mPointsValue);
+        mLevel = mLevelSeekBar.getProgress();
+        mDetails = mDetailsView.getText().toString();
+        UserSkills userSkill = new UserSkills(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
         String docID = userSkill.getSkillId();
 
         // add user's skill to database.
@@ -288,6 +293,7 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         }
 
         if (snapshot.getReference().equals(mSkillRef)) {
+            setTitle("Edit Skill");
             loadUserSkill(snapshot.toObject(UserSkills.class));
             hideProgressDialog();
         }
@@ -301,13 +307,7 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         mMainSpinner.setSelection(spinnerPosition);
 
         // load skill from database to secondary spinner.
-
-        mPointsView.setText(String.valueOf(userSkill.getPointsValue()));
-
-
         List<CharSequence> skillsList = Arrays.asList(this.getResources().getTextArray(getSkillArrayID(userSkill.getCategory())));
-
-
         HintAdapter adapter2 = new HintAdapter(this, skillsList,
                 android.R.layout.simple_spinner_item);
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -315,5 +315,13 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         mSecondarySpinner.setAdapter(adapter2);
         spinnerPosition = adapter2.getPosition(userSkill.getSkill());
         mSecondarySpinner.setSelection(spinnerPosition);
+
+//        adapter = (ArrayAdapter) mSecondarySpinner.getAdapter();
+//        spinnerPosition = adapter.getPosition(userSkill.getSkill());
+//        mSecondarySpinner.setSelection(spinnerPosition);
+
+        mPointsView.setText(String.valueOf(userSkill.getPointsValue()));
+        mLevelSeekBar.setProgress(userSkill.getLevel() - 1);
+        mDetailsView.setText(userSkill.getDetails());
     }
 }

@@ -7,24 +7,41 @@ public class UserSkills {
     private String  userID;
     private String category;
     private String skill;
-//    private int level;
-//    private float ranking;
     private int pointsValue;
-//    private String address;
+    private int level;
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    private String details;
+//    private float ranking;
 
 
     public UserSkills() {
         //public no-arg constructor needed
     }
 
-    public UserSkills(String userID, String category, String skill, int pointsValue) {
+    public UserSkills(String userID, String category, String skill, int pointsValue, int level, String details) {
         this.userID = userID;
         this.category = category;
         this.skill = skill;
         this.skillId = userID + "." + category + "." + skill;
-//        this.level = level;
         this.pointsValue = pointsValue;
-//        this.address = address;
+        this.level = level;
+        this.details = details;
     }
 
 //    public int getLevel() {
