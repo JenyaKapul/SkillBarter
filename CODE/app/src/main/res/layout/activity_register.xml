@@ -171,12 +171,11 @@
 
         <Button
             android:id="@+id/button_prev"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/my_button"
             android:enabled="false"
             android:text="@string/prev_button"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -184,12 +183,12 @@
 
         <Button
             android:id="@+id/button_next"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/my_button"
             android:text="@string/next_button"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/button_prev"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/button_prev" />
@@ -258,23 +257,21 @@
 
         <Button
             android:id="@+id/button_prev2"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:background="@drawable/my_button"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@color/colorPrimary"
             android:text="@string/prev_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/button_save"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:background="@color/colorPrimary"
+            android:background="@drawable/my_button"
             android:text="@string/save_button"
             app:layout_constraintBottom_toBottomOf="@+id/button_prev2"
             app:layout_constraintEnd_toEndOf="parent"
