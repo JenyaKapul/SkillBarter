@@ -8,25 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 
-public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkills, SkillAdapter.SkillHolder> {
+public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapter.SkillHolder> {
 
     private static final String TAG = "SkillAdapter";
 
     private OnItemClickListener listener;
 
-    public SkillAdapter(@NonNull FirestoreRecyclerOptions<UserSkills> options) {
+    public SkillAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull SkillHolder holder, int position, @NonNull UserSkills model) {
+    protected void onBindViewHolder(@NonNull SkillHolder holder, int position, @NonNull UserSkill model) {
         holder.textViewSkill.setText(model.getSkill());
     }
 

@@ -17,24 +17,24 @@
         app:layout_constraintStart_toStartOf="@+id/details_content"
         app:layout_constraintTop_toBottomOf="@+id/details_content" />
 
-    <TextView
-        android:id="@+id/location_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="LOCATION_CONTENT_MOCK"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/location_title" />
+    <!--<TextView-->
+        <!--android:id="@+id/location_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:text="LOCATION_CONTENT_MOCK"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/guideline2"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/location_title" />-->
 
-    <TextView
-        android:id="@+id/location_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:text="@string/location"
-        app:layout_constraintStart_toStartOf="@+id/level_title"
-        app:layout_constraintTop_toBottomOf="@+id/level_title" />
+    <!--<TextView-->
+        <!--android:id="@+id/location_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="@string/location"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/level_title"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/level_title" />-->
 
     <TextView
         android:id="@+id/details_content"
@@ -72,7 +72,7 @@
         app:layout_constraintTop_toTopOf="@+id/profile_picture_holder" />
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/rating_bar"
         style="?android:attr/ratingBarStyleIndicator"
         android:layout_width="183dp"
         android:layout_height="32dp"
@@ -97,10 +97,10 @@
         android:text="RATING"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
+        app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
         app:layout_constraintEnd_toEndOf="@+id/profile_name"
-        app:layout_constraintStart_toEndOf="@+id/ratingBar"
-        app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+        app:layout_constraintStart_toEndOf="@+id/rating_bar"
+        app:layout_constraintTop_toTopOf="@+id/rating_bar" />
 
     <ImageView
         android:id="@+id/points_icon"
@@ -111,10 +111,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/profile_picture_holder"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="@+id/profile_name"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+        app:layout_constraintTop_toBottomOf="@+id/rating_bar" />
 
     <TextView
-        android:id="@+id/cost_value"
+        android:id="@+id/skill_value"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -184,8 +184,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:text="@string/details"
-        app:layout_constraintStart_toStartOf="@+id/location_title"
-        app:layout_constraintTop_toBottomOf="@+id/location_title" />
+        app:layout_constraintStart_toStartOf="@+id/level_title"
+        app:layout_constraintTop_toBottomOf="@+id/level_title" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"

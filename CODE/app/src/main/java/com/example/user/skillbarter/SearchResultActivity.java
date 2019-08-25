@@ -41,8 +41,8 @@ public class SearchResultActivity extends ActionBarMenuActivity {
             query = query.whereEqualTo("skill", filterOptions.getSkill());
         }
 
-        FirestoreRecyclerOptions<UserSkills> options = new FirestoreRecyclerOptions.Builder<UserSkills>()
-                .setQuery(query, UserSkills.class)
+        FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
+                .setQuery(query, UserSkill.class)
                 .build();
 
         adapter = new SkillAdapter(options);

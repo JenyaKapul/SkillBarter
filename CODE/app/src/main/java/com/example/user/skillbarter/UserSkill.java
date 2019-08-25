@@ -1,7 +1,7 @@
 package com.example.user.skillbarter;
 
 
-public class UserSkills {
+public class UserSkill {
 
     private String skillId;
     private String  userID;
@@ -30,11 +30,11 @@ public class UserSkills {
 //    private float ranking;
 
 
-    public UserSkills() {
+    public UserSkill() {
         //public no-arg constructor needed
     }
 
-    public UserSkills(String userID, String category, String skill, int pointsValue, int level, String details) {
+    public UserSkill(String userID, String category, String skill, int pointsValue, int level, String details) {
         this.userID = userID;
         this.category = category;
         this.skill = skill;

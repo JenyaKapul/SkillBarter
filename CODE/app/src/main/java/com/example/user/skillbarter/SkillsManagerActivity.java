@@ -44,8 +44,8 @@ public class SkillsManagerActivity extends ActionBarMenuActivity {
         String uID = FirebaseAuth.getInstance().getUid();
         Query query = skillsRef.whereEqualTo("userID", uID);
 
-        FirestoreRecyclerOptions<UserSkills> options = new FirestoreRecyclerOptions.Builder<UserSkills>()
-                .setQuery(query, UserSkills.class)
+        FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
+                .setQuery(query, UserSkill.class)
                 .build();
 
         adapter = new SkillAdapter(options);

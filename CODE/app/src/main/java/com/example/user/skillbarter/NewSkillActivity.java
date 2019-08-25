@@ -44,7 +44,7 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
     private SeekBar mLevelSeekBar;
     private EditText mPointsView, mDetailsView;
 
-    // args for creating a new UserSkills object.
+    // args for creating a new UserSkill object.
     private String mCategory, mSkill, mUserID, mDetails;
     private int mPointsValue, mLevel;
 
@@ -153,7 +153,7 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         mPointsValue = Integer.parseInt(mPointsView.getText().toString());
         mLevel = mLevelSeekBar.getProgress();
         mDetails = mDetailsView.getText().toString();
-        UserSkills userSkill = new UserSkills(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
+        UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
         String docID = userSkill.getSkillId();
 
         // add user's skill to database.
@@ -261,12 +261,12 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
 
         if (snapshot.getReference().equals(mSkillRef)) {
             setTitle("Edit Skill");
-            loadUserSkill(snapshot.toObject(UserSkills.class));
+            loadUserSkill(snapshot.toObject(UserSkill.class));
             hideProgressDialog();
         }
     }
 
-    private void loadUserSkill(UserSkills userSkill) {
+    private void loadUserSkill(UserSkill userSkill) {
 
         // load category from database to main spinner.
         ArrayAdapter adapter = (ArrayAdapter) mMainSpinner.getAdapter();
