@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
@@ -23,10 +25,16 @@ public class ReviewAdapter extends FirestoreRecyclerAdapter<Review, ReviewAdapte
     @Override
     protected void onBindViewHolder(@NonNull ReviewHolder holder, int position, @NonNull Review model) {
         holder.userNameView.setText(model.getReviewerName());
-//        holder.userPictureView.setImageBitmap();
-        holder.rankValueView.setText(model.getRank());
+        holder.rankValueView.setText(String.valueOf(model.getRank()));
         holder.dateView.setText(DateFormat.getDateInstance().format(model.getDateOfReview()));
         holder.detailsView.setText(model.getDetails());
+        String profilePictureURL = model.getReviewerPicture();
+        if(profilePictureURL != null){
+            holder.userPictureView.setBackground(null);
+        }
+        //TODO - take care of the reviewer photo
+//        Glide.with().load(profilePictureURL).apply(new RequestOptions().centerCrop()
+//                .circleCrop().placeholder(R.drawable.incognito)).into(profilePictureView);
     }
 
     @NonNull
@@ -49,7 +57,7 @@ public class ReviewAdapter extends FirestoreRecyclerAdapter<Review, ReviewAdapte
             detailsView = itemView.findViewById(R.id.review_content);
             userPictureView = itemView.findViewById(R.id.reviewer_profile_picture_holder);
 
-                    }
+        }
     }
 }
 

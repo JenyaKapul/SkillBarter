@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.CollectionReference;
@@ -12,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class SearchResultActivity extends ActionBarMenuActivity {
+    private static final String TAG = "SearchResultActivity";
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference skillsRef = db.collection("User Skills");
@@ -57,6 +59,7 @@ public class SearchResultActivity extends ActionBarMenuActivity {
                 //TODO: move to intent presenting the skill
                 Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
                 intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, documentSnapshot.getId());
+                Log.d(TAG, "onItemClick:");
                 startActivity(intent);
             }
         });

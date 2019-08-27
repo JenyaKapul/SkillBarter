@@ -9,30 +9,10 @@ public class UserSkill {
     private String skill;
     private int pointsValue;
     private int level;
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
-    }
-
     private String details;
-//    private float ranking;
+    private float ranking;
 
-
-    public UserSkill() {
-        //public no-arg constructor needed
-    }
+    public UserSkill() {}
 
     public UserSkill(String userID, String category, String skill, int pointsValue, int level, String details) {
         this.userID = userID;
@@ -44,37 +24,22 @@ public class UserSkill {
         this.details = details;
     }
 
-//    public int getLevel() {
-//        return level;
-//    }
 
-//    public void setLevel(int level) {
-//        this.level = level;
-//    }
-
-//    public float getRanking() {
-//        return ranking;
-//    }
-
-//    public void setRanking(float ranking) {
-//        this.ranking = ranking;
-//    }
-
-    public int getPointsValue() {
-        return pointsValue;
+    public String getSkillId() {
+        return skillId;
     }
 
-    public void setPointsValue(int pointsValue) {
-        this.pointsValue = pointsValue;
+    public void setSkillId(String skillId) {
+        this.skillId = category + "." + skill;
     }
 
-//    public String getAddress() {
-//        return address;
-//    }
+    public String getUserID() {
+        return userID;
+    }
 
-//    public void setAddress(String address) {
-//        this.address = address;
-//    }
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
 
     public String getCategory() {
         return category;
@@ -92,19 +57,35 @@ public class UserSkill {
         this.skill = skill;
     }
 
-    public String getUserID() {
-        return userID;
+    public int getPointsValue() {
+        return pointsValue;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setPointsValue(int pointsValue) {
+        this.pointsValue = pointsValue;
     }
 
-    public String getSkillId() {
-        return skillId;
+    public int getLevel() {
+        return level;
     }
 
-    public void setSkillId(String skillId) {
-        this.skillId = category + "." + skill;
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public float getRanking() {
+        return ranking;
+    }
+
+    public void setRanking(float ranking) {
+        this.ranking = ranking;
     }
 }
