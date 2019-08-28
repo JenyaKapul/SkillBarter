@@ -29,7 +29,7 @@ import javax.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchItemDetailsActivity extends AppCompatActivity
+public class SearchItemDetailsActivity extends ActionBarMenuActivity
         implements EventListener<DocumentSnapshot> {
 //    private RecyclerView mRecyclerView;
     private static final String TAG = "SearchItemDetailsAct";
@@ -52,7 +52,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity
     @BindView(R.id.rating_bar)
     RatingBar ratingBarView;
 
-    @BindView(R.id.ratingBar)
+    @BindView(R.id.rating_value)
     TextView ratingValueView;
 
     @BindView(R.id.skill_value)
