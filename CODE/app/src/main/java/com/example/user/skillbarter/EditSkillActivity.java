@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -35,10 +36,12 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
     private SeekBar mLevelSeekBar;
     private EditText mPointsView, mDetailsView;
     private TextView categoryTextView, skillTextView;
+    private CheckBox isEnabledCheckbox;
 
     // args for creating a new UserSkill object.
     private String mCategory, mSkill, mUserID, mDetails;
     private int mPointsValue, mLevel;
+    private boolean mIsEnabled;
 
     private ListenerRegistration mListener;
     private DocumentReference mSkillRef;
@@ -58,6 +61,7 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
         mLevelSeekBar = findViewById(R.id.skillLevelSeekBar);
         mDetailsView = findViewById(R.id.skill_details);
         mPointsView = findViewById(R.id.points);
+        isEnabledCheckbox = findViewById(R.id.is_enabled_checkbox);
 
         String path = getIntent().getExtras().getString(KEY_SKILL_PATH);
         showProgressDialog();
@@ -97,7 +101,8 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
         mPointsValue = Integer.parseInt(mPointsView.getText().toString());
         mLevel = mLevelSeekBar.getProgress();
         mDetails = mDetailsView.getText().toString();
-        UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
+        mIsEnabled = !isEnabledCheckbox.isChecked();
+        UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails, mIsEnabled);
         String docID = userSkill.getSkillId();
 
         // add user's skill to database.
@@ -147,5 +152,6 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
         mPointsView.setText(String.valueOf(userSkill.getPointsValue()));
         mLevelSeekBar.setProgress(userSkill.getLevel() - 1);
         mDetailsView.setText(userSkill.getDetails());
+        isEnabledCheckbox.setChecked(!userSkill.isEnabled());
     }
 }

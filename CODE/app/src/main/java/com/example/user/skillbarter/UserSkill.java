@@ -27,6 +27,17 @@ public class UserSkill {
         this.isEnabled = true;
     }
 
+    public UserSkill(String userID, String category, String skill, int pointsValue, int level, String details, boolean isEnabled) {
+        this.userID = userID;
+        this.category = category;
+        this.skill = skill;
+        this.skillId = userID + "." + category + "." + skill;
+        this.pointsValue = pointsValue;
+        this.level = level;
+        this.details = details;
+        this.isEnabled = isEnabled;
+    }
+
 
     public String getSkillId() {
         return skillId;

@@ -137,9 +137,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="keep providing this service"
+            android:text="Stop providing this service"
             app:layout_constraintBottom_toBottomOf="@+id/is_enabled_checkbox"
             app:layout_constraintStart_toEndOf="@+id/is_enabled_checkbox"
             app:layout_constraintTop_toTopOf="@+id/is_enabled_checkbox" />
-    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
 </ScrollView>
