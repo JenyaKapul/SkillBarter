@@ -12,7 +12,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp">
+        android:padding="20dp">
 
         <TextView
             android:id="@+id/textView"
@@ -27,13 +27,13 @@
         
         <ImageView
             android:id="@+id/editView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/ic_edit"
             android:layout_alignParentEnd="true"
             android:clickable="true"
             android:focusable="true"
-            android:padding="2dp" />
+            android:padding="6dp" />
 
 
     </RelativeLayout>

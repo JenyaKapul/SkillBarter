@@ -97,7 +97,7 @@
     <string name="add_skill_title">Add New Skill:</string>
     <string name="edit_skill_title">Edit Skill:</string>
     <string name="skill_level_title">How good are you:</string>
-    <string name="skill_details_hint">Tell us a bit more about your \n skill...</string>
+    <string name="skill_details_hint">Tell us a bit more about your skill...</string>
     <string name="skill_points_title">Skill Value:</string>
     <string name="points">Points</string>
     <string name="skill_address_title">Address of service:</string>

@@ -11,6 +11,8 @@ public class UserSkill {
     private int level;
     private String details;
     private float ranking;
+    private boolean isEnabled;
+
 
     public UserSkill() {}
 
@@ -22,6 +24,7 @@ public class UserSkill {
         this.pointsValue = pointsValue;
         this.level = level;
         this.details = details;
+        this.isEnabled = true;
     }
 
 
@@ -87,5 +90,13 @@ public class UserSkill {
 
     public void setRanking(float ranking) {
         this.ranking = ranking;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 }
