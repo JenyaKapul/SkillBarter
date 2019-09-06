@@ -23,7 +23,10 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
 
     @Override
     protected void onBindViewHolder(@NonNull SkillHolder holder, int position, @NonNull UserSkill model) {
-        holder.textViewSkill.setText(model.getSkill());
+        holder.categoryTextView.setText(model.getCategory());
+        holder.skillTextView.setText(model.getSkill());
+        holder.levelTextView.setText("Level " + String.valueOf(model.getLevel()));
+        holder.pointsTextView.setText(String.valueOf(model.getPointsValue()));
     }
 
     @NonNull
@@ -39,15 +42,21 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
     }
 
     class SkillHolder extends RecyclerView.ViewHolder {
-        TextView textViewSkill;
-        ImageView imageViewEdit;
+        TextView categoryTextView;
+        TextView skillTextView;
+        TextView levelTextView;
+        TextView pointsTextView;
+        ImageView editImageView;
 
         public SkillHolder(View itemView) {
             super(itemView);
-            textViewSkill = itemView.findViewById(R.id.textView);
-            imageViewEdit = itemView.findViewById(R.id.editView);
+            categoryTextView = itemView.findViewById(R.id.categoryView);
+            skillTextView = itemView.findViewById(R.id.skillView);
+            levelTextView = itemView.findViewById(R.id.levelView);
+            pointsTextView = itemView.findViewById(R.id.pointsView);
+            editImageView = itemView.findViewById(R.id.editView);
 
-            imageViewEdit.setOnClickListener(new View.OnClickListener() {
+            editImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
