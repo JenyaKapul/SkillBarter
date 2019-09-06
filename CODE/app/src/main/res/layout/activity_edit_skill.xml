@@ -131,7 +131,26 @@
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="@+id/category_text_view"
         app:layout_constraintTop_toTopOf="@+id/points_wrapper" />
-    
 
+    <CheckBox
+        android:id="@+id/is_enabled_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="@id/skill_points_title"
+        app:layout_constraintTop_toBottomOf="@id/points_wrapper"
+        app:layout_constraintEnd_toStartOf="@id/is_enabled_text"
+        ></CheckBox>
+
+    <TextView
+        android:id="@+id/is_enabled_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="keep providing this service"
+        app:layout_constraintStart_toStartOf="@+id/is_enabled_checkbox"
+        app:layout_constraintTop_toBottomOf="@+id/points_wrapper"
+        android:layout_marginTop="46dp"
+        ></TextView>
 </android.support.constraint.ConstraintLayout>
 </ScrollView>
