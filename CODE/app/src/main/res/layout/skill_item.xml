@@ -24,23 +24,13 @@
             android:ellipsize="end"
             android:text="Skill"
             android:textAppearance="@style/TextAppearance.AppCompat.Large" />
-
+        
         <ImageView
             android:id="@+id/editView"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@drawable/ic_edit"
-            android:layout_toLeftOf="@+id/clearView"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="2dp" />
-
-        <ImageView
-            android:id="@+id/clearView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_clear"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:clickable="true"
             android:focusable="true"
             android:padding="2dp" />

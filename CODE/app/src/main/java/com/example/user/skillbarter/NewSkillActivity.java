@@ -1,46 +1,36 @@
 package com.example.user.skillbarter;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 
 import java.util.Arrays;
 import java.util.List;
-
-import javax.annotation.Nullable;
-
 import butterknife.ButterKnife;
 
-//TODO: add validate function
-//TODO: set save button disabled until second spinner is picked
-
-
-public class NewSkillActivity extends BaseActivity implements EventListener<DocumentSnapshot> {
+public class NewSkillActivity extends BaseActivity {
 
     public static final String KEY_SKILL_PATH = "key_skill_path";
 
-    private static final String TAG = "NewSkillActivity";
 
-    private Spinner mMainSpinner, mSecondarySpinner;
+    private Spinner categorySpinner, skillSpinner;
     private SeekBar mLevelSeekBar;
     private EditText mPointsView, mDetailsView;
 
@@ -48,13 +38,9 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
     private String mCategory, mSkill, mUserID, mDetails;
     private int mPointsValue, mLevel;
 
-    private ListenerRegistration mListener;
-    private DocumentReference mSkillRef;
-    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "***** onCreate: ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_skill);
         ButterKnife.bind(this);
@@ -62,25 +48,11 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Add Skill");
 
-        mSecondarySpinner = findViewById(R.id.skills_spinner);
-
-
-        // Get skill path from extras
-        if (getIntent().getExtras() != null) {
-             // user reached this intent by clicking on edit skill option.
-            String path = getIntent().getExtras().getString(KEY_SKILL_PATH);
-            showProgressDialog();
-            mSkillRef = FirebaseFirestore.getInstance().document(path);
-            mSecondarySpinner.setEnabled(true);
-
-        } else {
-            // user reached this intent by clicking the '+' sign in order to add a new skill.
-        }
-
+        categorySpinner = findViewById(R.id.category_spinner);
+        skillSpinner = findViewById(R.id.skills_spinner);
         mLevelSeekBar = findViewById(R.id.skillLevelSeekBar);
         mDetailsView = findViewById(R.id.skill_details);
         mPointsView = findViewById(R.id.points);
-
 
         List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
 
@@ -88,29 +60,27 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         HintAdapter adapter = new HintAdapter(this, categories,
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mMainSpinner = findViewById(R.id.category_spinner);
-        mMainSpinner.setAdapter(adapter);
+        categorySpinner.setAdapter(adapter);
 
         // show hint.
-        mMainSpinner.setSelection(adapter.getCount());
+        categorySpinner.setSelection(adapter.getCount());
 
         // add listener to the first spinner in order to load the correct data
         // for secondary spinner.
-        mMainSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                firstSpinnerChooser(parent, view, position, id);
+                categorySpinnerChooser(parent, view, position, id);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-//        mSecondarySpinner = findViewById(R.id.skills_spinner);
-        mSecondarySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        skillSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                secondSpinnerChooser(parent, view, position, id);
+                skillSpinnerChooser(parent, view, position, id);
             }
 
             @Override
@@ -141,7 +111,6 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
      * under collection 'User Data'
      */
     private void saveUserSkill() {
-        Log.d(TAG, "***** saveUserSkill: ");
         mUserID = FirebaseAuth.getInstance().getUid();
 
         if (TextUtils.isEmpty(mPointsView.getText().toString())) {
@@ -153,54 +122,33 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         mPointsValue = Integer.parseInt(mPointsView.getText().toString());
         mLevel = mLevelSeekBar.getProgress();
         mDetails = mDetailsView.getText().toString();
-        UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
-        String docID = userSkill.getSkillId();
+        final UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
+        final String docID = userSkill.getSkillId();
 
-        // add user's skill to database.
-        CollectionReference skillsCollection = FirebaseFirestore.getInstance()
-                .collection("User Skills");
-        skillsCollection.document(docID).set(userSkill);
+        DocumentReference skillRef = FirebaseFirestore.getInstance().collection("User Skills").document(docID);
 
-        Toast.makeText(this, "Skill added", Toast.LENGTH_SHORT).show();
+        skillRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if (documentSnapshot != null && documentSnapshot.exists()) {
+                        Toast.makeText(NewSkillActivity.this, "This skill already exists", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // add user's skill to database.
+                        CollectionReference skillsCollection = FirebaseFirestore.getInstance()
+                                .collection("User Skills");
+                        skillsCollection.document(docID).set(userSkill);
 
-        finish();
-    }
-
-    private int getSkillArrayID(String categoryLabel) {
-        int skillArrayID;
-        switch (categoryLabel) {
-            case "Tutoring":
-                skillArrayID = R.array.Tutoring;
-                break;
-            case "Music":
-                skillArrayID = R.array.Music;
-                break;
-            case "Dance":
-                skillArrayID = R.array.Dance;
-                break;
-            case "Arts and Crafts":
-                skillArrayID = R.array.arts_and_crafts;
-                break;
-            case "Sport":
-                skillArrayID = R.array.Sport;
-                break;
-            case "Household Services":
-                skillArrayID = R.array.Household;
-                break;
-            case "Beauty Care":
-                skillArrayID = R.array.Beauty;
-                break;
-            case "Culinary":
-                skillArrayID = R.array.Culinary;
-                break;
-            default:
-                skillArrayID = R.array.Empty;
-        }
-        return skillArrayID;
+                        finish();
+                    }
+                }
+            }
+        });
 
     }
 
-    private void firstSpinnerChooser(AdapterView<?> parent, View view, int position, long id) {
+    private void categorySpinnerChooser(AdapterView<?> parent, View view, int position, long id) {
         // An item was selected. You can retrieve the selected item using
         // parent.getItemAtPosition(pos)
         String categoryLabel = parent.getItemAtPosition(position).toString();
@@ -208,10 +156,10 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
         int skillArrayID = getSkillArrayID(categoryLabel);
 
         if (skillArrayID != R.array.Empty) {
-            mSecondarySpinner.setEnabled(true);
+            skillSpinner.setEnabled(true);
             mCategory = categoryLabel;
         } else {
-            mSecondarySpinner.setEnabled(false);
+            skillSpinner.setEnabled(false);
         }
 
         List<CharSequence> skillsList = Arrays.asList(this.getResources().getTextArray(skillArrayID));
@@ -220,75 +168,16 @@ public class NewSkillActivity extends BaseActivity implements EventListener<Docu
                 android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        mSecondarySpinner.setAdapter(adapter);
+        skillSpinner.setAdapter(adapter);
 
         // show hint.
-        mSecondarySpinner.setSelection(adapter.getCount());
+        skillSpinner.setSelection(adapter.getCount());
     }
 
-    private void secondSpinnerChooser(AdapterView<?> parent, View view, int position, long id) {
+    private void skillSpinnerChooser(AdapterView<?> parent, View view, int position, long id) {
         String skillLabel = parent.getItemAtPosition(position).toString();
         if (!skillLabel.startsWith("Choose")) {
-            //TODO: set save button enabled here (it should be disabled by default)
             mSkill = skillLabel;
         }
-    }
-
-    @Override
-    public void onStart() {
-        Log.d(TAG, "***** onStart");
-        super.onStart();
-        if (mSkillRef != null) {
-            mListener = mSkillRef.addSnapshotListener(this);
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (mListener != null) {
-            mListener.remove();
-            mListener = null;
-        }
-    }
-
-    @Override
-    public void onEvent(@Nullable DocumentSnapshot snapshot, @Nullable FirebaseFirestoreException e) {
-        if (e != null) {
-            Log.w(TAG, "user:onEvent", e);
-            return;
-        }
-
-        if (snapshot.getReference().equals(mSkillRef)) {
-            setTitle("Edit Skill");
-            loadUserSkill(snapshot.toObject(UserSkill.class));
-            hideProgressDialog();
-        }
-    }
-
-    private void loadUserSkill(UserSkill userSkill) {
-
-        // load category from database to main spinner.
-        ArrayAdapter adapter = (ArrayAdapter) mMainSpinner.getAdapter();
-        int spinnerPosition = adapter.getPosition(userSkill.getCategory());
-        mMainSpinner.setSelection(spinnerPosition);
-
-        // load skill from database to secondary spinner.
-        List<CharSequence> skillsList = Arrays.asList(this.getResources().getTextArray(getSkillArrayID(userSkill.getCategory())));
-        HintAdapter adapter2 = new HintAdapter(this, skillsList,
-                android.R.layout.simple_spinner_item);
-        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        mSecondarySpinner.setAdapter(adapter2);
-        spinnerPosition = adapter2.getPosition(userSkill.getSkill());
-        mSecondarySpinner.setSelection(spinnerPosition);
-
-//        adapter = (ArrayAdapter) mSecondarySpinner.getAdapter();
-//        spinnerPosition = adapter.getPosition(userSkill.getSkill());
-//        mSecondarySpinner.setSelection(spinnerPosition);
-
-        mPointsView.setText(String.valueOf(userSkill.getPointsValue()));
-        mLevelSeekBar.setProgress(userSkill.getLevel() - 1);
-        mDetailsView.setText(userSkill.getDetails());
     }
 }

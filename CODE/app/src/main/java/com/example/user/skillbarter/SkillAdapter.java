@@ -2,7 +2,6 @@ package com.example.user.skillbarter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +14,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 
 public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapter.SkillHolder> {
-
-    private static final String TAG = "SkillAdapter";
 
     private OnItemClickListener listener;
 
@@ -43,25 +40,12 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
 
     class SkillHolder extends RecyclerView.ViewHolder {
         TextView textViewSkill;
-        ImageView imageViewDelete;
         ImageView imageViewEdit;
 
         public SkillHolder(View itemView) {
             super(itemView);
             textViewSkill = itemView.findViewById(R.id.textView);
-            imageViewDelete = itemView.findViewById(R.id.clearView);
             imageViewEdit = itemView.findViewById(R.id.editView);
-
-            imageViewDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    Log.d(TAG, "onClick: ");
-                    if (position != RecyclerView.NO_POSITION && listener != null) {
-                        listener.onItemClick(getSnapshots().getSnapshot(position), position, "delete");
-                    }
-                }
-            });
 
             imageViewEdit.setOnClickListener(new View.OnClickListener() {
                 @Override

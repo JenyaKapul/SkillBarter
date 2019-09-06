@@ -156,39 +156,6 @@ public class SearchEngineActivity extends ActionBarMenuActivity implements TimeP
         }
     }
 
-    private int getSkillArrayID(String categoryLabel) {
-        int skillArrayID;
-        switch (categoryLabel) {
-            case "Tutoring":
-                skillArrayID = R.array.Tutoring;
-                break;
-            case "Music":
-                skillArrayID = R.array.Music;
-                break;
-            case "Dance":
-                skillArrayID = R.array.Dance;
-                break;
-            case "Arts and Crafts":
-                skillArrayID = R.array.arts_and_crafts;
-                break;
-            case "Sport":
-                skillArrayID = R.array.Sport;
-                break;
-            case "Household Services":
-                skillArrayID = R.array.Household;
-                break;
-            case "Beauty Care":
-                skillArrayID = R.array.Beauty;
-                break;
-            case "Culinary":
-                skillArrayID = R.array.Culinary;
-                break;
-            default:
-                skillArrayID = R.array.Empty;
-        }
-        return skillArrayID;
-
-    }
 
     @OnClick(R.id.time_from_picker)
     public void onTimeFromPickerClicked() {
