@@ -54,10 +54,9 @@ public class SkillsManagerActivity extends ActionBarMenuActivity {
         adapter.setOnItemClickListener(new SkillAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position, String buttonClicked) {
-//
                 if (buttonClicked.equals("edit")) {
                     String skillPath = documentSnapshot.getReference().getPath();
-                    Intent intent = new Intent(SkillsManagerActivity.this, NewSkillActivity.class);
+                    Intent intent = new Intent(SkillsManagerActivity.this, EditSkillActivity.class);
                     intent.putExtra(EditSkillActivity.KEY_SKILL_PATH, skillPath);
                     startActivity(intent);
                 }
