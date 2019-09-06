@@ -43,6 +43,9 @@ public class SearchResultActivity extends ActionBarMenuActivity {
             query = query.whereEqualTo("skill", filterOptions.getSkill());
         }
 
+        // filter only enabled skills
+        query = query.whereEqualTo("enabled", true);
+
         FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
                 .setQuery(query, UserSkill.class)
                 .build();
@@ -56,7 +59,6 @@ public class SearchResultActivity extends ActionBarMenuActivity {
         adapter.setOnItemClickListener(new SkillAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position, String buttonClicked) {
-                //TODO: move to intent presenting the skill
                 Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
                 intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, documentSnapshot.getId());
                 Log.d(TAG, "onItemClick:");
