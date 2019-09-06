@@ -31,6 +31,9 @@
         <activity
             android:name=".NewSkillActivity"
             android:parentActivityName=".SkillsManagerActivity" />
+        <activity
+            android:name=".EditSkillActivity"
+            android:parentActivityName=".SkillsManagerActivity" />
         <activity android:name=".History" />
         <activity android:name=".SearchEngineActivity" />
         <activity android:name=".UserHomeProfile" />
