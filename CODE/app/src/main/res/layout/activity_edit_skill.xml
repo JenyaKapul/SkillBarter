@@ -147,7 +147,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:text="keep providing this service"
+        android:text="Stop providing this service"
         app:layout_constraintStart_toStartOf="@+id/is_enabled_checkbox"
         app:layout_constraintTop_toBottomOf="@+id/points_wrapper"
         android:layout_marginTop="46dp"
