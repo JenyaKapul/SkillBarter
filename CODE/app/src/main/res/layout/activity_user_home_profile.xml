@@ -101,12 +101,20 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="8dp"
         app:isw_default_selection="left"
-        app:isw_icon_left="@drawable/ic_current_location"
-        app:isw_icon_right="@drawable/ic_home"
+        app:isw_icon_left="@drawable/ic_incoming"
+        app:isw_icon_right="@drawable/ic_outgoing"
         app:isw_icon_size="25dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="@+id/textView2"
+        app:isw_background_color="@color/colorPrimaryDark"
+        app:isw_thumb_color_left="@color/colorPrimary"
+        app:isw_thumb_color_right="@color/colorPrimary"
+        app:isw_inactive_tint_icon_left="#000"
+        app:isw_inactive_tint_icon_right="#000"
+        app:isw_active_tint_icon_left="#fff"
+        app:isw_active_tint_icon_right="#fff" />
+
 
 
 </android.support.constraint.ConstraintLayout>
