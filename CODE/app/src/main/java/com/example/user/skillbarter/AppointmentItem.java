@@ -1,6 +1,6 @@
 package com.example.user.skillbarter;
 
-import com.google.instrumentation.common.Timestamp;
+import com.google.firebase.Timestamp;
 
 public class AppointmentItem {
     private int value;
@@ -57,7 +57,7 @@ public class AppointmentItem {
     }
 
     public String getCategoryName() {
-        return categoryName;
+        return "(" + categoryName + ")";
     }
 
     public void setCategoryName(String categoryName) {
