@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
@@ -53,7 +51,7 @@ public class ReviewAdapter extends FirestoreRecyclerAdapter<Review, ReviewAdapte
             super(itemView);
             userNameView = itemView.findViewById(R.id.reviewer_profile_name);
             rankValueView = itemView.findViewById(R.id.rank);
-            dateView = itemView.findViewById(R.id.date);
+            dateView = itemView.findViewById(R.id.date_text_view);
             detailsView = itemView.findViewById(R.id.review_content);
             userPictureView = itemView.findViewById(R.id.reviewer_profile_picture_holder);
 

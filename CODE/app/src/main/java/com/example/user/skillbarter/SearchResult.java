@@ -3,16 +3,26 @@ package com.example.user.skillbarter;
 public class SearchResult {
     private int value;
     private float ranking;
-    private String providerName, providerImageURL, skillName, categoryName;
+    private String providerName, providerUID, providerImageURL, skillName, categoryName;
 
-    public SearchResult(int value, float ranking, String providerName, String providerImageURL, String skillName, String categoryName) {
+    public SearchResult(int value, float ranking, String providerName, String providerUID, String providerImageURL, String skillName, String categoryName) {
         this.value = value;
         this.ranking = ranking;
         this.providerName = providerName;
+        this.providerUID = providerUID;
         this.providerImageURL = providerImageURL;
         this.skillName = skillName;
         this.categoryName = categoryName;
     }
+
+    public String getProviderUID() {
+        return providerUID;
+    }
+
+    public void setProviderUID(String providerUID) {
+        this.providerUID = providerUID;
+    }
+
 
     public int getValue() {
         return value;

@@ -5,15 +5,13 @@ import com.google.firebase.Timestamp;
 public class Appointment {
     private String providerUID, clientUID, skillID;
     private Timestamp date;
-    private int ranking;
     private boolean isProviderPaid;
 
-    public Appointment(String providerUID, String clientUID, String skillID, Timestamp date, int ranking, boolean isProviderPaid) {
+    public Appointment(String providerUID, String clientUID, String skillID, Timestamp date, boolean isProviderPaid) {
         this.providerUID = providerUID;
         this.clientUID = clientUID;
         this.skillID = skillID;
         this.date = date;
-        this.ranking = ranking;
         this.isProviderPaid = isProviderPaid;
     }
 
@@ -49,19 +47,18 @@ public class Appointment {
         this.date = date;
     }
 
-    public int getRanking() {
-        return ranking;
-    }
-
-    public void setRanking(int ranking) {
-        this.ranking = ranking;
-    }
-
     public boolean isProviderPaid() {
         return isProviderPaid;
     }
 
     public void setProviderPaid(boolean providerPaid) {
         isProviderPaid = providerPaid;
+    }
+
+    public String otherUser(String currUserID) {
+        if (currUserID == this.providerUID) {
+            return this.clientUID;
+        }
+        return this.providerUID;
     }
 }
