@@ -10,7 +10,6 @@ public class UserSkill {
     private int pointsValue;
     private int level;
     private String details;
-    private float ranking;
     private boolean isEnabled;
 
 
@@ -93,14 +92,6 @@ public class UserSkill {
 
     public void setDetails(String details) {
         this.details = details;
-    }
-
-    public float getRanking() {
-        return ranking;
-    }
-
-    public void setRanking(float ranking) {
-        this.ranking = ranking;
     }
 
     public boolean isEnabled() {

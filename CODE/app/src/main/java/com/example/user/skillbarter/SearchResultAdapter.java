@@ -2,6 +2,7 @@ package com.example.user.skillbarter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +12,66 @@ import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class SearchResultAdapter extends FirestoreRecyclerAdapter<SearchResult, SearchResultAdapter.SearchResultHolder> {
+public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, SearchResultAdapter.SearchResultHolder> {
+    private static final String TAG = "SearchResultAdapter";
+    private static final String KEY_FIRST_NAME = "firstName";
+    private static final String KEY_LAST_NAME = "lastName";
+    private static final String KEY_RATING = "personalRating";
+    private static final String KEY_PICTURE = "profilePictureURL";
 
-    public SearchResultAdapter(@NonNull FirestoreRecyclerOptions<SearchResult> options) {
+
+    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+
+    private OnItemClickListener listener;
+
+    public SearchResultAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull SearchResultHolder holder, int position, @NonNull SearchResult model) {
-        holder.tvProviderName.setText(model.getProviderName());
-        holder.tvSkill.setText(model.getSkillName());
-        holder.tvCategory.setText(model.getCategoryName());
-        holder.tvValue.setText(model.getValue());
-        holder.tvRanking.setText(String.valueOf(model.getRanking()));
-        holder.ivProviderPicture.setBackground(null); //TODO - set actual picture
-        holder.rbRating.setRating(model.getRanking());
+    protected void onBindViewHolder(@NonNull SearchResultHolder holder, int position, @NonNull UserSkill model) {
+        Log.v(TAG, "onBindViewHolder: SearchResultHolder");
+        holder.tvSkill.setText(model.getSkill());
+        holder.tvCategory.setText("(" + model.getCategory() + ")");
+        holder.tvValue.setText(String.valueOf(model.getPointsValue()));
+        this.setDataFromUserData(model.getUserID(), holder);
+    }
+
+    private void setDataFromUserData(String uID, @NonNull final SearchResultHolder holder) {
+        Log.v(TAG, "onBindViewHolder: setDataFromUserData");
+        DocumentReference mUserRef = mFirestore.collection("User Data")
+                .document(uID);
+        mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()){
+                    String userName = documentSnapshot.getString(KEY_FIRST_NAME) + " " +
+                            documentSnapshot.getString(KEY_LAST_NAME);
+                    float rating = documentSnapshot.getDouble(KEY_RATING).floatValue();
+                    int level = documentSnapshot.getDouble(KEY_RATING).intValue();
+                    holder.tvProviderName.setText(userName);
+                    holder.tvRating.setText(String.valueOf(rating));
+//                    holder.ivProviderPicture.setBackground(documentSnapshot.getString(KEY_PICTURE));
+                    holder.ivProviderPicture.setBackground(null); //TODO - set actual picture
+                    holder.rbRating.setRating(rating);
+                    holder.tvLevel.setText(String.valueOf(level));
+                } else {
+                    Log.e(TAG, "Document does not exist");
+                }
+            }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e(TAG, "onFailure: " + e.toString());
+            }
+        });
     }
 
     @NonNull
@@ -38,7 +83,7 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<SearchResult, 
     }
 
     class SearchResultHolder extends RecyclerView.ViewHolder {
-        TextView tvProviderName, tvRanking, tvSkill, tvCategory, tvValue;
+        TextView tvProviderName, tvRating, tvSkill, tvCategory, tvValue, tvLevel;
         ImageView  ivProviderPicture;
         RatingBar rbRating;
 
@@ -46,11 +91,31 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<SearchResult, 
             super(itemView);
             tvProviderName = itemView.findViewById(R.id.provider_profile_name);
             ivProviderPicture = itemView.findViewById(R.id.provider_picture_holder);
-            tvRanking = itemView.findViewById(R.id.rating_value);
+            tvRating = itemView.findViewById(R.id.rating_value);
             tvSkill = itemView.findViewById(R.id.skill_text_view);
             tvCategory = itemView.findViewById(R.id.category_text_view);
             tvValue = itemView.findViewById(R.id.value_text_view);
             rbRating = itemView.findViewById(R.id.ratingBar);
+            tvLevel = itemView.findViewById(R.id.level_value_text_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
         }
     }
+
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
 }

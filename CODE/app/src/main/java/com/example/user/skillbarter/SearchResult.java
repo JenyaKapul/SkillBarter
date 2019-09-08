@@ -2,12 +2,12 @@ package com.example.user.skillbarter;
 
 public class SearchResult {
     private int value;
-    private float ranking;
+    private float rating;
     private String providerName, providerUID, providerImageURL, skillName, categoryName;
 
-    public SearchResult(int value, float ranking, String providerName, String providerUID, String providerImageURL, String skillName, String categoryName) {
+    public SearchResult(int value, float rating, String providerName, String providerUID, String providerImageURL, String skillName, String categoryName) {
         this.value = value;
-        this.ranking = ranking;
+        this.rating = rating;
         this.providerName = providerName;
         this.providerUID = providerUID;
         this.providerImageURL = providerImageURL;
@@ -32,9 +32,9 @@ public class SearchResult {
         this.value = value;
     }
 
-    public float getRanking() { return ranking; }
+    public float getRating() { return rating; }
 
-    public void setRanking(float ranking) { this.ranking = ranking; }
+    public void setRating(float rating) { this.rating = rating; }
 
     public String getProviderName() {
         return providerName;

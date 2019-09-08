@@ -18,7 +18,7 @@ public class SearchResultActivity extends ActionBarMenuActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference skillsRef = db.collection("User Skills");
 
-    private SkillAdapter adapter;
+    private SearchResultAdapter adapter;
     private  FilterSearchResult filterOptions;
 
     @Override
@@ -32,6 +32,7 @@ public class SearchResultActivity extends ActionBarMenuActivity {
     }
 
     private void setUpRecyclerView() {
+        Log.v(TAG, "setUpRecyclerView: entry setUpRecyclerView");
         Query query = skillsRef.whereGreaterThanOrEqualTo("pointsValue", filterOptions.getMinPoints());
         query = query.whereLessThanOrEqualTo("pointsValue", filterOptions.getMaxPoints());
 
@@ -50,15 +51,16 @@ public class SearchResultActivity extends ActionBarMenuActivity {
                 .setQuery(query, UserSkill.class)
                 .build();
 
-        adapter = new SkillAdapter(options);
+        adapter = new SearchResultAdapter(options);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        Log.v(TAG, "setUpRecyclerView: before setLayoutManager");
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new SkillAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position, String buttonClicked) {
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
                 intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, documentSnapshot.getId());
                 Log.d(TAG, "onItemClick:");

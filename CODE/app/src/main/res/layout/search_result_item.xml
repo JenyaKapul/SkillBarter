@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
@@ -17,7 +18,7 @@
 
         <ImageView
             android:id="@+id/provider_picture_holder"
-            android:layout_width="50dp"
+            android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -29,19 +30,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <TextView
-            android:id="@+id/provider_profile_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="PROFILE_NAME_MOCK"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/provider_picture_holder"
-            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/points_imageView"
+            android:layout_width="25dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/star_icon"
+            app:layout_constraintBottom_toBottomOf="@id/provider_picture_holder"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/provider_picture_holder" />
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -49,13 +48,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
+            android:layout_marginTop="4dp"
             android:isIndicator="true"
             android:numStars="5"
             android:rating="2.5"
             android:stepSize="0.1"
             android:transformPivotX="0dp"
             android:transformPivotY="0dp"
-            android:layout_marginTop="4dp"
             app:layout_constraintStart_toStartOf="@+id/provider_profile_name"
             app:layout_constraintTop_toBottomOf="@+id/provider_profile_name" />
 
@@ -64,28 +63,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="8dp"
             android:gravity="start"
             android:text="XX.X"
-            android:textSize="14sp"
+            style="@style/AppTheme.Subheader"
             android:textStyle="bold"
-            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
             app:layout_constraintStart_toEndOf="@+id/ratingBar"
-            app:layout_constraintTop_toTopOf="@+id/ratingBar"
-            app:layout_constraintBottom_toBottomOf="@+id/ratingBar" />
+            app:layout_constraintTop_toTopOf="@+id/ratingBar" />
 
         <TextView
             android:id="@+id/skill_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="start"
-            android:text="SKILL_MOCK"
-            android:textSize="12sp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
+            android:gravity="start"
+            android:text="SKILL_MOCK"
+            style="@style/AppTheme.Body1"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/ratingBar"
-            app:layout_constraintTop_toBottomOf="@+id/ratingBar"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
 
         <TextView
             android:id="@+id/category_text_view"
@@ -95,21 +94,22 @@
             android:layout_marginStart="16dp"
             android:gravity="start"
             android:text="CATEGORY_MOCK"
-            android:textSize="12sp"
+            style="@style/AppTheme.Body1"
             app:layout_constraintStart_toEndOf="@+id/skill_text_view"
             app:layout_constraintTop_toTopOf="@+id/skill_text_view" />
 
-        <ImageView
-            android:id="@+id/points_imageView"
-            android:layout_width="25dp"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="1:1"
+        <TextView
+            style="@style/AppTheme.Subheader"
+            android:id="@+id/provider_profile_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/star_icon"
-            app:layout_constraintTop_toTopOf="@id/provider_picture_holder"
-            app:layout_constraintBottom_toBottomOf="@id/provider_picture_holder"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:gravity="center"
+            android:text="PROFILE_NAME_MOCK"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/provider_picture_holder"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/value_text_view"
@@ -118,11 +118,37 @@
             android:layout_marginEnd="8dp"
             android:gravity="center_vertical"
             android:text="XXXX"
-            android:textSize="14sp"
+            style="@style/AppTheme.Subheader"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/points_imageView"
             app:layout_constraintEnd_toStartOf="@id/points_imageView"
             app:layout_constraintTop_toTopOf="@id/points_imageView" />
+
+
+        <TextView
+            android:id="@+id/level_title_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:text="LEVEL:"
+            style="@style/AppTheme.Subheader"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/level_value_text_view"
+            app:layout_constraintEnd_toStartOf="@id/level_value_text_view"
+            app:layout_constraintTop_toTopOf="@id/level_value_text_view" />
+
+        <TextView
+            android:id="@+id/level_value_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="X"
+            style="@style/AppTheme.Subheader"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/provider_profile_name"
+            app:layout_constraintEnd_toEndOf="@+id/value_text_view"
+            app:layout_constraintTop_toTopOf="@id/provider_profile_name" />
 
 
     </android.support.constraint.ConstraintLayout>
