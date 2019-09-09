@@ -20,14 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, SearchResultAdapter.SearchResultHolder> {
     private static final String TAG = "SearchResultAdapter";
-    private static final String KEY_FIRST_NAME = "firstName";
-    private static final String KEY_LAST_NAME = "lastName";
-    private static final String KEY_RATING = "personalRating";
-    private static final String KEY_PICTURE = "profilePictureURL";
-
 
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-
     private OnItemClickListener listener;
 
     public SearchResultAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options) {
@@ -40,6 +34,7 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
         holder.tvSkill.setText(model.getSkill());
         holder.tvCategory.setText("(" + model.getCategory() + ")");
         holder.tvValue.setText(String.valueOf(model.getPointsValue()));
+        holder.tvLevel.setText(String.valueOf(model.getLevel()));
         this.setDataFromUserData(model.getUserID(), holder);
     }
 
@@ -51,16 +46,12 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()){
-                    String userName = documentSnapshot.getString(KEY_FIRST_NAME) + " " +
-                            documentSnapshot.getString(KEY_LAST_NAME);
-                    float rating = documentSnapshot.getDouble(KEY_RATING).floatValue();
-                    int level = documentSnapshot.getDouble(KEY_RATING).intValue();
-                    holder.tvProviderName.setText(userName);
-                    holder.tvRating.setText(String.valueOf(rating));
+                    UserData ud = documentSnapshot.toObject(UserData.class);
+                    holder.tvProviderName.setText(ud.getFullName());
+                    holder.tvRating.setText(String.valueOf(ud.getPersonalRating()));
 //                    holder.ivProviderPicture.setBackground(documentSnapshot.getString(KEY_PICTURE));
                     holder.ivProviderPicture.setBackground(null); //TODO - set actual picture
-                    holder.rbRating.setRating(rating);
-                    holder.tvLevel.setText(String.valueOf(level));
+                    holder.rbRating.setRating(ud.getPersonalRating());
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }

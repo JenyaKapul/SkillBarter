@@ -8,40 +8,13 @@
     tools:context=".SearchItemDetailsActivity">
 
     <TextView
-        android:id="@+id/reviews_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:text="@string/review"
-        app:layout_constraintStart_toStartOf="@+id/details_content"
-        app:layout_constraintTop_toBottomOf="@+id/details_content" />
-
-    <!--<TextView-->
-        <!--android:id="@+id/location_content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:text="LOCATION_CONTENT_MOCK"-->
-        <!--app:layout_constraintStart_toStartOf="@+id/guideline2"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/location_title" />-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/location_title"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:text="@string/location"-->
-        <!--app:layout_constraintStart_toStartOf="@+id/level_title"-->
-        <!--app:layout_constraintTop_toBottomOf="@+id/level_title" />-->
-
-    <TextView
         android:id="@+id/details_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="DETAILS_CONTENT_MOCK"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/details_title"
         app:layout_constraintTop_toBottomOf="@+id/details_title" />
 
@@ -74,14 +47,12 @@
     <RatingBar
         android:id="@+id/rating_bar"
         style="?android:attr/ratingBarStyleIndicator"
-        android:layout_width="183dp"
-        android:layout_height="32dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:isIndicator="true"
         android:numStars="5"
         android:rating="2.5"
-        android:scaleX=".7"
-        android:scaleY=".7"
         android:stepSize="0.1"
         android:transformPivotX="0dp"
         android:transformPivotY="0dp"
@@ -94,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:gravity="center_vertical"
-        android:text="RATING"
+        android:text="X.X"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
@@ -106,27 +77,26 @@
         android:id="@+id/points_icon"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:background="@drawable/star_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_picture_holder"
+        app:layout_constraintBottom_toBottomOf="@+id/skill_value"
+        app:layout_constraintTop_toTopOf="@+id/skill_value"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="@+id/profile_name"
-        app:layout_constraintTop_toBottomOf="@+id/rating_bar" />
+        app:layout_constraintStart_toEndOf="@+id/skill_value"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/skill_value"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
         android:gravity="center_vertical"
         android:text="COST_MOCK"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/points_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/points_icon"
-        app:layout_constraintTop_toTopOf="@+id/points_icon" />
+        app:layout_constraintStart_toStartOf="@+id/rating_bar"
+        app:layout_constraintTop_toBottomOf="@+id/rating_bar" />
 
 
     <TextView
@@ -178,6 +148,8 @@
         app:layout_constraintTop_toTopOf="@+id/level_title" />
 
     <TextView
+        android:textSize="20sp"
+        android:textStyle="bold"
         android:id="@+id/details_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -194,19 +166,6 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="100dp" />
 
-    <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/reviews_title">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </android.support.design.widget.CoordinatorLayout>
 
 </android.support.constraint.ConstraintLayout>

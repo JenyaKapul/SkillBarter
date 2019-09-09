@@ -61,10 +61,12 @@ public class SearchResultActivity extends ActionBarMenuActivity {
         adapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
-                intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, documentSnapshot.getId());
-                Log.d(TAG, "onItemClick:");
-                startActivity(intent);
+                if (position != RecyclerView.NO_POSITION) {
+                    Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
+                    intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, documentSnapshot.getId());
+                    Log.d(TAG, "onItemClick:");
+                    startActivity(intent);
+                }
             }
         });
     }

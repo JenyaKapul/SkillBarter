@@ -101,4 +101,8 @@ public class UserSkill {
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
     }
+
+    public String getSkillWithCategory() {
+        return this.skill + " (" + this.category + ")";
+    }
 }
