@@ -49,8 +49,7 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
                     UserData ud = documentSnapshot.toObject(UserData.class);
                     holder.tvProviderName.setText(ud.getFullName());
                     holder.tvRating.setText(String.valueOf(ud.getPersonalRating()));
-//                    holder.ivProviderPicture.setBackground(documentSnapshot.getString(KEY_PICTURE));
-                    holder.ivProviderPicture.setBackground(null); //TODO - set actual picture
+//                    holder.ivProviderPicture.setBackground(documentSnapshot.getString(KEY_PICTURE));//TODO - set actual picture
                     holder.rbRating.setRating(ud.getPersonalRating());
                 } else {
                     Log.e(TAG, "Document does not exist");

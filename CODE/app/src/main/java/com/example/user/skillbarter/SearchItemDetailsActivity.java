@@ -1,5 +1,6 @@
 package com.example.user.skillbarter;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -21,6 +24,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
     private static final String TAG = "SearchItemDetailsAct";
     public static final String KEY_SKILL_ID = "key_skill_id";
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+    private Activity thisActivity;
 
     @BindView(R.id.profile_picture_holder)
     ImageView profilePictureView;
@@ -51,6 +55,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         Log.v(TAG, "onCreate:");
         super.onCreate(savedInstanceState);
+        thisActivity = this;
         setContentView(R.layout.activity_search_item_details);
         ButterKnife.bind(this);
         setTitle("Details");
@@ -72,9 +77,13 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
                     UserData ud = documentSnapshot.toObject(UserData.class);
                     profileNameView.setText(ud.getFullName());
                     ratingValueView.setText(String.valueOf(ud.getPersonalRating()));
-//                    profilePictureView.setBackground(ud.getProfilePictureURL());
-                    profilePictureView.setBackground(null); //TODO - set actual picture
                     ratingBarView.setRating(ud.getPersonalRating());
+
+                    if(ud.getProfilePictureURL() != null){
+                        profilePictureView.setBackground(null);
+                    }
+                    Glide.with(thisActivity).load(ud.getProfilePictureURL()).apply(new RequestOptions().centerCrop()
+                            .circleCrop().placeholder(R.drawable.incognito)).into(profilePictureView);
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }

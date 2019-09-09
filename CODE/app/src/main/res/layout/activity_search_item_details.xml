@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="DETAILS_CONTENT_MOCK"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/details_title"
         app:layout_constraintTop_toBottomOf="@+id/details_title" />
@@ -64,7 +64,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:gravity="center_vertical"
+        android:gravity="start"
         android:text="X.X"
         android:textSize="20sp"
         android:textStyle="bold"
