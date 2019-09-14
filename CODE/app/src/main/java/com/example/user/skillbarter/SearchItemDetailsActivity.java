@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -58,6 +59,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
         thisActivity = this;
         setContentView(R.layout.activity_search_item_details);
         ButterKnife.bind(this);
+        skillDetailsView.setMovementMethod(new ScrollingMovementMethod());
         setTitle("Details");
         Bundle extras = getIntent().getExtras();
         if (extras != null) {

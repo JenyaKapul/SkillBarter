@@ -11,6 +11,9 @@
         android:id="@+id/details_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:singleLine="false"
+        android:maxLines="3"
+        android:scrollbars="vertical"
         android:layout_gravity="center"
         android:text="DETAILS_CONTENT_MOCK"
         android:textSize="20sp"
@@ -148,9 +151,9 @@
         app:layout_constraintTop_toTopOf="@+id/level_title" />
 
     <TextView
+        android:id="@+id/details_title"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:id="@+id/details_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -165,6 +168,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="100dp" />
+
+    <Spinner
+        android:id="@+id/date_picker_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:dropDownWidth="match_parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/details_content" />
+
+    <Button
+        android:id="@+id/booking_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginEnd="162dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/booking_button"
+        android:background="@drawable/my_button"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 
 
 
