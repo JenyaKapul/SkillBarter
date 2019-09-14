@@ -23,10 +23,40 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
 
     @Override
     protected void onBindViewHolder(@NonNull SkillHolder holder, int position, @NonNull UserSkill model) {
-        holder.categoryTextView.setText(model.getCategory());
-        holder.skillTextView.setText(model.getSkill());
+        String category = model.getCategory();
+        String skill = model.getSkill();
+        holder.categoryTextView.setText(category);
+        holder.skillTextView.setText(skill);
         holder.levelTextView.setText("Level " + String.valueOf(model.getLevel()));
         holder.pointsTextView.setText(String.valueOf(model.getPointsValue()));
+        holder.iconImageView.setImageResource(getSkillImageID(category, skill));
+    }
+
+    private int getSkillImageID(String category, String skill) {
+        switch (category) {
+            case "Tutoring":
+                return R.drawable.skill_icon_tutoring;
+            case "Music":
+                return R.drawable.skill_icon_music;
+            case "Dance":
+                return R.drawable.skill_icon_dance;
+            case "Arts and Crafts":
+                return R.drawable.skill_icon_arts;
+            case "Sport":
+                return R.drawable.skill_icon_sport;
+            case "Household Services":
+                if (skill.equals("Handyman")) {
+                    return R.drawable.skill_icon_handyman;
+                } else {
+                    return R.drawable.skill_icon_household_services;
+                }
+            case "Beauty Care":
+                return R.drawable.skill_icon_beauty_care;
+            case "Culinary":
+                return R.drawable.skill_icon_culinary;
+            default:
+                return 0;
+        }
     }
 
     @NonNull
@@ -47,6 +77,7 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
         TextView levelTextView;
         TextView pointsTextView;
         ImageView editImageView;
+        ImageView iconImageView;
 
         public SkillHolder(View itemView) {
             super(itemView);
@@ -55,6 +86,7 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
             levelTextView = itemView.findViewById(R.id.levelView);
             pointsTextView = itemView.findViewById(R.id.pointsView);
             editImageView = itemView.findViewById(R.id.editView);
+            iconImageView = itemView.findViewById(R.id.imageView);
 
             editImageView.setOnClickListener(new View.OnClickListener() {
                 @Override

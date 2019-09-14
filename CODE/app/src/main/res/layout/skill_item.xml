@@ -19,7 +19,6 @@
             android:id="@+id/imageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="#757575"
             android:scaleType="centerCrop"
             android:src="@drawable/star_icon" />
 

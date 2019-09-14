@@ -1,6 +1,9 @@
 package com.example.user.skillbarter;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,10 +34,13 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
     @Override
     protected void onBindViewHolder(@NonNull SearchResultHolder holder, int position, @NonNull UserSkill model) {
         Log.v(TAG, "onBindViewHolder: SearchResultHolder");
-        holder.tvSkill.setText(model.getSkill());
-        holder.tvCategory.setText("(" + model.getCategory() + ")");
+        String category = model.getCategory();
+        String skill = model.getSkill();
+        holder.tvSkill.setText(skill);
+        holder.tvCategory.setText("(" + category + ")");
         holder.tvValue.setText(String.valueOf(model.getPointsValue()));
         holder.tvLevel.setText(String.valueOf(model.getLevel()));
+        holder.ivProviderPicture.setImageResource(getSkillImageID(category, skill));
         this.setDataFromUserData(model.getUserID(), holder);
     }
 
@@ -49,7 +55,6 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
                     UserData ud = documentSnapshot.toObject(UserData.class);
                     holder.tvProviderName.setText(ud.getFullName());
                     holder.tvRating.setText(String.valueOf(ud.getPersonalRating()));
-//                    holder.ivProviderPicture.setBackground(documentSnapshot.getString(KEY_PICTURE));//TODO - set actual picture
                     holder.rbRating.setRating(ud.getPersonalRating());
                 } else {
                     Log.e(TAG, "Document does not exist");
@@ -62,6 +67,33 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
                 Log.e(TAG, "onFailure: " + e.toString());
             }
         });
+    }
+
+    private int getSkillImageID(String category, String skill) {
+        switch (category) {
+            case "Tutoring":
+                return R.drawable.skill_icon_tutoring;
+            case "Music":
+                return R.drawable.skill_icon_music;
+            case "Dance":
+                return R.drawable.skill_icon_dance;
+            case "Arts and Crafts":
+                return R.drawable.skill_icon_arts;
+            case "Sport":
+                return R.drawable.skill_icon_sport;
+            case "Household Services":
+                if (skill.equals("Handyman")) {
+                    return R.drawable.skill_icon_handyman;
+                } else {
+                    return R.drawable.skill_icon_household_services;
+                }
+            case "Beauty Care":
+                return R.drawable.skill_icon_beauty_care;
+            case "Culinary":
+                return R.drawable.skill_icon_culinary;
+            default:
+                return 0;
+        }
     }
 
     @NonNull

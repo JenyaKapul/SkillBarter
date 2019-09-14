@@ -2,6 +2,7 @@ package com.example.user.skillbarter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -131,7 +132,6 @@ public class BaseActivity extends AppCompatActivity {
                 skillArrayID = R.array.Empty;
         }
         return skillArrayID;
-
     }
 }
 
