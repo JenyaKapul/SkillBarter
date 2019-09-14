@@ -24,7 +24,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
 
     private static final String TAG = "AppointmentAdapter";
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-//    private AppointmentAdapter.OnItemClickListener listener;
+    private AppointmentAdapter.OnItemClickListener listener;
 
     public AppointmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options) {
         super(options);
@@ -108,23 +108,23 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
             tvCategory = itemView.findViewById(R.id.category_text_view);
             tvValue = itemView.findViewById(R.id.value_text_view);
 
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int position = getAdapterPosition();
-//                    if (position != RecyclerView.NO_POSITION && listener !=null) {
-//                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
-//                    }
-//                }
-//            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && listener !=null) {
+                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
         }
     }
 
-//    public interface OnItemClickListener {
-//        void onItemClick(DocumentSnapshot documentSnapshot, int position);
-//    }
-//
-//    public void setOnItemClickListener(AppointmentAdapter.OnItemClickListener listener) {
-//        this.listener = listener;
-//    }
+    public interface OnItemClickListener {
+        void onItemClick(DocumentSnapshot documentSnapshot, int position);
+    }
+
+    public void setOnItemClickListener(AppointmentAdapter.OnItemClickListener listener) {
+        this.listener = listener;
+    }
 }

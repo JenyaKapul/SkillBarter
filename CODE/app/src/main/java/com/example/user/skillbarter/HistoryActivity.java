@@ -1,6 +1,8 @@
 package com.example.user.skillbarter;
 
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.Timestamp;
@@ -31,24 +33,29 @@ public class HistoryActivity extends ActionBarMenuActivity {
     private void setUpRecyclerView() {
         Log.v(TAG, "setUpRecyclerView: setUpRecyclerView");
         Timestamp nowTimestamp = Timestamp.now();
-        Query query;
-        if (this.currIsProvider) {
-            query = appointmentRef.whereEqualTo("providerUID", this.currUID);
-        }
-        else {
-            query = appointmentRef.whereEqualTo("clientUID", this.currUID);
-        }
-        query.whereLessThan("date", nowTimestamp).orderBy("date", Query.Direction.ASCENDING);
+        Query query = appointmentRef.orderBy("date", Query.Direction.ASCENDING);
+//        if (this.currIsProvider) {
+//            query = appointmentRef.whereEqualTo("providerUID", this.currUID);
+//        }
+//        else {
+//            query = appointmentRef.whereEqualTo("clientUID", this.currUID);
+//        }
+//        query.whereLessThan("date", nowTimestamp).orderBy("date", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class).build();
 
-//        adapter.setOnItemClickListener(new AppointmentAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-//                Log.v(TAG, "onItemClick: setOnItemClickListener");
-//            }
-//        });
+        adapter = new AppointmentAdapter(options);
+        RecyclerView recyclerView = findViewById(R.id.history_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new AppointmentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Log.v(TAG, "onItemClick: setOnItemClickListener");
+            }
+        });
     }
 
     @Override
