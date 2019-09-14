@@ -19,8 +19,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -83,7 +81,8 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
 
         // Initializing an ArrayAdapter
         datesList = new ArrayList<>();
-        spinnerArrayAdapter = new ArrayAdapter<String>(
+        datesList.add("Choose date and starting time");
+        spinnerArrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, datesList);
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
         availableDatesSpinner.setAdapter(spinnerArrayAdapter);
