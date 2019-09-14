@@ -1,9 +1,6 @@
 package com.example.user.skillbarter;
 
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,7 +34,7 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
         String category = model.getCategory();
         String skill = model.getSkill();
         holder.tvSkill.setText(skill);
-        holder.tvCategory.setText("(" + category + ")");
+        holder.tvCategory.setText("(" + model.getCategory() + ")");
         holder.tvValue.setText(String.valueOf(model.getPointsValue()));
         holder.tvLevel.setText(String.valueOf(model.getLevel()));
         holder.ivProviderPicture.setImageResource(getSkillImageID(category, skill));
@@ -111,7 +108,7 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
 
         public SearchResultHolder(@NonNull View itemView) {
             super(itemView);
-            tvProviderName = itemView.findViewById(R.id.provider_profile_name);
+            tvProviderName = itemView.findViewById(R.id.other_profile_name);
             ivProviderPicture = itemView.findViewById(R.id.provider_picture_holder);
             tvRating = itemView.findViewById(R.id.rating_value);
             tvSkill = itemView.findViewById(R.id.skill_text_view);

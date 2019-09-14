@@ -53,8 +53,8 @@
             android:stepSize="0.1"
             android:transformPivotX="0dp"
             android:transformPivotY="0dp"
-            app:layout_constraintStart_toStartOf="@+id/provider_profile_name"
-            app:layout_constraintTop_toBottomOf="@+id/provider_profile_name" />
+            app:layout_constraintStart_toStartOf="@+id/other_profile_name"
+            app:layout_constraintTop_toBottomOf="@+id/other_profile_name" />
 
         <TextView
             android:id="@+id/rating_value"
@@ -98,7 +98,7 @@
 
         <TextView
             style="@style/AppTheme.Subheader"
-            android:id="@+id/provider_profile_name"
+            android:id="@+id/other_profile_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -144,9 +144,9 @@
             android:text="X"
             style="@style/AppTheme.Subheader"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/provider_profile_name"
+            app:layout_constraintBottom_toBottomOf="@id/other_profile_name"
             app:layout_constraintEnd_toEndOf="@+id/value_text_view"
-            app:layout_constraintTop_toTopOf="@id/provider_profile_name" />
+            app:layout_constraintTop_toTopOf="@id/other_profile_name" />
 
 
     </android.support.constraint.ConstraintLayout>

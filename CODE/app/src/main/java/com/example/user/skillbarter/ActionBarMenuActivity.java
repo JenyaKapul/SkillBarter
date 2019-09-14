@@ -72,7 +72,7 @@ public class ActionBarMenuActivity extends BaseActivity {
                 intent.putExtra(RegisterActivity.KEY_USER_ID, currentUser.getUid());
                 break;
             case R.id.menu_history:
-                intent = new Intent(this, History.class);
+                intent = new Intent(this, HistoryActivity.class);
                 break;
             case R.id.menu_manage_skills:
                 intent = new Intent(this, SkillsManagerActivity.class);
