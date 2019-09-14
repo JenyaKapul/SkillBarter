@@ -90,7 +90,8 @@
     <string name="level">LEVEL:</string>
     <string name="details">Details:</string>
     <string name="location">Location:</string>
-    <string name="review">Reviews:</string>
+    <string name="review">Reviews:</string>D
+    <string name="booking_button">Book Now</string>
 
 
     <!--ADD SKILL-->
