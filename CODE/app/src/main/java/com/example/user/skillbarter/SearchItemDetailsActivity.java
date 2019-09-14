@@ -6,17 +6,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,6 +37,8 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
     public static final String KEY_SKILL_ID = "key_skill_id";
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     private Activity thisActivity;
+    private List<String> datesList;
+    private ArrayAdapter<String> spinnerArrayAdapter;
 
     @BindView(R.id.profile_picture_holder)
     ImageView profilePictureView;
@@ -51,6 +64,9 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
     @BindView(R.id.details_content)
     TextView skillDetailsView;
 
+    @BindView(R.id.date_picker_spinner)
+    Spinner availableDatesSpinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +77,17 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         skillDetailsView.setMovementMethod(new ScrollingMovementMethod());
         setTitle("Details");
+
+        // Initializing an ArrayAdapter
+        datesList = new ArrayList<>();
+        spinnerArrayAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, datesList);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        availableDatesSpinner.setAdapter(spinnerArrayAdapter);
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             this.setDataFromSkillData(extras.getString(KEY_SKILL_ID));
-//            this.setDataFromUserData(userID);
         }
     }
 
@@ -113,6 +136,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
                     skillLevelView.setText(String.valueOf(us.getLevel()));
                     skillDetailsView.setText(us.getDetails());
                     setDataFromUserData(us.getUserID());
+                    setDataFromUserAvailableDates(us.getUserID());
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
@@ -124,6 +148,25 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
                         Log.e(TAG, "onFailure: " + e.toString());
                     }
                 });
+    }
+
+    private void setDataFromUserAvailableDates(String uID) {
+        mFirestore.collection("User Data").document(uID).collection("Dates")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot snapshots) {
+                for (QueryDocumentSnapshot doc: snapshots) {
+                    if (doc.getBoolean("isAvailable")) {
+                        Date date = doc.getDate("timestamp");
+                        String dateFormatted = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(date);
+                        datesList.add(dateFormatted);
+                    }
+
+                }
+                /* Single refresh for the adapter! */
+                spinnerArrayAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
 }
