@@ -59,7 +59,7 @@ public class HistoryActivity extends ActionBarMenuActivity {
         else {
             query = appointmentRef.whereEqualTo("clientUID", this.currUID);
         }
-        query.whereLessThan("date", nowDate).orderBy("date", Query.Direction.DESCENDING);
+        query = query.whereLessThan("date", nowDate).orderBy("date", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class).build();

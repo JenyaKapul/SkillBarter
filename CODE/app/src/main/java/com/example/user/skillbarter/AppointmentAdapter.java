@@ -38,7 +38,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
     }
 
     private String getOtherUser(String currUID, Appointment appointment) {
-        if (currUID == appointment.getProviderUID()) {
+        if (currUID.equals(appointment.getProviderUID())) {
             return appointment.getClientUID();
         }
         return appointment.getProviderUID();
