@@ -95,7 +95,7 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_picture_holder" />
 
     <com.polyak.iconswitch.IconSwitch
-        android:id="@+id/distance_type_switch"
+        android:id="@+id/appointments_type_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"

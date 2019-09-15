@@ -11,6 +11,9 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.polyak.iconswitch.IconSwitch;
+
+import java.util.Date;
 
 public class HistoryActivity extends ActionBarMenuActivity {
     private static final String TAG = "HistoryActivity";
@@ -19,28 +22,44 @@ public class HistoryActivity extends ActionBarMenuActivity {
     private CollectionReference appointmentRef = db.collection("Appointments");
 
     private AppointmentAdapter adapter;
+
     private String currUID = FirebaseAuth.getInstance().getUid();
-    private boolean currIsProvider = true;
+    private IconSwitch iconSwitch;
+    private boolean currIsProvider = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-
+        iconSwitch = findViewById(R.id.history_appointments_type_switch);
+        iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
+            @Override
+            public void onCheckChanged(IconSwitch.Checked current) {
+                adapter.stopListening();
+                if(current == IconSwitch.Checked.LEFT){
+                    currIsProvider = false;
+                }
+                else {
+                    currIsProvider = true;
+                }
+                setUpRecyclerView();
+                adapter.startListening();
+            }
+        });
         setUpRecyclerView();
     }
 
     private void setUpRecyclerView() {
         Log.v(TAG, "setUpRecyclerView: setUpRecyclerView");
-        Timestamp nowTimestamp = Timestamp.now();
-        Query query = appointmentRef.orderBy("date", Query.Direction.ASCENDING);
-//        if (this.currIsProvider) {
-//            query = appointmentRef.whereEqualTo("providerUID", this.currUID);
-//        }
-//        else {
-//            query = appointmentRef.whereEqualTo("clientUID", this.currUID);
-//        }
-//        query.whereLessThan("date", nowTimestamp).orderBy("date", Query.Direction.ASCENDING);
+        Timestamp nowDate = new Timestamp(new Date());
+        Query query;
+        if (this.currIsProvider) {
+            query = appointmentRef.whereEqualTo("providerUID", this.currUID);
+        }
+        else {
+            query = appointmentRef.whereEqualTo("clientUID", this.currUID);
+        }
+        query.whereLessThan("date", nowDate).orderBy("date", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class).build();
