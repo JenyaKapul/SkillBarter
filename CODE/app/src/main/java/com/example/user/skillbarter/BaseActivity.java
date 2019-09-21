@@ -23,6 +23,7 @@ public class BaseActivity extends AppCompatActivity {
     public CollectionReference skillsCollectionRef = mFirestore.collection("User Skills");
     public CollectionReference appointmentsCollectionRef = mFirestore.collection("Appointments");
 
+
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
 
