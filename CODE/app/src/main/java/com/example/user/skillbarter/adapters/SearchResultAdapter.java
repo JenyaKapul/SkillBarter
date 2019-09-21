@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.example.user.skillbarter.R;
+import com.example.user.skillbarter.models.UserData;
+import com.example.user.skillbarter.models.UserSkill;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;

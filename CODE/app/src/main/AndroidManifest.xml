@@ -13,15 +13,15 @@
         <activity android:name=".SearchResultActivity" />
         <activity android:name=".SearchItemDetailsActivity" />
         <activity
-            android:name=".SkillsManagerActivity"
+            android:name=".screens.SkillsManagerActivity"
             android:launchMode="singleTop" />
         <activity
-            android:name=".NewSkillActivity"
-            android:parentActivityName=".SkillsManagerActivity" />
+            android:name=".screens.NewSkillActivity"
+            android:parentActivityName=".screens.SkillsManagerActivity" />
         <activity
-            android:name=".EditSkillActivity"
-            android:parentActivityName=".SkillsManagerActivity" />
-        <activity android:name=".HistoryActivity" />
+            android:name=".screens.EditSkillActivity"
+            android:parentActivityName=".screens.SkillsManagerActivity" />
+        <activity android:name=".screens.HistoryActivity" />
         <activity android:name=".SearchEngineActivity" />
         <activity android:name=".UserHomeProfile" />
 
@@ -34,7 +34,7 @@
         </activity>
 
         <activity
-            android:name=".EmailPasswordActivity"
+            android:name=".screens.EmailPasswordActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".RegisterActivity" />
         <provider

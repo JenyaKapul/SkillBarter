@@ -2,7 +2,6 @@ package com.example.user.skillbarter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.VisibleForTesting;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
@@ -12,8 +11,17 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+
 
 public class BaseActivity extends AppCompatActivity {
+
+    public FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+    public FirebaseStorage mStorage = FirebaseStorage.getInstance();
+    public CollectionReference skillsCollectionRef = mFirestore.collection("User Skills");
+    public CollectionReference appointmentsCollectionRef = mFirestore.collection("Appointments");
 
     @VisibleForTesting
     public ProgressDialog mProgressDialog;

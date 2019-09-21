@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.services;
 
 import android.Manifest;
 import android.app.Activity;
@@ -14,6 +14,8 @@ import android.provider.Settings;
 import android.support.v4.content.FileProvider;
 import android.widget.Toast;
 
+import com.example.user.skillbarter.BuildConfig;
+import com.example.user.skillbarter.R;
 import com.example.user.skillbarter.utils.FileCompressor;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.MultiplePermissionsReport;

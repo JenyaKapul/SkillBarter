@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.user.skillbarter.models.UserData;
+import com.example.user.skillbarter.models.UserSkill;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -32,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SearchItemDetailsActivity extends AppCompatActivity {
     private static final String TAG = "SearchItemDetailsAct";
@@ -187,6 +190,11 @@ public class SearchItemDetailsActivity extends AppCompatActivity {
                 spinnerArrayAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @OnClick(R.id.booking_button)
+    public void onBookNowClicked() {
+        Log.d(TAG, "****** onBookNowClicked: Booking buton clicked");
     }
 
 }

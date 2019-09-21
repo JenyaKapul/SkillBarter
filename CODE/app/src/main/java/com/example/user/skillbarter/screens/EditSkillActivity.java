@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.screens;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,12 +11,13 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.example.user.skillbarter.BaseActivity;
+import com.example.user.skillbarter.R;
+import com.example.user.skillbarter.models.UserSkill;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -65,7 +66,7 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
 
         String path = getIntent().getExtras().getString(KEY_SKILL_PATH);
         showProgressDialog();
-        mSkillRef = FirebaseFirestore.getInstance().document(path);
+        mSkillRef = mFirestore.document(path);
 
     }
 
@@ -106,9 +107,7 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
         String docID = userSkill.getSkillId();
 
         // add user's skill to database.
-        CollectionReference skillsCollection = FirebaseFirestore.getInstance()
-                .collection("User Skills");
-        skillsCollection.document(docID).set(userSkill);
+        skillsCollectionRef.document(docID).set(userSkill);
 
         finish();
     }

@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,18 +7,17 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.example.user.skillbarter.ActionBarMenuActivity;
+import com.example.user.skillbarter.R;
+import com.example.user.skillbarter.adapters.SkillAdapter;
+import com.example.user.skillbarter.models.UserSkill;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 
 public class SkillsManagerActivity extends ActionBarMenuActivity {
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference skillsRef = db.collection("User Skills");
-
     private SkillAdapter adapter;
 
     @Override
@@ -39,7 +38,7 @@ public class SkillsManagerActivity extends ActionBarMenuActivity {
 
     private void setUpRecyclerView() {
         String uID = FirebaseAuth.getInstance().getUid();
-        Query query = skillsRef.whereEqualTo("userID", uID);
+        Query query = skillsCollectionRef.whereEqualTo("userID", uID);
 
         FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
                 .setQuery(query, UserSkill.class)

@@ -6,20 +6,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.example.user.skillbarter.adapters.SearchResultAdapter;
+import com.example.user.skillbarter.models.FilterSearchResult;
+import com.example.user.skillbarter.models.UserSkill;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
 public class SearchResultActivity extends ActionBarMenuActivity {
     private static final String TAG = "SearchResultActivity";
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference skillsRef = db.collection("User Skills");
-
     private SearchResultAdapter adapter;
-    private  FilterSearchResult filterOptions;
+    private FilterSearchResult filterOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +31,7 @@ public class SearchResultActivity extends ActionBarMenuActivity {
 
     private void setUpRecyclerView() {
         Log.v(TAG, "setUpRecyclerView: entry setUpRecyclerView");
-        Query query = skillsRef.whereGreaterThanOrEqualTo("pointsValue", filterOptions.getMinPoints());
+        Query query = skillsCollectionRef.whereGreaterThanOrEqualTo("pointsValue", filterOptions.getMinPoints());
         query = query.whereLessThanOrEqualTo("pointsValue", filterOptions.getMaxPoints());
 
         if (filterOptions.getCategory() != null) {

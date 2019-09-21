@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.screens;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,13 +13,15 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.user.skillbarter.BaseActivity;
+import com.example.user.skillbarter.R;
+import com.example.user.skillbarter.adapters.HintAdapter;
+import com.example.user.skillbarter.models.UserSkill;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Arrays;
 import java.util.List;
@@ -125,7 +127,7 @@ public class NewSkillActivity extends BaseActivity {
         final UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
         final String docID = userSkill.getSkillId();
 
-        DocumentReference skillRef = FirebaseFirestore.getInstance().collection("User Skills").document(docID);
+        DocumentReference skillRef = skillsCollectionRef.document(docID);
 
         skillRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -136,9 +138,7 @@ public class NewSkillActivity extends BaseActivity {
                         Toast.makeText(NewSkillActivity.this, "This skill already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // add user's skill to database.
-                        CollectionReference skillsCollection = FirebaseFirestore.getInstance()
-                                .collection("User Skills");
-                        skillsCollection.document(docID).set(userSkill);
+                        skillsCollectionRef.document(docID).set(userSkill);
 
                         finish();
                     }

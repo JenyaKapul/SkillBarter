@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.example.user.skillbarter.screens.EmailPasswordActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

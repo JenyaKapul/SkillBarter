@@ -12,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.EditText;
 
+import com.example.user.skillbarter.adapters.HintAdapter;
+import com.example.user.skillbarter.models.FilterSearchResult;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

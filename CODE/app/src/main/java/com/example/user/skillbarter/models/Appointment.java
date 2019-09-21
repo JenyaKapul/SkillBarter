@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.models;
 
 import com.google.firebase.Timestamp;
 

@@ -10,15 +10,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.user.skillbarter.adapters.AppointmentAdapter;
+import com.example.user.skillbarter.models.Appointment;
+import com.example.user.skillbarter.models.UserData;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
@@ -35,9 +36,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
         implements EventListener<DocumentSnapshot> {
     private static final String TAG = "UserHomeProfile";
 
-    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-    private CollectionReference appointmentRef = mFirestore.collection("Appointments");
     private DocumentReference mUserRef;
 
     private AppointmentAdapter adapter;
@@ -92,10 +91,10 @@ public class UserHomeProfile extends ActionBarMenuActivity
         Timestamp nowDate = new Timestamp(new Date());
         Query query;
         if (this.currIsProvider) {
-            query = appointmentRef.whereEqualTo("providerUID", this.mUser.getUid());
+            query = appointmentsCollectionRef.whereEqualTo("providerUID", this.mUser.getUid());
         }
         else {
-            query = appointmentRef.whereEqualTo("clientUID", this.mUser.getUid());
+            query = appointmentsCollectionRef.whereEqualTo("clientUID", this.mUser.getUid());
         }
         query = query.whereGreaterThanOrEqualTo("date", nowDate).orderBy("date", Query.Direction.ASCENDING);
 
