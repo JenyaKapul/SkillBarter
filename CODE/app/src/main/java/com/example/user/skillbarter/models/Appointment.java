@@ -1,16 +1,16 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.models;
 
-import com.google.firebase.Timestamp;
+import java.util.Date;
 
 public class Appointment {
     private String providerUID, clientUID, skillID;
-    private Timestamp date;
+    private Date date;
     private int rating;
     private boolean isProviderPaid;
 
     Appointment() {}
 
-    public Appointment(String providerUID, String clientUID, String skillID, Timestamp date,
+    public Appointment(String providerUID, String clientUID, String skillID, Date date,
                        int rating, boolean isProviderPaid) {
         this.providerUID = providerUID;
         this.clientUID = clientUID;
@@ -44,11 +44,11 @@ public class Appointment {
         this.skillID = skillID;
     }
 
-    public Timestamp getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Timestamp date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

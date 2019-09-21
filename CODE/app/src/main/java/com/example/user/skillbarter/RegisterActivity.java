@@ -18,16 +18,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.user.skillbarter.models.UserData;
+import com.example.user.skillbarter.services.CameraService;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -90,8 +90,6 @@ public class RegisterActivity extends ActionBarMenuActivity
     @BindView(R.id.date_picker)
     ImageButton datePickerButton;
 
-    private FirebaseFirestore mFirestore;
-    private FirebaseStorage mStorage;
     private FirebaseAuth mAuth;
 
     private String signedInUserID;
@@ -121,10 +119,6 @@ public class RegisterActivity extends ActionBarMenuActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-
-        mFirestore = FirebaseFirestore.getInstance();
-
-        mStorage = FirebaseStorage.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
 

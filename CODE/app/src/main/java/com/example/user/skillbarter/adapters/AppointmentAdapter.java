@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.user.skillbarter.R;
+import com.example.user.skillbarter.models.Appointment;
+import com.example.user.skillbarter.models.UserData;
+import com.example.user.skillbarter.models.UserSkill;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,7 +37,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
     @Override
     protected void onBindViewHolder(@NonNull AppointmentHolder holder, int position, @NonNull Appointment model) {
         Log.v(TAG, "onBindViewHolder: AppointmentHolder");
-        holder.tvDate.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(model.getDate().toDate()));
+        holder.tvDate.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(model.getDate()));
         this.setDataFromUserData(this.getOtherUser(FirebaseAuth.getInstance().getUid(), model), holder);
         this.setDataFromSkillData(model.getSkillID(), holder);
     }
@@ -100,7 +105,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
                 viewGroup, false);
         return new AppointmentHolder(v);
     }
-//
+
     class AppointmentHolder extends RecyclerView.ViewHolder {
         TextView tvOtherProfileName, tvDate, tvSkill, tvCategory, tvValue;
         ImageView ivOtherProfilePicture;

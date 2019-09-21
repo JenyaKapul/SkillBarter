@@ -6,7 +6,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HistoryActivity">
+    tools:context=".screens.HistoryActivity">
 
     <com.polyak.iconswitch.IconSwitch
         android:id="@+id/history_appointments_type_switch"

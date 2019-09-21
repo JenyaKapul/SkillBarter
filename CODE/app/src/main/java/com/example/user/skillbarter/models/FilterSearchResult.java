@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -7,6 +7,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.example.user.skillbarter.screens.EmailPasswordActivity;
+import com.example.user.skillbarter.screens.HistoryActivity;
+import com.example.user.skillbarter.screens.SkillsManagerActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

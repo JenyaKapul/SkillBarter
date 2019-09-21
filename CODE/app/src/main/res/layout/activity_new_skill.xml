@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewSkillActivity">
+    tools:context=".screens.NewSkillActivity">
 
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,7 +13,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NewSkillActivity">
+    tools:context=".screens.NewSkillActivity">
 
     <TextView
         android:id="@+id/edit_skill_title"

@@ -1,15 +1,18 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.screens;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+
+import com.example.user.skillbarter.ActionBarMenuActivity;
+import com.example.user.skillbarter.R;
+import com.example.user.skillbarter.adapters.AppointmentAdapter;
+import com.example.user.skillbarter.models.Appointment;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.polyak.iconswitch.IconSwitch;
 
@@ -17,9 +20,6 @@ import java.util.Date;
 
 public class HistoryActivity extends ActionBarMenuActivity {
     private static final String TAG = "HistoryActivity";
-
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private CollectionReference appointmentRef = db.collection("Appointments");
 
     private AppointmentAdapter adapter;
 
@@ -55,10 +55,10 @@ public class HistoryActivity extends ActionBarMenuActivity {
 //        Query query = appointmentRef.orderBy("date", Query.Direction.DESCENDING);
         Query query;
         if (this.currIsProvider) {
-            query = appointmentRef.whereEqualTo("providerUID", this.currUID);
+            query = appointmentsCollectionRef.whereEqualTo("providerUID", this.currUID);
         }
         else {
-            query = appointmentRef.whereEqualTo("clientUID", this.currUID);
+            query = appointmentsCollectionRef.whereEqualTo("clientUID", this.currUID);
         }
         query = query.whereLessThan("date", nowDate).orderBy("date", Query.Direction.DESCENDING);
 

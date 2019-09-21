@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.adapters;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 
