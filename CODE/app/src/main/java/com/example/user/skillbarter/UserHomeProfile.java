@@ -17,6 +17,7 @@ import com.example.user.skillbarter.models.Appointment;
 import com.example.user.skillbarter.models.UserData;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,6 +30,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.polyak.iconswitch.IconSwitch;
+
+import java.util.Date;
 
 import javax.annotation.Nullable;
 
@@ -68,7 +71,6 @@ public class UserHomeProfile extends ActionBarMenuActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home_profile);
         ButterKnife.bind(this);
-
         mUserRef = usersCollectionRef.document(mUser.getUid());
 
         iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
@@ -97,7 +99,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
         else {
             query = appointmentsCollectionRef.whereEqualTo("clientUID", this.mUser.getUid());
         }
-        query = query.whereEqualTo("isProviderPaid", true);
+        query = query.whereEqualTo("isProviderPaid", false);
         query = query.orderBy("date", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
@@ -180,9 +182,11 @@ public class UserHomeProfile extends ActionBarMenuActivity
     }
 
     private void completeTransactions() {
+        Timestamp nowDate = new Timestamp(new Date());
         appointmentsCollectionRef
                 .whereEqualTo("providerUID", this.mUser.getUid())
-//                .whereEqualTo("isProviderPaid", false)
+                .whereEqualTo("isProviderPaid", false)
+                .whereLessThan("date", nowDate)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
