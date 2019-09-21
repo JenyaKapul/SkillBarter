@@ -37,7 +37,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
     @Override
     protected void onBindViewHolder(@NonNull AppointmentHolder holder, int position, @NonNull Appointment model) {
         Log.v(TAG, "onBindViewHolder: AppointmentHolder");
-//        holder.tvDate.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(model.getDate().toDate()));
+        holder.tvDate.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(model.getDate()));
         this.setDataFromUserData(this.getOtherUser(FirebaseAuth.getInstance().getUid(), model), holder);
         this.setDataFromSkillData(model.getSkillID(), holder);
     }
