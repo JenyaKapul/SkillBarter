@@ -23,7 +23,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text=""
+            android:text="PROFILE_NAME_MOCK"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/appointment_profile_picture_holder"

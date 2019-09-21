@@ -1,17 +1,19 @@
 package com.example.user.skillbarter;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.Timestamp;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -22,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Transaction;
 import com.polyak.iconswitch.IconSwitch;
 
 import java.util.Date;
@@ -38,6 +43,8 @@ public class UserHomeProfile extends ActionBarMenuActivity
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
     private CollectionReference appointmentRef = mFirestore.collection("Appointments");
+    private CollectionReference userSkillsRef = mFirestore.collection("User Skills");
+    private CollectionReference userDataRef = mFirestore.collection("User Data");
     private DocumentReference mUserRef;
 
     private AppointmentAdapter adapter;
@@ -67,8 +74,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
         setContentView(R.layout.activity_user_home_profile);
         ButterKnife.bind(this);
 
-        mUserRef = mFirestore.collection(getString(R.string.collection_user_data))
-                .document(mUser.getUid());
+        mUserRef = userDataRef.document(mUser.getUid());
 
         iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
             @Override
@@ -84,12 +90,11 @@ public class UserHomeProfile extends ActionBarMenuActivity
                 adapter.startListening();
             }
         });
+//        completeTransactions();
         setUpRecyclerView();
     }
 
     private void setUpRecyclerView() {
-        Log.v(TAG, "setUpRecyclerView: setUpRecyclerView");
-        Timestamp nowDate = new Timestamp(new Date());
         Query query;
         if (this.currIsProvider) {
             query = appointmentRef.whereEqualTo("providerUID", this.mUser.getUid());
@@ -97,7 +102,8 @@ public class UserHomeProfile extends ActionBarMenuActivity
         else {
             query = appointmentRef.whereEqualTo("clientUID", this.mUser.getUid());
         }
-        query = query.whereGreaterThanOrEqualTo("date", nowDate).orderBy("date", Query.Direction.ASCENDING);
+        query = query.whereEqualTo("isProviderPaid", false);
+        query = query.orderBy("date", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class).build();
@@ -176,5 +182,44 @@ public class UserHomeProfile extends ActionBarMenuActivity
         balanceView.setText(userPoints);
 
         ratingBarView.setRating(userData.getPersonalRating());
+    }
+
+    private void completeTransactions() {
+        appointmentRef
+                .whereEqualTo("providerUID", this.mUser.getUid())
+//                .whereEqualTo("isProviderPaid", false)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
+                        mFirestore.runTransaction(new Transaction.Function<Void>() {
+                            @android.support.annotation.Nullable
+                            @Override
+                            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
+                                long sumToTransfer = 0;
+                                //all the reads of the transaction
+                                DocumentReference currUserRef = userDataRef.document(mUser.getUid());
+                                long currentUserPoints = transaction.get(currUserRef).getLong("pointsBalance");
+                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    String skillID = documentSnapshot.getString("skillID");
+                                    DocumentSnapshot skillSnapshot = transaction.get(userSkillsRef.document(skillID));
+                                    sumToTransfer += skillSnapshot.getLong("pointsValue");
+                                }
+                                //all the writes of the transaction
+                                transaction.update(currUserRef, "pointsBalance", currentUserPoints + sumToTransfer);
+                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                    String appointmentID = documentSnapshot.getId();
+                                    transaction.update(appointmentRef.document(appointmentID), "isProviderPaid", true);
+                                }
+                                return null;
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(UserHomeProfile.this, "Transaction success", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
     }
 }

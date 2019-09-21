@@ -70,9 +70,9 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
 
     private void setDataFromSkillData(String skillID, @NonNull final AppointmentAdapter.AppointmentHolder holder) {
         Log.v(TAG, "onBindViewHolder: setDataFromSkillData");
-        DocumentReference mUserRef = mFirestore.collection("User Skills")
+        DocumentReference mSkillRef = mFirestore.collection("User Skills")
                 .document(skillID);
-        mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        mSkillRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()){

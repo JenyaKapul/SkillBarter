@@ -52,6 +52,7 @@ public class HistoryActivity extends ActionBarMenuActivity {
     private void setUpRecyclerView() {
         Log.v(TAG, "setUpRecyclerView: setUpRecyclerView");
         Timestamp nowDate = new Timestamp(new Date());
+//        Query query = appointmentRef.orderBy("date", Query.Direction.DESCENDING);
         Query query;
         if (this.currIsProvider) {
             query = appointmentRef.whereEqualTo("providerUID", this.currUID);
@@ -59,7 +60,7 @@ public class HistoryActivity extends ActionBarMenuActivity {
         else {
             query = appointmentRef.whereEqualTo("clientUID", this.currUID);
         }
-        query = query.whereLessThan("date", nowDate).orderBy("date", Query.Direction.ASCENDING);
+        query = query.whereLessThan("date", nowDate).orderBy("date", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class).build();
