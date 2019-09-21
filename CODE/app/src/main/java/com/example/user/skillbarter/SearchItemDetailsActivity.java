@@ -280,9 +280,18 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
                 mFirestore.collection("Appointments").add(appointment);
                 Toast.makeText(this, "New appointment is set!", Toast.LENGTH_SHORT).show();
                 decreaseClientPointsForService(providingServiceUserSkill.getPointsValue());
+                setSelectedDateToUnavailable(date);
                 finish();
             }
         }
+    }
+
+    private void setSelectedDateToUnavailable(Date date) {
+        String uID = providingServiceUserSkill.getUserID();
+        String dateDocID = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
+        mFirestore.collection("User Data")
+                .document(uID).collection("Dates").document(dateDocID)
+                .update("isAvailable", false);
     }
 
     private void decreaseClientPointsForService(int pointsValue) {
