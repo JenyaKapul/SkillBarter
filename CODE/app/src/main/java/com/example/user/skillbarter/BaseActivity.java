@@ -18,10 +18,11 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class BaseActivity extends AppCompatActivity {
 
-    public FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-    public FirebaseStorage mStorage = FirebaseStorage.getInstance();
-    public CollectionReference skillsCollectionRef = mFirestore.collection("User Skills");
-    public CollectionReference appointmentsCollectionRef = mFirestore.collection("Appointments");
+    protected FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+    protected FirebaseStorage mStorage = FirebaseStorage.getInstance();
+    protected CollectionReference skillsCollectionRef = mFirestore.collection("User Skills");
+    protected CollectionReference appointmentsCollectionRef = mFirestore.collection("Appointments");
+    protected CollectionReference usersCollectionRef = mFirestore.collection("User Data");
 
 
     @VisibleForTesting

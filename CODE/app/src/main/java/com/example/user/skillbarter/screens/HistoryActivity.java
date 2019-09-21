@@ -52,7 +52,7 @@ public class HistoryActivity extends ActionBarMenuActivity {
     private void setUpRecyclerView() {
         Log.v(TAG, "setUpRecyclerView: setUpRecyclerView");
         Timestamp nowDate = new Timestamp(new Date());
-//        Query query = appointmentRef.orderBy("date", Query.Direction.DESCENDING);
+//        Query query = appointmentsCollectionRef.orderBy("date", Query.Direction.DESCENDING);
         Query query;
         if (this.currIsProvider) {
             query = appointmentsCollectionRef.whereEqualTo("providerUID", this.currUID);

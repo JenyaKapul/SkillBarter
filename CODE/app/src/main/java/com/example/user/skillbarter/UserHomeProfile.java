@@ -19,7 +19,6 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -31,8 +30,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.polyak.iconswitch.IconSwitch;
 
-import java.util.Date;
-
 import javax.annotation.Nullable;
 
 import butterknife.BindView;
@@ -43,9 +40,6 @@ public class UserHomeProfile extends ActionBarMenuActivity
     private static final String TAG = "UserHomeProfile";
 
     private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-    private CollectionReference appointmentRef = mFirestore.collection("Appointments");
-    private CollectionReference userSkillsRef = mFirestore.collection("User Skills");
-    private CollectionReference userDataRef = mFirestore.collection("User Data");
     private DocumentReference mUserRef;
 
     private AppointmentAdapter adapter;
@@ -75,7 +69,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
         setContentView(R.layout.activity_user_home_profile);
         ButterKnife.bind(this);
 
-        mUserRef = userDataRef.document(mUser.getUid());
+        mUserRef = usersCollectionRef.document(mUser.getUid());
 
         iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
             @Override
@@ -103,7 +97,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
         else {
             query = appointmentsCollectionRef.whereEqualTo("clientUID", this.mUser.getUid());
         }
-        query = query.whereEqualTo("isProviderPaid", false);
+        query = query.whereEqualTo("isProviderPaid", true);
         query = query.orderBy("date", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
@@ -186,7 +180,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
     }
 
     private void completeTransactions() {
-        appointmentRef
+        appointmentsCollectionRef
                 .whereEqualTo("providerUID", this.mUser.getUid())
 //                .whereEqualTo("isProviderPaid", false)
                 .get()
@@ -199,18 +193,18 @@ public class UserHomeProfile extends ActionBarMenuActivity
                             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
                                 long sumToTransfer = 0;
                                 //all the reads of the transaction
-                                DocumentReference currUserRef = userDataRef.document(mUser.getUid());
+                                DocumentReference currUserRef = usersCollectionRef.document(mUser.getUid());
                                 long currentUserPoints = transaction.get(currUserRef).getLong("pointsBalance");
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     String skillID = documentSnapshot.getString("skillID");
-                                    DocumentSnapshot skillSnapshot = transaction.get(userSkillsRef.document(skillID));
+                                    DocumentSnapshot skillSnapshot = transaction.get(skillsCollectionRef.document(skillID));
                                     sumToTransfer += skillSnapshot.getLong("pointsValue");
                                 }
                                 //all the writes of the transaction
                                 transaction.update(currUserRef, "pointsBalance", currentUserPoints + sumToTransfer);
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     String appointmentID = documentSnapshot.getId();
-                                    transaction.update(appointmentRef.document(appointmentID), "isProviderPaid", true);
+                                    transaction.update(appointmentsCollectionRef.document(appointmentID), "isProviderPaid", true);
                                 }
                                 return null;
                             }
