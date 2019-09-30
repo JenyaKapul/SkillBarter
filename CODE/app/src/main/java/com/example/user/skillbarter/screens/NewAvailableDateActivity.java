@@ -14,7 +14,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 import com.example.user.skillbarter.BaseActivity;
 import com.example.user.skillbarter.R;
-import com.example.user.skillbarter.models.FreeTime;
+import com.example.user.skillbarter.models.AvailableDate;
 import com.example.user.skillbarter.utils.TimePickerFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,7 +30,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NewFreeTimeActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener{
+public class NewAvailableDateActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener{
 
     private Date chosenDate = null;
     private int chosenHour = -1;
@@ -74,7 +74,7 @@ public class NewFreeTimeActivity extends BaseActivity implements TimePickerDialo
                 String selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(date);
                 tvDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
                 datePicker.setVisibility(View.INVISIBLE);
-                Toast.makeText(NewFreeTimeActivity.this, selectedDate, Toast.LENGTH_SHORT).show();
+                Toast.makeText(NewAvailableDateActivity.this, selectedDate, Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onDateUnselected(Date date) {}
@@ -134,11 +134,11 @@ public class NewFreeTimeActivity extends BaseActivity implements TimePickerDialo
         selectedDate.set(Calendar.MINUTE, chosenMinute);
         final Date date = selectedDate.getTime();
 
-        final FreeTime freeTime = new FreeTime(date, true);
+        final AvailableDate availableDate = new AvailableDate(date, true);
         final String docID = new SimpleDateFormat("dd.MM.yy hh:mm").format(date);
 
         final CollectionReference userFreeTimeRef = usersCollectionRef.document(mUserID).
-                collection("Free Time");
+                collection("Available Dates");
 
         userFreeTimeRef.document(docID)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -147,11 +147,11 @@ public class NewFreeTimeActivity extends BaseActivity implements TimePickerDialo
                 if (task.isSuccessful()) {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot != null && documentSnapshot.exists()) {
-                        Toast.makeText(NewFreeTimeActivity.this,
+                        Toast.makeText(NewAvailableDateActivity.this,
                                 "This time slot already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // add time slot to database.
-                        userFreeTimeRef.document(docID).set(freeTime);
+                        userFreeTimeRef.document(docID).set(availableDate);
                         finish();
                     }
                 }

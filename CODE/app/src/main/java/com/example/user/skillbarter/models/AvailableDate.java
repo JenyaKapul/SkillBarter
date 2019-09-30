@@ -2,13 +2,13 @@ package com.example.user.skillbarter.models;
 
 import java.util.Date;
 
-public class FreeTime {
+public class AvailableDate {
     private Date date;
     private boolean isAvailable;
 
-    public FreeTime() {}
+    public AvailableDate() {}
 
-    public FreeTime(Date date, boolean isAvailable) {
+    public AvailableDate(Date date, boolean isAvailable) {
         this.date = date;
         this.isAvailable = isAvailable;
     }

@@ -9,37 +9,37 @@ import android.widget.Switch;
 import android.widget.TextView;
 import com.example.user.skillbarter.R;
 
-import com.example.user.skillbarter.models.FreeTime;
+import com.example.user.skillbarter.models.AvailableDate;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
 import java.text.SimpleDateFormat;
 
-public class FreeTimeAdapter extends FirestoreRecyclerAdapter<FreeTime, FreeTimeAdapter.FreeTimeHolder> {
+public class AvailableDateAdapter extends FirestoreRecyclerAdapter<AvailableDate, AvailableDateAdapter.AvailableDateHolder> {
 
-    public FreeTimeAdapter(@NonNull FirestoreRecyclerOptions<FreeTime> options) {
+    public AvailableDateAdapter(@NonNull FirestoreRecyclerOptions<AvailableDate> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull FreeTimeHolder holder, int position, @NonNull FreeTime model) {
+    protected void onBindViewHolder(@NonNull AvailableDateHolder holder, int position, @NonNull AvailableDate model) {
         holder.tvAvailability.setChecked(model.isAvailable());
         holder.tvDate.setText(new SimpleDateFormat("dd/MM/yyyy     HH:mm").format(model.getDate()));
     }
 
     @NonNull
     @Override
-    public FreeTimeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AvailableDateHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.free_time_item,
                 parent, false);
-        return new FreeTimeHolder(v);
+        return new AvailableDateHolder(v);
     }
 
-    class FreeTimeHolder extends RecyclerView.ViewHolder {
+    class AvailableDateHolder extends RecyclerView.ViewHolder {
         TextView tvDate;
         Switch tvAvailability;
 
-        public FreeTimeHolder(@NonNull View itemView) {
+        public AvailableDateHolder(@NonNull View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.free_time_date);
             tvAvailability = itemView.findViewById(R.id.free_time_availability);

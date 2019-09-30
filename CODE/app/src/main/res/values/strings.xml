@@ -96,7 +96,7 @@
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
 
-    <!--ADD FREE TIME-->
+    <!--ADD AVAILABLE DATES-->
     <string name="date_hint">DD/MM/YYYY</string>
     <string name="time_hint">HH:MM</string>
 

@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".screens.NewFreeTimeActivity"></activity>
-        <activity android:name=".screens.FreeTimeManagerActivity" />
+        <activity android:name=".screens.NewAvailableDateActivity"></activity>
+        <activity android:name=".screens.AvailableDatesManagerActivity" />
         <activity android:name=".TempActivity" />
         <activity android:name=".SearchResultActivity" />
         <activity android:name=".SearchItemDetailsActivity" />

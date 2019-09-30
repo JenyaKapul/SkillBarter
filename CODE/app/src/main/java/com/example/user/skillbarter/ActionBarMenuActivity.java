@@ -8,7 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.user.skillbarter.screens.EmailPasswordActivity;
-import com.example.user.skillbarter.screens.FreeTimeManagerActivity;
+import com.example.user.skillbarter.screens.AvailableDatesManagerActivity;
 import com.example.user.skillbarter.screens.HistoryActivity;
 import com.example.user.skillbarter.screens.SkillsManagerActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -83,7 +83,7 @@ public class ActionBarMenuActivity extends BaseActivity {
                 intent = new Intent(this, SkillsManagerActivity.class);
                 break;
             case R.id.menu_manage_free_time:
-                intent = new Intent(this, FreeTimeManagerActivity.class);
+                intent = new Intent(this, AvailableDatesManagerActivity.class);
                 break;
             case R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();

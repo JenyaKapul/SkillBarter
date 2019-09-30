@@ -27,7 +27,7 @@
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_manage_free_time"
-                android:title="Manage Free Time"
+                android:title="Manage Available Dates"
                 android:titleCondensed="FreeTimeManager"
                 app:showAsAction="never"/>
 
