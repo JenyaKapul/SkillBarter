@@ -25,12 +25,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
 import java.util.List;
-import butterknife.ButterKnife;
 
 public class NewSkillActivity extends BaseActivity {
-
-    public static final String KEY_SKILL_PATH = "key_skill_path";
-
 
     private Spinner categorySpinner, skillSpinner;
     private SeekBar mLevelSeekBar;
@@ -45,7 +41,6 @@ public class NewSkillActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_skill);
-        ButterKnife.bind(this);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Add Skill");
@@ -100,7 +95,7 @@ public class NewSkillActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.save_skill:
+            case R.id.save_item:
                 saveUserSkill();
                 return true;
             default:

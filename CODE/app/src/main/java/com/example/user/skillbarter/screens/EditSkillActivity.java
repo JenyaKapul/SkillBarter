@@ -80,7 +80,7 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.save_skill:
+            case R.id.save_item:
                 saveUserSkill();
                 return true;
             default:

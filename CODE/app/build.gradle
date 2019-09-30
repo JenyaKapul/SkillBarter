@@ -31,6 +31,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-auth:16.2.0'
     implementation 'com.google.firebase:firebase-storage:16.1.0'
+    implementation 'com.squareup:android-times-square:1.6.5@aar'
 
     implementation 'com.polyak:icon-switch:1.0.0'
     implementation 'com.github.santalu:mask-edittext:1.0.2'

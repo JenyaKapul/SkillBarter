@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.user.skillbarter.screens.EmailPasswordActivity;
+import com.example.user.skillbarter.screens.FreeTimeManagerActivity;
 import com.example.user.skillbarter.screens.HistoryActivity;
 import com.example.user.skillbarter.screens.SkillsManagerActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,6 +48,7 @@ public class ActionBarMenuActivity extends BaseActivity {
             menu.findItem(R.id.app_bar_search).setEnabled(false);
             menu.findItem(R.id.app_bar_profile).setEnabled(false);
             menu.findItem(R.id.menu_manage_skills).setEnabled(false);
+            menu.findItem(R.id.menu_manage_free_time).setEnabled(false);
             menu.findItem(R.id.menu_history).setEnabled(false);
             menu.findItem(R.id.menu_edit_profile).setEnabled(false);
         }
@@ -79,6 +81,9 @@ public class ActionBarMenuActivity extends BaseActivity {
                 break;
             case R.id.menu_manage_skills:
                 intent = new Intent(this, SkillsManagerActivity.class);
+                break;
+            case R.id.menu_manage_free_time:
+                intent = new Intent(this, FreeTimeManagerActivity.class);
                 break;
             case R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();

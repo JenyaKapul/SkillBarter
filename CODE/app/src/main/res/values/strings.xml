@@ -2,21 +2,16 @@
     <string name="app_name">SkillBarter</string>
 
     <!-- Types of domains in the technion -->
-    <string-array name="domains">
-        <item>\@campus.technion.ac.il</item>
-        <item>\@ee.technion.ac.il</item>
-        <item>\@technion.ac.il</item>
-    </string-array>
-
     <string name="choose_domain">Choose domain</string>
 
     <string name="collection_user_data">User Data</string>
+
     <string name="collection_user_skills">User Skills</string>
     <string name="collection_user_skill_reviews">Skill Reviews</string>
+    <string name="userData_userID_key">userID</string>
 
 
     <!--USER DATA KEYS-->
-    <string name="userData_userID_key">userID</string>
     <string name="userData_profilePictureURL_key">profilePictureURL</string>
     <string name="userData_dateOfBirth_key">dateOfBirth</string>
     <string name="userData_firstName_key">firstName</string>
@@ -28,25 +23,24 @@
     <string name="userData_pointsBalance_key">pointsBalance</string>
     <string name="userData_personalRating_key">personalRating</string>
     <string name="userData_numOfRatings_key">numOfRatings</string>
+    <string name="userSkill_skillId_key">skillId</string>
 
     <!--USER SKILL KEYS-->
-    <string name="userSkill_skillId_key">skillId</string>
     <string name="userSkill_userID_key">userID</string>
     <string name="userSkill_category_key">category</string>
     <string name="userSkill_skill_key">skill</string>
     <string name="userSkill_pointsValue_key">pointsValue</string>
     <string name="userSkill_level_key">level</string>
+    <string name="review_reviewerName_key">reviewerName</string>
 
     <!--REVIEW KEYS-->
-    <string name="review_reviewerName_key">reviewerName</string>
     <string name="review_reviewerPicture_key">reviewerPicture</string>
     <string name="review_dateOfReview_key">dateOfReview</string>
     <string name="review_rank_key">rank</string>
     <string name="review_details_key">details</string>
-
-
-
     <string name="user_information_title">User Information</string>
+
+
     <string name="user_first_name">First Name</string>
     <string name="user_last_name">Last Name</string>
     <string name="user_birthday">Birthday</string>
@@ -61,16 +55,12 @@
     <string name="send_verification_email">Send Email Verification Again</string>
     <string name="female">Female</string>
     <string name="male">Male</string>
-    <string-array name="genders">
-        <item>@string/female</item>
-        <item>@string/male</item>
-    </string-array>
     <string name="up_next">Up Next:</string>
     <string name="search_button">Search</string>
-
-    <!--SEARCH ENGINE-->
     <string name="distance_section">Distance From Me:</string>
     <string name="max_distance">Maximal Distance</string>
+
+    <!--SEARCH ENGINE-->
     <string name="km">Km</string>
     <string name="from">From</string>
     <string name="to">To</string>
@@ -84,31 +74,34 @@
     <string name="points_image_description">Points icon</string>
     <string name="min">MIN</string>
     <string name="max">MAX</string>
-
-    <!--SEARCH ITEM DETAILS-->
     <string name="skill">SKILL:</string>
     <string name="level">LEVEL:</string>
+
+    <!--SEARCH ITEM DETAILS-->
     <string name="details">Details:</string>
     <string name="location">Location:</string>
     <string name="review">Reviews:</string>
     <string name="booking_button">Book Now</string>
+    <string name="add_skill_title">Add New Skill:</string>
+    <string name="edit_skill_title">Edit Skill:</string>
 
 
     <!--ADD SKILL-->
-    <string name="add_skill_title">Add New Skill:</string>
-    <string name="edit_skill_title">Edit Skill:</string>
     <string name="skill_level_title">How good are you:</string>
     <string name="skill_details_hint">Tell us a bit more about your skill...</string>
     <string name="skill_points_title">Skill Value:</string>
     <string name="points">Points</string>
     <string name="skill_address_title">Address of service:</string>
     <string name="skill_address">Specify the address of service</string>
-
-
-    <!--AUTHENTICATION-->
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
 
+    <!--ADD FREE TIME-->
+    <string name="date_hint">DD/MM/YYYY</string>
+    <string name="time_hint">HH:MM</string>
+
+
+    <!--AUTHENTICATION-->
     <string name="label_facebook_login">Firebase + Facebook Login</string>
     <string name="desc_facebook_login">Use a Facebook Login credential to authenticate with Firebase.</string>
 
@@ -135,6 +128,7 @@
 
     <string name="hint_user_id">User ID</string>
     <string name="get_custom_token">Get Token</string>
+
     <string name="sign_in">Sign In</string>
     <string name="create_account">Create Account</string>
     <string name="send_link">Send Link</string>
@@ -160,7 +154,6 @@
     <string name="status_verification_succeeded">Verification succeeded</string>
     <string name="status_sign_in_failed">Sign-in failed</string>
     <string name="instant_validation">(instant validation)</string>
-
     <string name="firebase_status_fmt">Firebase User: %s</string>
     <string name="firebase_user_management">Firebase User Management</string>
 
@@ -175,13 +168,13 @@
 
     <string name="passwordless_status_fmt">Email User: %1$s (verified: %2$b)</string>
     <string name="passwordless_title_text">Passwordless Sign In</string>
+
     <string name="status_email_not_sent">Send link to your email to get started.</string>
     <string name="status_email_sent">Link sent, check your email to continue.</string>
     <string name="status_link_found">Link received, enter email to sign in.</string>
-
     <string name="phone_title_text">Phone Number</string>
-
     <string name="twitter_status_fmt">Twitter User: %s</string>
+
     <string name="twitter_title_text">Twitter Login</string>
 
     <string name="firebaseui_status_fmt">Firebase User: %s</string>
@@ -189,8 +182,18 @@
 
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
+
     <string name="error_toast">Error occurred! </string>
     <string name="missing_profile_picture_toast">You must set profile picture</string>
-
     <string name="divider_bullet" translatable="false">•</string>
+    <string-array name="domains">
+        <item>\@campus.technion.ac.il</item>
+        <item>\@ee.technion.ac.il</item>
+        <item>\@technion.ac.il</item>
+    </string-array>
+
+    <string-array name="genders">
+        <item>@string/female</item>
+        <item>@string/male</item>
+    </string-array>
 </resources>

@@ -16,6 +16,7 @@ import com.example.user.skillbarter.adapters.AppointmentAdapter;
 import com.example.user.skillbarter.models.Appointment;
 import com.example.user.skillbarter.models.UserData;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -76,6 +77,8 @@ public class UserHomeProfile extends ActionBarMenuActivity
         iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
             @Override
             public void onCheckChanged(IconSwitch.Checked current) {
+                //TODO: remove for production
+                completeTransactions();
                 adapter.stopListening();
                 if(current == IconSwitch.Checked.LEFT){
                     currIsProvider = false;
@@ -87,7 +90,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
                 adapter.startListening();
             }
         });
-//        completeTransactions();
+        completeTransactions();
         setUpRecyclerView();
     }
 
@@ -184,9 +187,9 @@ public class UserHomeProfile extends ActionBarMenuActivity
     private void completeTransactions() {
         Timestamp nowDate = new Timestamp(new Date());
         appointmentsCollectionRef
-                .whereEqualTo("providerUID", this.mUser.getUid())
-                .whereEqualTo("isProviderPaid", false)
-                .whereLessThan("date", nowDate)
+//                .whereEqualTo("providerUID", this.mUser.getUid())
+//                .whereEqualTo("isProviderPaid", false)
+//                .whereLessThan("date", nowDate)
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -211,10 +214,16 @@ public class UserHomeProfile extends ActionBarMenuActivity
                                     transaction.update(appointmentsCollectionRef.document(appointmentID), "isProviderPaid", true);
                                 }
                                 return null;
+                        //TODO - remove the Toasts
                             }
                         }).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                Toast.makeText(UserHomeProfile.this, "Transaction success", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(UserHomeProfile.this, "Transaction success", Toast.LENGTH_SHORT).show();
                             }
                         });
