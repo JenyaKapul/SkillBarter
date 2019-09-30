@@ -228,7 +228,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
             @Override
             public void onSuccess(QuerySnapshot snapshots) {
                 for (QueryDocumentSnapshot doc: snapshots) {
-                    if (doc.getBoolean("isAvailable")) {
+                    if (doc.getBoolean("available")) {
                         Date date = doc.getDate("timestamp");
                         if (isFutureDate(date)) {
                             String dateFormatted = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(date);
@@ -289,8 +289,9 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
     private void setSelectedDateToUnavailable(Date date) {
         String uID = providingServiceUserSkill.getUserID();
         String dateDocID = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
+        //TODO: update chosen date within transaction
         mFirestore.collection("User Data")
-                .document(uID).collection("Dates").document(dateDocID)
+                .document(uID).collection("Available Dates").document(dateDocID)
                 .update("isAvailable", false);
     }
 

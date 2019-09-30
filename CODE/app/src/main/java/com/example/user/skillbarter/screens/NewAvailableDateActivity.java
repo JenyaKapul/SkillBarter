@@ -134,7 +134,7 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
         selectedDate.set(Calendar.MINUTE, chosenMinute);
         final Date date = selectedDate.getTime();
 
-        final AvailableDate availableDate = new AvailableDate(date, true);
+        final AvailableDate availableDate = new AvailableDate(date);
         final String docID = new SimpleDateFormat("dd.MM.yy hh:mm").format(date);
 
         final CollectionReference userFreeTimeRef = usersCollectionRef.document(mUserID).
