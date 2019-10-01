@@ -20,9 +20,9 @@ public class BaseActivity extends AppCompatActivity {
 
     protected final FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     protected final FirebaseStorage mStorage = FirebaseStorage.getInstance();
-    protected final CollectionReference skillsCollectionRef = mFirestore.collection("User Skills");
-    protected final CollectionReference appointmentsCollectionRef = mFirestore.collection("Appointments");
-    protected final CollectionReference usersCollectionRef = mFirestore.collection("User Data");
+    protected final CollectionReference skillsCollection = mFirestore.collection("User Skills");
+    protected final CollectionReference appointmentsCollection = mFirestore.collection("Appointments");
+    protected final CollectionReference usersCollection = mFirestore.collection("User Data");
 
 
     @VisibleForTesting
@@ -111,7 +111,7 @@ public class BaseActivity extends AppCompatActivity {
         hideProgressDialog();
     }
 
-    public int getSkillArrayID(String categoryLabel) {
+    public static int getSkillArrayID(String categoryLabel) {
         int skillArrayID;
         switch (categoryLabel) {
             case "Tutoring":

@@ -54,10 +54,10 @@ public class HistoryActivity extends ActionBarMenuActivity {
         Timestamp nowDate = new Timestamp(new Date());
         Query query;
         if (this.currIsProvider) {
-            query = appointmentsCollectionRef.whereEqualTo("providerUID", this.currUID);
+            query = appointmentsCollection.whereEqualTo("providerUID", this.currUID);
         }
         else {
-            query = appointmentsCollectionRef.whereEqualTo("clientUID", this.currUID);
+            query = appointmentsCollection.whereEqualTo("clientUID", this.currUID);
         }
         query = query.whereLessThan("date", nowDate).orderBy("date", Query.Direction.DESCENDING);
 

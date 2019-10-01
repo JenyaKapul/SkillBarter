@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.example.user.skillbarter.ActionBarMenuActivity;
 import com.example.user.skillbarter.R;
-import com.example.user.skillbarter.adapters.SkillAdapter;
+import com.example.user.skillbarter.adapters.EditableSkillAdapter;
 import com.example.user.skillbarter.models.UserSkill;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,7 +18,7 @@ import com.google.firebase.firestore.Query;
 
 
 public class SkillsManagerActivity extends ActionBarMenuActivity {
-    private SkillAdapter adapter;
+    private EditableSkillAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +38,19 @@ public class SkillsManagerActivity extends ActionBarMenuActivity {
 
     private void setUpRecyclerView() {
         String uID = FirebaseAuth.getInstance().getUid();
-        Query query = skillsCollectionRef.whereEqualTo("userID", uID);
+        Query query = skillsCollection.whereEqualTo("userID", uID);
 
         FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
                 .setQuery(query, UserSkill.class)
                 .build();
 
-        adapter = new SkillAdapter(options);
+        adapter = new EditableSkillAdapter(options);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.search_result_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new SkillAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new EditableSkillAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position, String buttonClicked) {
                 if (buttonClicked.equals("edit")) {

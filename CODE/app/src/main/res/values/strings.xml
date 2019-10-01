@@ -10,6 +10,9 @@
     <string name="collection_user_skill_reviews">Skill Reviews</string>
     <string name="userData_userID_key">userID</string>
 
+    <string name="search_result_title">Search Results</string>
+
+
 
     <!--USER DATA KEYS-->
     <string name="userData_profilePictureURL_key">profilePictureURL</string>
@@ -84,6 +87,17 @@
     <string name="booking_button">Book Now</string>
     <string name="add_skill_title">Add New Skill:</string>
     <string name="edit_skill_title">Edit Skill:</string>
+
+    <!--FILTER DIALOG-->
+    <string name="filter_header" translatable="false">Filter</string>
+    <string name="all_categories" translatable="false">All Categories</string>
+    <string name="sorted_by_category" translatable="false">sorted by category</string>
+    <string name="sort_by_category" translatable="false">Sort by Category</string>
+    <string name="value_any_category" translatable="false">All Categories</string>
+    <string name="value_any_skill" translatable="false">All Skills</string>
+    <string name="cancel" translatable="false">Cancel</string>
+    <string name="apply" translatable="false">Apply</string>
+
 
 
     <!--ADD SKILL-->

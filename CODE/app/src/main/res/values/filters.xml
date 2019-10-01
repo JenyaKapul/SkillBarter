@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="filter_categories">
+        <item>@string/value_any_category</item>
+        <item>@string/tutoring</item>
+        <item>@string/music</item>
+        <item>@string/dance</item>
+        <item>@string/arts_and_crafts</item>
+        <item>@string/sports</item>
+        <item>@string/household</item>
+        <item>@string/beauty</item>
+        <item>@string/culinary</item>
+    </string-array>
+
+    <string-array name="filter_skills">
+        <item>@string/value_any_skill</item>
+    </string-array>
+
+
+    <!-- Ways you can sort dogs -->
+    <string-array name="sort_by">
+        <item>@string/sort_by_category</item>
+    </string-array>
+
+
+
+</resources>

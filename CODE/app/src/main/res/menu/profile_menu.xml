@@ -5,7 +5,7 @@
     <item android:id="@+id/app_bar_search"
         android:icon="@drawable/ic_search"
         android:title="@string/search_button"
-        android:titleCondensed="SearchEngine"
+        android:titleCondensed="SearchResultActivity"
         app:showAsAction="always"/>
 
     <item android:id="@+id/app_bar_profile"
@@ -23,17 +23,17 @@
         <menu>
             <item android:id="@+id/menu_manage_skills"
                 android:title="Manage Skills"
-                android:titleCondensed="SkillsManager"
+                android:titleCondensed="SkillsManagerActivity"
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_manage_free_time"
                 android:title="Manage Available Dates"
-                android:titleCondensed="FreeTimeManager"
+                android:titleCondensed="AvailableDatesManagerActivity"
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_history"
                 android:title="History"
-                android:titleCondensed="History"
+                android:titleCondensed="HistoryActivity"
                 app:showAsAction="never"/>
 
             <item android:id="@+id/menu_edit_profile"

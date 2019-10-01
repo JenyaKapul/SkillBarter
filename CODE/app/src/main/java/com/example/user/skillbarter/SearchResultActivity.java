@@ -1,83 +1,200 @@
 package com.example.user.skillbarter;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.Html;
+import android.widget.TextView;
 
 import com.example.user.skillbarter.adapters.SearchResultAdapter;
-import com.example.user.skillbarter.models.FilterSearchResult;
 import com.example.user.skillbarter.models.UserSkill;
+import com.example.user.skillbarter.search.FilterDialogFragment;
+import com.example.user.skillbarter.search.Filters;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
-public class SearchResultActivity extends ActionBarMenuActivity {
-    private static final String TAG = "SearchResultActivity";
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-    private SearchResultAdapter adapter;
-    private FilterSearchResult filterOptions;
+import static com.example.user.skillbarter.search.Filters.CATEGORY;
+import static com.example.user.skillbarter.search.Filters.ENABLED;
+import static com.example.user.skillbarter.search.Filters.SKILL;
+
+public class SearchResultActivity extends ActionBarMenuActivity implements FilterDialogFragment.FilterListener {
+
+    @BindView(R.id.text_current_search)
+    TextView mCurrentSearchView;
+
+    @BindView(R.id.text_current_sort_by)
+    TextView mCurrentSortByView;
+
+    @BindView(R.id.search_result_recycler_view)
+    RecyclerView mSearchResultRecycler;
+
+    private static SearchResultAdapter mAdapter;
+
+    private Query mQuery;
+
+    private static final int LIMIT = 50;
+
+    private SearchResultActivityViewModel mViewModel;
+
+    private FilterDialogFragment mFilterDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skills_search_result);
+        ButterKnife.bind(this);
+        setTitle(R.string.search_result_title);
 
-        filterOptions = getIntent().getParcelableExtra("parcel_data");
+        /* View model */
+        mViewModel = ViewModelProviders.of(this).get(SearchResultActivityViewModel.class);
 
-        setUpRecyclerView();
+        initRecyclerView();
+
+        /* Filter Dialog */
+        mFilterDialog = new FilterDialogFragment();
     }
 
-    private void setUpRecyclerView() {
-        Log.v(TAG, "setUpRecyclerView: entry setUpRecyclerView");
-        Query query = skillsCollectionRef.whereGreaterThanOrEqualTo("pointsValue", filterOptions.getMinPoints());
-        query = query.whereLessThanOrEqualTo("pointsValue", filterOptions.getMaxPoints());
+    private void initRecyclerView() {
 
-        if (filterOptions.getCategory() != null) {
-            query = query.whereEqualTo("category", filterOptions.getCategory());
-        }
-
-        if (filterOptions.getSkill() != null) {
-            query = query.whereEqualTo("skill", filterOptions.getSkill());
-        }
-
-        // filter only enabled skills
-        query = query.whereEqualTo("enabled", true);
+        /* Query the categories to be displayed in the search results screen. */
+        mQuery = skillsCollection.orderBy(CATEGORY, Query.Direction.ASCENDING).limit(LIMIT);
 
         FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
-                .setQuery(query, UserSkill.class)
+                .setQuery(mQuery, UserSkill.class)
                 .build();
 
-        adapter = new SearchResultAdapter(options);
+        mAdapter = new SearchResultAdapter(options, false);
+        mSearchResultRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mSearchResultRecycler.setAdapter(mAdapter);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        Log.v(TAG, "setUpRecyclerView: before setLayoutManager");
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                if (position != RecyclerView.NO_POSITION) {
-                    Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
-                    intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, documentSnapshot.getId());
-                    Log.d(TAG, "onItemClick:");
-                    startActivity(intent);
-                }
+                // Pass skill document id to the next (skill details) activity.
+                String docID = documentSnapshot.getId();
+                Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
+                intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, docID);
+                startActivity(intent);
             }
         });
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
-        adapter.startListening();
+        hideProgressDialog();
+
+        if (mAdapter != null) {
+            mAdapter.startListening();
+        }
+
+        /* Apply filters */
+        onFilter(mViewModel.getFilters());
     }
+
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+        if (mAdapter != null) {
+            mAdapter.stopListening();
+        }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideProgressDialog();
+    }
+
+    @OnClick(R.id.filter_bar)
+    public void onFilterClicked() {
+        /* Show the dialog containing filter options. */
+        mFilterDialog.show(getSupportFragmentManager(), FilterDialogFragment.TAG);
+    }
+
+
+    @OnClick(R.id.button_clear_filter)
+    public void onClearFilterClicked() {
+        /* Clear all spinners' states to display 'All...' */
+        mFilterDialog = new FilterDialogFragment();
+
+        onFilter(Filters.getDefault());
+    }
+
+
+    /*
+     * TODO:
+     *  (1) Add Points filter option. See Friendly Eats app for reference.
+     *  (2) Check if there's an option to filter out current user's skills.
+     *  (3) Check the influence of HTML headers
+     */
+    @Override
+    public void onFilter(Filters filters) {
+
+        /* Construct query basic query */
+        Query query = skillsCollection;
+
+        /* Category (equality filter) */
+        if (filters.hasCategory()) {
+            query = query.whereEqualTo(CATEGORY, filters.getCategory());
+        }
+
+        /* Skill (equality filter) */
+        if (filters.hasSkill()) {
+            query = query.whereEqualTo(SKILL, filters.getSkill());
+        }
+
+        /* Non-hidden (enabled) Skills */
+        query = query.whereEqualTo(ENABLED, true);
+
+        /* Sort by (orderBy with direction) */
+        if (filters.hasSortBy()) {
+            query = query.orderBy(filters.getSortBy(), filters.getSortDirection());
+        }
+
+        /* Limit items */
+        query = query.limit(LIMIT);
+
+
+        /* Update the query */
+        if(mAdapter != null) {
+            mQuery = query;
+            FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
+                    .setQuery(mQuery, UserSkill.class)
+                    .build();
+
+            mAdapter.stopListening();
+            mAdapter = new SearchResultAdapter(options, false);
+            mSearchResultRecycler.setAdapter(mAdapter);
+            mAdapter.startListening();
+
+            mAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                    // Pass skill document id to the next (skill details) activity.
+                    String docID = documentSnapshot.getId();
+                    Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
+                    intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, docID);
+                    startActivity(intent);
+                }
+            });
+        }
+
+        /* Set header */
+        mCurrentSearchView.setText(Html.fromHtml(filters.getSearchDescription(this)));
+        mCurrentSortByView.setText(filters.getOrderDescription(this));
+
+        /* Save filters */
+        mViewModel.setFilters(filters);
     }
 }

@@ -8,7 +8,6 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -16,7 +15,6 @@ import com.example.user.skillbarter.adapters.AppointmentAdapter;
 import com.example.user.skillbarter.models.Appointment;
 import com.example.user.skillbarter.models.UserData;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,7 +70,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home_profile);
         ButterKnife.bind(this);
-        mUserRef = usersCollectionRef.document(mUser.getUid());
+        mUserRef = usersCollection.document(mUser.getUid());
 
         iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
             @Override
@@ -97,10 +95,10 @@ public class UserHomeProfile extends ActionBarMenuActivity
     private void setUpRecyclerView() {
         Query query;
         if (this.currIsProvider) {
-            query = appointmentsCollectionRef.whereEqualTo("providerUID", this.mUser.getUid());
+            query = appointmentsCollection.whereEqualTo("providerUID", this.mUser.getUid());
         }
         else {
-            query = appointmentsCollectionRef.whereEqualTo("clientUID", this.mUser.getUid());
+            query = appointmentsCollection.whereEqualTo("clientUID", this.mUser.getUid());
         }
         query = query.whereEqualTo("isProviderPaid", false);
         query = query.orderBy("date", Query.Direction.ASCENDING);
@@ -186,7 +184,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
 
     private void completeTransactions() {
         Timestamp nowDate = new Timestamp(new Date());
-        appointmentsCollectionRef
+        appointmentsCollection
 //                .whereEqualTo("providerUID", this.mUser.getUid())
 //                .whereEqualTo("isProviderPaid", false)
 //                .whereLessThan("date", nowDate)
@@ -200,18 +198,18 @@ public class UserHomeProfile extends ActionBarMenuActivity
                             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
                                 long sumToTransfer = 0;
                                 //all the reads of the transaction
-                                DocumentReference currUserRef = usersCollectionRef.document(mUser.getUid());
+                                DocumentReference currUserRef = usersCollection.document(mUser.getUid());
                                 long currentUserPoints = transaction.get(currUserRef).getLong("pointsBalance");
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     String skillID = documentSnapshot.getString("skillID");
-                                    DocumentSnapshot skillSnapshot = transaction.get(skillsCollectionRef.document(skillID));
+                                    DocumentSnapshot skillSnapshot = transaction.get(skillsCollection.document(skillID));
                                     sumToTransfer += skillSnapshot.getLong("pointsValue");
                                 }
                                 //all the writes of the transaction
                                 transaction.update(currUserRef, "pointsBalance", currentUserPoints + sumToTransfer);
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     String appointmentID = documentSnapshot.getId();
-                                    transaction.update(appointmentsCollectionRef.document(appointmentID), "isProviderPaid", true);
+                                    transaction.update(appointmentsCollection.document(appointmentID), "isProviderPaid", true);
                                 }
                                 return null;
                             }

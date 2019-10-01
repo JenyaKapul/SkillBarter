@@ -122,7 +122,7 @@ public class NewSkillActivity extends BaseActivity {
         final UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
         final String docID = userSkill.getSkillId();
 
-        DocumentReference skillRef = skillsCollectionRef.document(docID);
+        DocumentReference skillRef = skillsCollection.document(docID);
 
         skillRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -133,7 +133,7 @@ public class NewSkillActivity extends BaseActivity {
                         Toast.makeText(NewSkillActivity.this, "This skill already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // add user's skill to database.
-                        skillsCollectionRef.document(docID).set(userSkill);
+                        skillsCollection.document(docID).set(userSkill);
 
                         finish();
                     }

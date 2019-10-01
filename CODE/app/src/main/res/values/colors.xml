@@ -7,7 +7,10 @@
     <color name="grey_100">#F5F5F5</color>
     <color name="grey_300">#E0E0E0</color>
     <color name="grey_500">#9E9E9E</color>
+    <color name="greyDisabled">#61000000</color>
+    <color name="greySecondary">#8B000000</color>
     <color name="linkBlue">#4d94ff</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="primary_text">#212121</color>
 </resources>

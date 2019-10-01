@@ -116,7 +116,7 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
         String docID = userSkill.getSkillId();
 
         // add user's skill to database.
-        skillsCollectionRef.document(docID).set(userSkill);
+        skillsCollection.document(docID).set(userSkill);
 
         finish();
     }

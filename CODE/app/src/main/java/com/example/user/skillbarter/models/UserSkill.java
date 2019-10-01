@@ -3,10 +3,10 @@ package com.example.user.skillbarter.models;
 
 public class UserSkill {
 
-    private String skillId;
     private String  userID;
     private String category;
     private String skill;
+    private String skillId;
     private int pointsValue;
     private int level;
     private String details;
@@ -100,9 +100,5 @@ public class UserSkill {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-    }
-
-    public String getSkillWithCategory() {
-        return this.skill + " (" + this.category + ")";
     }
 }

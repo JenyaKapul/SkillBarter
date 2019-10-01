@@ -63,6 +63,7 @@ public class ActionBarMenuActivity extends BaseActivity {
         if (this.getClass().getSimpleName().equals(item.getTitleCondensed())) {
             return true;
         }
+
         Intent intent;
 
         switch (item.getItemId()) {
@@ -70,7 +71,7 @@ public class ActionBarMenuActivity extends BaseActivity {
                 intent = new Intent(this, UserHomeProfile.class);
                 break;
             case R.id.app_bar_search:
-                intent = new Intent(this, SearchEngineActivity.class);
+                intent = new Intent(this, SearchResultActivity.class);
                 break;
             case R.id.menu_edit_profile:
                 intent = new Intent(this, RegisterActivity.class);

@@ -137,7 +137,7 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
         final AvailableDate availableDate = new AvailableDate(date);
         final String docID = new SimpleDateFormat("dd.MM.yy hh:mm").format(date);
 
-        final CollectionReference userFreeTimeRef = usersCollectionRef.document(mUserID).
+        final CollectionReference userFreeTimeRef = usersCollection.document(mUserID).
                 collection("Available Dates");
 
         userFreeTimeRef.document(docID)

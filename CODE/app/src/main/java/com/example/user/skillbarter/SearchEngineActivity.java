@@ -19,6 +19,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
+//TODO: delete this class safely
 public class SearchEngineActivity extends ActionBarMenuActivity {
 
     // args for creating a new FilterSearchResult object.

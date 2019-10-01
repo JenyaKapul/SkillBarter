@@ -15,11 +15,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 
-public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapter.SkillHolder> {
+public class EditableSkillAdapter extends FirestoreRecyclerAdapter<UserSkill, EditableSkillAdapter.SkillHolder> {
 
     private OnItemClickListener listener;
 
-    public SkillAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options) {
+    public EditableSkillAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options) {
         super(options);
     }
 
@@ -64,7 +64,7 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
     @NonNull
     @Override
     public SkillHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.skill_item,
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.editable_skill_item,
                 parent, false);
         return new SkillHolder(v);
     }

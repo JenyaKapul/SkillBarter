@@ -204,7 +204,11 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
                 if (documentSnapshot.exists()){
                     providingServiceUserSkill = documentSnapshot.toObject(UserSkill.class);
                     skillValueView.setText(String.valueOf(providingServiceUserSkill.getPointsValue()));
-                    skillNameView.setText(providingServiceUserSkill.getSkillWithCategory());
+
+                    String skillWithCategory = providingServiceUserSkill.getSkill() +
+                            " (" + providingServiceUserSkill.getCategory() + ")";
+
+                    skillNameView.setText(skillWithCategory);
                     skillLevelView.setText(String.valueOf(providingServiceUserSkill.getLevel()));
                     skillDetailsView.setText(providingServiceUserSkill.getDetails());
                     setDataFromUserData(providingServiceUserSkill.getUserID());
