@@ -214,17 +214,6 @@ public class UserHomeProfile extends ActionBarMenuActivity
                                     transaction.update(appointmentsCollectionRef.document(appointmentID), "isProviderPaid", true);
                                 }
                                 return null;
-                        //TODO - remove the Toasts
-                            }
-                        }).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(UserHomeProfile.this, "Transaction success", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(UserHomeProfile.this, "Transaction success", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

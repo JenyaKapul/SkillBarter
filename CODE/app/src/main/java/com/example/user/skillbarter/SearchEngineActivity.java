@@ -21,8 +21,6 @@ import butterknife.OnClick;
 
 public class SearchEngineActivity extends ActionBarMenuActivity {
 
-	private Spinner categorySpinner, skillSpinner;
-
     // args for creating a new FilterSearchResult object.
     private String mCategory, mSkill;
     private int mPointsMin, mPointsMax;
@@ -33,6 +31,12 @@ public class SearchEngineActivity extends ActionBarMenuActivity {
     @BindView(R.id.points_max)
     EditText pointsMaxView;
 
+    @BindView(R.id.category_spinner)
+    Spinner categorySpinner;
+
+    @BindView(R.id.skills_spinner)
+    Spinner skillSpinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +44,6 @@ public class SearchEngineActivity extends ActionBarMenuActivity {
         setContentView(R.layout.activity_search_engine);
         ButterKnife.bind(this);
 
-        categorySpinner = findViewById(R.id.category_spinner);
-        skillSpinner = findViewById(R.id.skills_spinner);
 
         List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
 

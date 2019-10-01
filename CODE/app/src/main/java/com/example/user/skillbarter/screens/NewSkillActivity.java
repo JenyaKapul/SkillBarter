@@ -48,8 +48,8 @@ public class NewSkillActivity extends BaseActivity {
         categorySpinner = findViewById(R.id.category_spinner);
         skillSpinner = findViewById(R.id.skills_spinner);
         mLevelSeekBar = findViewById(R.id.skillLevelSeekBar);
-        mDetailsView = findViewById(R.id.skill_details);
-        mPointsView = findViewById(R.id.points);
+        mDetailsView = findViewById(R.id.skill_details_text_input);
+        mPointsView = findViewById(R.id.points_text_input);
 
         List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
 

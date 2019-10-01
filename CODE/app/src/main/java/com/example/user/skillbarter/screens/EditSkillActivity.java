@@ -24,6 +24,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import javax.annotation.Nullable;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -34,10 +35,6 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
 
     private static final String TAG = "EditSkillActivity";
 
-    private SeekBar mLevelSeekBar;
-    private EditText mPointsView, mDetailsView;
-    private TextView categoryTextView, skillTextView;
-    private CheckBox isEnabledCheckbox;
 
     // args for creating a new UserSkill object.
     private String mCategory, mSkill, mUserID, mDetails;
@@ -46,6 +43,25 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
 
     private ListenerRegistration mListener;
     private DocumentReference mSkillRef;
+
+    @BindView(R.id.category_text_view)
+    TextView categoryTextView;
+
+    @BindView(R.id.skill_text_view)
+    TextView skillTextView;
+
+    @BindView(R.id.skillLevelSeekBar)
+    SeekBar skillLevelSeekBar;
+
+    @BindView(R.id.points_text_input)
+    EditText pointsTextInput;
+
+    @BindView(R.id.skill_details_text_input)
+    EditText detailsTextInput;
+
+    @BindView(R.id.is_enabled_checkbox)
+    CheckBox isEnabledCheckbox;
+
     
 
     @Override
@@ -56,13 +72,6 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Edit Skill");
-
-        categoryTextView = findViewById(R.id.category_text_view);
-        skillTextView = findViewById(R.id.skill_text_view);
-        mLevelSeekBar = findViewById(R.id.skillLevelSeekBar);
-        mDetailsView = findViewById(R.id.skill_details);
-        mPointsView = findViewById(R.id.points);
-        isEnabledCheckbox = findViewById(R.id.is_enabled_checkbox);
 
         String path = getIntent().getExtras().getString(KEY_SKILL_PATH);
         showProgressDialog();
@@ -94,14 +103,14 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
     private void saveUserSkill() {
         mUserID = FirebaseAuth.getInstance().getUid();
 
-        if (TextUtils.isEmpty(mPointsView.getText().toString())) {
+        if (TextUtils.isEmpty(pointsTextInput.getText().toString())) {
             // user did not specify points value for his skill.
-            mPointsView.setError("Required.");
+            pointsTextInput.setError("Required.");
             return;
         }
-        mPointsValue = Integer.parseInt(mPointsView.getText().toString());
-        mLevel = mLevelSeekBar.getProgress();
-        mDetails = mDetailsView.getText().toString();
+        mPointsValue = Integer.parseInt(pointsTextInput.getText().toString());
+        mLevel = skillLevelSeekBar.getProgress();
+        mDetails = detailsTextInput.getText().toString();
         mIsEnabled = !isEnabledCheckbox.isChecked();
         UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails, mIsEnabled);
         String docID = userSkill.getSkillId();
@@ -148,9 +157,9 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
         categoryTextView.setText(mCategory);
         mSkill = userSkill.getSkill();
         skillTextView.setText(mSkill);
-        mPointsView.setText(String.valueOf(userSkill.getPointsValue()));
-        mLevelSeekBar.setProgress(userSkill.getLevel() - 1);
-        mDetailsView.setText(userSkill.getDetails());
+        pointsTextInput.setText(String.valueOf(userSkill.getPointsValue()));
+        skillLevelSeekBar.setProgress(userSkill.getLevel() - 1);
+        detailsTextInput.setText(userSkill.getDetails());
         isEnabledCheckbox.setChecked(!userSkill.isEnabled());
     }
 }

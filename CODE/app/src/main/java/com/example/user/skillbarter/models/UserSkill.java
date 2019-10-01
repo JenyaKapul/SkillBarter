@@ -10,7 +10,7 @@ public class UserSkill {
     private int pointsValue;
     private int level;
     private String details;
-    private boolean isEnabled;
+    private boolean enabled;
 
 
     public UserSkill() {}
@@ -23,10 +23,10 @@ public class UserSkill {
         this.pointsValue = pointsValue;
         this.level = level;
         this.details = details;
-        this.isEnabled = true;
+        this.enabled = true;
     }
 
-    public UserSkill(String userID, String category, String skill, int pointsValue, int level, String details, boolean isEnabled) {
+    public UserSkill(String userID, String category, String skill, int pointsValue, int level, String details, boolean enabled) {
         this.userID = userID;
         this.category = category;
         this.skill = skill;
@@ -34,7 +34,7 @@ public class UserSkill {
         this.pointsValue = pointsValue;
         this.level = level;
         this.details = details;
-        this.isEnabled = isEnabled;
+        this.enabled = enabled;
     }
 
 
@@ -95,11 +95,11 @@ public class UserSkill {
     }
 
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
     }
 
     public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
+        this.enabled = enabled;
     }
 
     public String getSkillWithCategory() {
