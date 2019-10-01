@@ -11,6 +11,7 @@ import com.example.user.skillbarter.screens.EmailPasswordActivity;
 import com.example.user.skillbarter.screens.AvailableDatesManagerActivity;
 import com.example.user.skillbarter.screens.HistoryActivity;
 import com.example.user.skillbarter.screens.SkillsManagerActivity;
+import com.example.user.skillbarter.search.SearchResultActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

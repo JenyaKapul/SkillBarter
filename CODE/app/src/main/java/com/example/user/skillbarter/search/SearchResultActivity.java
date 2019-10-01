@@ -1,4 +1,4 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.search;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -9,20 +9,18 @@ import android.text.Html;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.user.skillbarter.ActionBarMenuActivity;
+import com.example.user.skillbarter.R;
+import com.example.user.skillbarter.SearchItemDetailsActivity;
 import com.example.user.skillbarter.adapters.SearchResultAdapter;
 import com.example.user.skillbarter.models.UserSkill;
-import com.example.user.skillbarter.search.FilterDialogFragment;
-import com.example.user.skillbarter.search.Filters;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 

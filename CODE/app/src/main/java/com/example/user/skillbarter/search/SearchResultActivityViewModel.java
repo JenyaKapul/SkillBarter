@@ -1,11 +1,11 @@
-package com.example.user.skillbarter;
+package com.example.user.skillbarter.search;
 
 import android.arch.lifecycle.ViewModel;
 
 import com.example.user.skillbarter.search.Filters;
 
 /*
- * ViewModel for {@link com.example.user.skillbarter.SearchResultActivity}.
+ * ViewModel for {@link com.example.user.skillbarter.search.SearchResultActivity}.
  */
 
 public class SearchResultActivityViewModel extends ViewModel {

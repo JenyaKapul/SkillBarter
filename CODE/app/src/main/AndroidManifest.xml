@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".screens.NewAvailableDateActivity"></activity>
         <activity android:name=".screens.AvailableDatesManagerActivity" />
-        <activity android:name=".SearchResultActivity" />
+        <activity android:name=".search.SearchResultActivity" />
         <activity android:name=".SearchItemDetailsActivity" />
         <activity
             android:name=".screens.SkillsManagerActivity"
