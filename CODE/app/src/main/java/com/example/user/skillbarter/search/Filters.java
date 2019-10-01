@@ -12,12 +12,6 @@ import com.google.firebase.firestore.Query;
  */
 public class Filters {
 
-    /*
-     * TODO:
-     *  (1) In case filtered by price, disable "Sort by..." spinner and set its label to "Sort by Points"
-     *
-     */
-
     public static final String CATEGORY = "category";
     public static final String SKILL = "skill";
     public static final String POINTS = "pointsValue";
@@ -137,14 +131,28 @@ public class Filters {
 
 
     public String getOrderDescription(Context context) {
-
-        if (CATEGORY.equals(sortBy)) {
-            return context.getString(R.string.sorted_by_category);
+        String orderDescription = "";
+        if (hasPoints()) {
+            orderDescription = context.getString(R.string.sorted_by_points);
+            if (!POINTS.equals(sortBy)) {
+                orderDescription = orderDescription.concat(", " + sortBy);
+            }
+        } else if (CATEGORY.equals(sortBy)) {
+            orderDescription = context.getString(R.string.sorted_by_category);
         } else if (POINTS.equals(sortBy)){
-            return context.getString(R.string.sorted_by_points);
-        } else {
-            return context.getString(R.string.sorted_by_level);
+            orderDescription = context.getString(R.string.sorted_by_points);
+        } else if (LEVEL.equals(sortBy)){
+            orderDescription = context.getString(R.string.sorted_by_level);
         }
+        return orderDescription;
+
+//        if (CATEGORY.equals(sortBy)) {
+//            return context.getString(R.string.sorted_by_category);
+//        } else if (POINTS.equals(sortBy)){
+//            return context.getString(R.string.sorted_by_points);
+//        } else if (LEVEL.equals(sortBy)){
+//            return context.getString(R.string.sorted_by_level);
+//        }
     }
 }
 

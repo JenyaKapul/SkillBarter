@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.user.skillbarter.adapters.SearchResultAdapter;
@@ -13,8 +14,17 @@ import com.example.user.skillbarter.models.UserSkill;
 import com.example.user.skillbarter.search.FilterDialogFragment;
 import com.example.user.skillbarter.search.Filters;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+
+import javax.annotation.Nullable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,7 +35,8 @@ import static com.example.user.skillbarter.search.Filters.ENABLED;
 import static com.example.user.skillbarter.search.Filters.POINTS;
 import static com.example.user.skillbarter.search.Filters.SKILL;
 
-public class SearchResultActivity extends ActionBarMenuActivity implements FilterDialogFragment.FilterListener {
+public class SearchResultActivity extends ActionBarMenuActivity
+        implements FilterDialogFragment.FilterListener, EventListener<QuerySnapshot> {
 
     @BindView(R.id.text_current_search)
     TextView mCurrentSearchView;
@@ -39,6 +50,7 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
     private static SearchResultAdapter mAdapter;
 
     private Query mQuery;
+    private ListenerRegistration mRegistration;
 
     private static final int LIMIT = 50;
 
@@ -64,28 +76,11 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
     }
 
     private void initRecyclerView() {
-
-        /* Query the categories to be displayed in the search results screen. */
-        mQuery = skillsCollection.orderBy(CATEGORY, Query.Direction.ASCENDING).limit(LIMIT);
-
-        FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
-                .setQuery(mQuery, UserSkill.class)
-                .build();
-
-        mAdapter = new SearchResultAdapter(options, false);
         mSearchResultRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mSearchResultRecycler.setAdapter(mAdapter);
+        /* Query the categories to be displayed in the search results screen. */
+        Query query = skillsCollection.orderBy(CATEGORY, Query.Direction.ASCENDING).limit(LIMIT);
 
-        mAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                // Pass skill document id to the next (skill details) activity.
-                String docID = documentSnapshot.getId();
-                Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
-                intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, docID);
-                startActivity(intent);
-            }
-        });
+        setQuery(query);
     }
 
     @Override
@@ -95,6 +90,10 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
 
         if (mAdapter != null) {
             mAdapter.startListening();
+        }
+
+        if (mQuery != null && mRegistration == null) {
+            mRegistration = mQuery.addSnapshotListener(this);
         }
 
         /* Apply filters */
@@ -107,6 +106,11 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
         super.onStop();
         if (mAdapter != null) {
             mAdapter.stopListening();
+        }
+
+        if (mRegistration != null) {
+            mRegistration.remove();
+            mRegistration = null;
         }
     }
 
@@ -136,7 +140,6 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
     /*
      * TODO:
      *  (1) Check if there's an option to filter out current user's skills.
-     *  (2) Add ListenerRegistration that listens to DB changes (see friendly eats --> codelab.md)
      */
     @Override
     public void onFilter(Filters filters) {
@@ -160,7 +163,7 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
 
             // In case of an inequality where filter (whereLessThan(), whereGreaterThan(), etc.)
             // on field 'pointsValue', the query must also have 'pointsValue' as the first orderBy() field
-            filters.setSortBy(POINTS);
+            query = query.orderBy(POINTS, filters.getSortDirection());
         }
 
         // Non-hidden (enabled) Skills
@@ -177,26 +180,7 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
 
         /* Update the query */
         if(mAdapter != null) {
-            mQuery = query;
-            FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
-                    .setQuery(mQuery, UserSkill.class)
-                    .build();
-
-            mAdapter.stopListening();
-            mAdapter = new SearchResultAdapter(options, false);
-            mSearchResultRecycler.setAdapter(mAdapter);
-            mAdapter.startListening();
-
-            mAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                    // Pass skill document id to the next (skill details) activity.
-                    String docID = documentSnapshot.getId();
-                    Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
-                    intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, docID);
-                    startActivity(intent);
-                }
-            });
+            setQuery(query);
         }
 
         /* Set header */
@@ -206,4 +190,43 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
         /* Save filters */
         mViewModel.setFilters(filters);
     }
+
+    void setQuery(Query query) {
+        mQuery = query;
+        FirestoreRecyclerOptions<UserSkill> options = new FirestoreRecyclerOptions.Builder<UserSkill>()
+                .setQuery(mQuery, UserSkill.class)
+                .build();
+
+        if (mAdapter != null) {
+            mAdapter.stopListening();
+        }
+
+        mAdapter = new SearchResultAdapter(options, false);
+        mSearchResultRecycler.setAdapter(mAdapter);
+        mAdapter.startListening();
+
+        mAdapter.setOnItemClickListener(new SearchResultAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                // Pass skill document id to the next (skill details) activity.
+                String docID = documentSnapshot.getId();
+                Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
+                intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, docID);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    public void onEvent(@Nullable QuerySnapshot snapshots, @Nullable FirebaseFirestoreException e) {
+        // Handle errors
+        if (e != null) {
+            Log.w("onEvent:error", e);
+            return;
+        }
+
+        /* Apply filters to reload data */
+        onFilter(mViewModel.getFilters());
+    }
+
 }
