@@ -132,8 +132,4 @@ public class UserData {
     public void setNumOfRatings(int numOfRatings) {
         this.numOfRatings = numOfRatings;
     }
-
-    public String getFullName() {
-        return this.firstName + " " + this.lastName;
-    }
 }

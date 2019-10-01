@@ -10,18 +10,27 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.user.skillbarter.R;
+import com.example.user.skillbarter.models.UserData;
 import com.example.user.skillbarter.models.UserSkill;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
 public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, SearchResultAdapter.SearchResultHolder> {
 
-    private OnItemClickListener listener;
+    private static final String TAG = "SearchResultAdapter";
+    private OnItemClickListener clickListener;
 
     /* Set to true if the adapter does not display current user's skills. */
     private boolean hideMySkills;
+
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public SearchResultAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options, boolean hideMySkills) {
         super(options);
@@ -30,11 +39,6 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
 
     @Override
     protected void onBindViewHolder(@NonNull SearchResultHolder holder, int position, @NonNull UserSkill userSkill) {
-        /* TODO: handle data from providing service user db:
-            (1) textViewProviderName
-            (2) textViewRating
-            (3) ratingBar
-         */
 
         String category = userSkill.getCategory();
         String skill = userSkill.getSkill();
@@ -42,10 +46,11 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
         holder.textViewCategory.setText("(" + category + ")");
         holder.textViewSkill.setText(skill);
         holder.textViewPointsValue.setText(String.valueOf(userSkill.getPointsValue()));
-        holder.textViewLevel.setText(String.valueOf(userSkill.getLevel()));
+        holder.textViewLevel.setText("Level " + String.valueOf(userSkill.getLevel()));
         holder.imageViewProvider.setImageResource(getSkillImageID(category, skill));
 
-        
+        String providerUserID = userSkill.getUserID();
+        loadProviderUserData(providerUserID, holder);
     }
 
 
@@ -80,43 +85,19 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && listener != null) {
+                    if (position != RecyclerView.NO_POSITION && clickListener != null) {
                         DocumentSnapshot snapshot = getSnapshots().getSnapshot(position);
 
                         /* Prevent current user's skills being clickable. */
                         String currentID = FirebaseAuth.getInstance().getUid();
                         if (!snapshot.getString("userID").equals(currentID)) {
-                            listener.onItemClick(snapshot, position);
+                            clickListener.onItemClick(snapshot, position);
                         }
                     }
                 }
             });
         }
     }
-
-//    private void setDataFromUserData(String uID, @NonNull final SearchResultHolder holder) {
-//        DocumentReference mUserRef = mFirestore.collection("User Data")
-//                .document(uID);
-//        mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                if (documentSnapshot.exists()){
-//                    UserData ud = documentSnapshot.toObject(UserData.class);
-//                    holder.tvProviderName.setText(ud.getFullName());
-//                    holder.tvRating.setText(String.valueOf(ud.getPersonalRating()));
-//                    holder.rbRating.setRating(ud.getPersonalRating());
-//                } else {
-//                    Log.e(TAG, "Document does not exist");
-//                }
-//            }
-//        })
-//        .addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.e(TAG, "onFailure: " + e.toString());
-//            }
-//        });
-//    }
 
     private int getSkillImageID(String category, String skill) {
         switch (category) {
@@ -145,11 +126,28 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
         }
     }
 
+    private void loadProviderUserData(String uID, @NonNull final SearchResultHolder holder) {
+        DocumentReference userDocRef = db.collection(USERS_COLLECTION).document(uID);
+
+        userDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    UserData user = documentSnapshot.toObject(UserData.class);
+                    String fullName = user.getFirstName() + " " + user.getLastName();
+                    holder.textViewProviderName.setText(fullName);
+                    holder.textViewRating.setText(String.format("%.1f", user.getPersonalRating()));
+                    holder.ratingBar.setRating(user.getPersonalRating());
+                }
+            }
+        });
+    }
+
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
+        this.clickListener = listener;
     }
 }

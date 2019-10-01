@@ -17,10 +17,20 @@
         <item>@string/value_any_skill</item>
     </string-array>
 
+    <!-- Points filters -->
+    <string-array name="points">
+        <item>@string/value_any_points</item>
+        <item>@string/price_1</item>
+        <item>@string/price_2</item>
+        <item>@string/price_3</item>
+    </string-array>
 
-    <!-- Ways you can sort dogs -->
+
+    <!-- Ways you can sort skills -->
     <string-array name="sort_by">
+        <item>@string/sort_by_points</item>
         <item>@string/sort_by_category</item>
+        <item>@string/sort_by_level</item>
     </string-array>
 
 

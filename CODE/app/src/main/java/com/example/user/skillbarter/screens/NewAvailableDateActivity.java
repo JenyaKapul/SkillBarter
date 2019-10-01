@@ -30,6 +30,8 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
+
 public class NewAvailableDateActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener{
 
     private Date chosenDate = null;
@@ -138,7 +140,7 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
         final String docID = new SimpleDateFormat("dd.MM.yy hh:mm").format(date);
 
         final CollectionReference userFreeTimeRef = usersCollection.document(mUserID).
-                collection("Available Dates");
+                collection(DATES_COLLECTION);
 
         userFreeTimeRef.document(docID)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

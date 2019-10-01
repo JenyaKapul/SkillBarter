@@ -23,7 +23,6 @@
             android:name=".screens.EditSkillActivity"
             android:parentActivityName=".screens.SkillsManagerActivity" />
         <activity android:name=".screens.HistoryActivity" />
-        <activity android:name=".SearchEngineActivity" />
         <activity android:name=".UserHomeProfile" />
         <activity android:name=".MainActivity">
             <intent-filter>

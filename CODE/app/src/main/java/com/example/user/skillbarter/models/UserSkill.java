@@ -3,6 +3,7 @@ package com.example.user.skillbarter.models;
 
 public class UserSkill {
 
+    //TODO: safely remove skillId
     private String  userID;
     private String category;
     private String skill;

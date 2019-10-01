@@ -15,14 +15,18 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+import static com.example.user.skillbarter.Constants.APPOINTMENTS_COLLECTION;
+import static com.example.user.skillbarter.Constants.SKILLS_COLLECTION;
+import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
-public class BaseActivity extends AppCompatActivity {
+
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected final FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     protected final FirebaseStorage mStorage = FirebaseStorage.getInstance();
-    protected final CollectionReference skillsCollection = mFirestore.collection("User Skills");
-    protected final CollectionReference appointmentsCollection = mFirestore.collection("Appointments");
-    protected final CollectionReference usersCollection = mFirestore.collection("User Data");
+    protected final CollectionReference skillsCollection = mFirestore.collection(SKILLS_COLLECTION);
+    protected final CollectionReference appointmentsCollection = mFirestore.collection(APPOINTMENTS_COLLECTION);
+    protected final CollectionReference usersCollection = mFirestore.collection(USERS_COLLECTION);
 
 
     @VisibleForTesting
@@ -142,6 +146,22 @@ public class BaseActivity extends AppCompatActivity {
                 skillArrayID = R.array.Empty;
         }
         return skillArrayID;
+    }
+
+    /**
+     * Get points represented as dollar signs.
+     */
+    public static String getPointsString(int pointsInt) {
+        switch (pointsInt) {
+            case 20:
+                return "$";
+            case 50:
+                return "$$";
+            case 100:
+                return "$$$";
+            default:
+                return "$$$";
+        }
     }
 }
 

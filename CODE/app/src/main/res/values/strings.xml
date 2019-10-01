@@ -92,11 +92,20 @@
     <string name="filter_header" translatable="false">Filter</string>
     <string name="all_categories" translatable="false">All Categories</string>
     <string name="sorted_by_category" translatable="false">sorted by category</string>
+    <string name="sorted_by_points" translatable="false">sorted by points</string>
+    <string name="sorted_by_level" translatable="false">sorted by level</string>
     <string name="sort_by_category" translatable="false">Sort by Category</string>
+    <string name="sort_by_points" translatable="false">Sort by Points</string>
+    <string name="sort_by_level" translatable="false">Sort by Level</string>
     <string name="value_any_category" translatable="false">All Categories</string>
     <string name="value_any_skill" translatable="false">All Skills</string>
+    <string name="value_any_points">Any Value of Points</string>
     <string name="cancel" translatable="false">Cancel</string>
     <string name="apply" translatable="false">Apply</string>
+
+    <string name="price_1">$ (maximum 20 points)</string>
+    <string name="price_2">$$ (maximum 50 points)</string>
+    <string name="price_3">$$$ (maximum 100 points)</string>
 
 
 

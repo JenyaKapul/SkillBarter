@@ -3,6 +3,7 @@ package com.example.user.skillbarter.search;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.example.user.skillbarter.BaseActivity;
 import com.example.user.skillbarter.R;
 import com.google.firebase.firestore.Query;
 
@@ -11,25 +12,30 @@ import com.google.firebase.firestore.Query;
  */
 public class Filters {
 
-    //TODO: filter by points
-    //TODO: think about more sort by options (other than category)
+    /*
+     * TODO:
+     *  (1) In case filtered by price, disable "Sort by..." spinner and set its label to "Sort by Points"
+     *
+     */
+
     public static final String CATEGORY = "category";
     public static final String SKILL = "skill";
+    public static final String POINTS = "pointsValue";
+    public static final String LEVEL = "level";
     public static final String ENABLED = "enabled";
 
 
     private String category = null;
     private String skill = null;
     private String sortBy = null;
+    private int points = -1;
     private Query.Direction sortDirection = null;
-
-    private String userID = null;
 
     public Filters() {}
 
     public static Filters getDefault() {
         Filters filters = new Filters();
-        filters.setSortBy(CATEGORY);
+        filters.setSortBy(POINTS);
         filters.setSortDirection(Query.Direction.ASCENDING);
 
         return filters;
@@ -46,11 +52,13 @@ public class Filters {
         return false;
     }
 
+    public boolean hasPoints() {
+        return (points > 0);
+    }
+
     public boolean hasSortBy() {
         return !(TextUtils.isEmpty(sortBy));
     }
-
-    public boolean hasUserId() { return !(TextUtils.isEmpty(userID)); }
 
     public String getCategory() {
         return category;
@@ -68,6 +76,14 @@ public class Filters {
         this.skill = skill;
     }
 
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
     public String getSortBy() {
         return sortBy;
     }
@@ -82,14 +98,6 @@ public class Filters {
 
     public void setSortDirection(Query.Direction sortDirection) {
         this.sortDirection = sortDirection;
-    }
-
-    public String getUserID() {
-        return userID;
-    }
-
-    public void setUserID(String userID) {
-        this.userID = userID;
     }
 
     public String getSearchDescription(Context context) {
@@ -117,12 +125,26 @@ public class Filters {
             desc.append("</b>");
         }
 
+        if (points > 0) {
+            desc.append(" for ");
+            desc.append("<b>");
+            desc.append(BaseActivity.getPointsString(points));
+            desc.append("</b>");
+        }
+
         return desc.toString();
     }
 
 
     public String getOrderDescription(Context context) {
-        return context.getString(R.string.sorted_by_category);
+
+        if (CATEGORY.equals(sortBy)) {
+            return context.getString(R.string.sorted_by_category);
+        } else if (POINTS.equals(sortBy)){
+            return context.getString(R.string.sorted_by_points);
+        } else {
+            return context.getString(R.string.sorted_by_level);
+        }
     }
 }
 

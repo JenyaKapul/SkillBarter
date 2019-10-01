@@ -48,6 +48,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.user.skillbarter.Constants.APPOINTMENTS_COLLECTION;
+import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
+import static com.example.user.skillbarter.Constants.SKILLS_COLLECTION;
+import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
+
 public class SearchItemDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
     private static final String TAG = "SearchItemDetailsAct";
     public static final String KEY_SKILL_ID = "key_skill_id";
@@ -101,7 +106,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
         skillDetailsView.setMovementMethod(new ScrollingMovementMethod());
         setTitle("Details");
         spinnerDateSelection = spinnerDatesTitle; // initialization
-        currentUserRef = mFirestore.collection("User Data").document(FirebaseAuth.getInstance().getUid());
+        currentUserRef = mFirestore.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getUid());
 
         // Initializing an ArrayAdapter
         datesList = new ArrayList<>();
@@ -165,14 +170,15 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
 
     private void setDataFromUserData(String uID) {
         Log.v(TAG, "setDataFromUserData");
-        DocumentReference mUserRef = mFirestore.collection("User Data")
+        DocumentReference mUserRef = mFirestore.collection(USERS_COLLECTION)
                 .document(uID);
         mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()){
                     UserData ud = documentSnapshot.toObject(UserData.class);
-                    profileNameView.setText(ud.getFullName());
+                    String fullName = ud.getFirstName() + " " + ud.getLastName();
+                    profileNameView.setText(fullName);
                     ratingValueView.setText(String.valueOf(ud.getPersonalRating()));
                     ratingBarView.setRating(ud.getPersonalRating());
 
@@ -196,7 +202,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
 
     private void setDataFromSkillData(String sID) {
         Log.v(TAG, "setDataFromSkillData");
-        DocumentReference mSkillRef = mFirestore.collection("User Skills")
+        DocumentReference mSkillRef = mFirestore.collection(SKILLS_COLLECTION)
                 .document(sID);
         mSkillRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -227,7 +233,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
     }
 
     private void setDataFromUserAvailableDates(String uID) {
-        mFirestore.collection("User Data").document(uID).collection("Dates")
+        mFirestore.collection(USERS_COLLECTION).document(uID).collection("Dates")
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot snapshots) {
@@ -281,7 +287,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
                 String clientUID = currentUser.getUserID();
                 Appointment appointment = new Appointment(providerUID, clientUID,
                         providingServiceUserSkill.getSkillId(), date, 0, false);
-                mFirestore.collection("Appointments").add(appointment);
+                mFirestore.collection(APPOINTMENTS_COLLECTION).add(appointment);
                 Toast.makeText(this, "New appointment is set!", Toast.LENGTH_SHORT).show();
                 decreaseClientPointsForService(providingServiceUserSkill.getPointsValue());
                 setSelectedDateToUnavailable(date);
@@ -294,8 +300,8 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
         String uID = providingServiceUserSkill.getUserID();
         String dateDocID = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
         //TODO: update chosen date within transaction
-        mFirestore.collection("User Data")
-                .document(uID).collection("Available Dates").document(dateDocID)
+        mFirestore.collection(USERS_COLLECTION)
+                .document(uID).collection(DATES_COLLECTION).document(dateDocID)
                 .update("isAvailable", false);
     }
 

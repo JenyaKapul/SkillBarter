@@ -8,15 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
-import com.example.user.skillbarter.BaseActivity;
 import com.example.user.skillbarter.R;
 import com.example.user.skillbarter.adapters.HintAdapter;
 import com.google.firebase.firestore.Query;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +23,8 @@ import butterknife.OnClick;
 
 import static com.example.user.skillbarter.BaseActivity.getSkillArrayID;
 import static com.example.user.skillbarter.search.Filters.CATEGORY;
+import static com.example.user.skillbarter.search.Filters.LEVEL;
+import static com.example.user.skillbarter.search.Filters.POINTS;
 
 
 /*
@@ -42,10 +41,7 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
     /* TODO:
-        (1) set skill spinner after choosing category
-        (2) filter by points (max and min value)
-        (3) Fix the height of the skills spinner which gets changed when choosing a category (maybe padding?)
-
+        (1) Fix the height of the skills spinner which gets changed when choosing a category (maybe padding?)
      */
 
     private View mRootView;
@@ -55,6 +51,9 @@ public class FilterDialogFragment extends DialogFragment {
 
     @BindView(R.id.spinner_skill)
     Spinner mSkillSpinner;
+
+    @BindView(R.id.spinner_points)
+    Spinner mPointsSpinner;
 
     @BindView(R.id.spinner_sort)
     Spinner mSortSpinner;
@@ -141,12 +140,14 @@ public class FilterDialogFragment extends DialogFragment {
         dismiss();
     }
 
+
     public Filters getFilters() {
         Filters filters = new Filters();
 
         if (mRootView != null) {
             filters.setCategory(getSelectedCategory());
             filters.setSkill(getSelectedSkill());
+            filters.setPoints(getSelectedPointsLimit());
             filters.setSortBy(getSelectedSortBy());
             filters.setSortDirection(getSortDirection());
         }
@@ -168,10 +169,24 @@ public class FilterDialogFragment extends DialogFragment {
     @Nullable
     private String getSelectedSkill() {
         String selected = (String) mSkillSpinner.getSelectedItem();
-        if (getString(R.string.value_any_skill).equals(selected)) { //TODO!!!
+        if (getString(R.string.value_any_skill).equals(selected) || selected.startsWith("Choose")) {
             return null;
         } else {
             return selected;
+        }
+    }
+
+
+    private int getSelectedPointsLimit() {
+        String selected = (String) mPointsSpinner.getSelectedItem();
+        if (selected.equals(getString(R.string.price_1))) {
+            return 20;
+        } else if (selected.equals(getString(R.string.price_2))) {
+            return 50;
+        } else if (selected.equals(getString(R.string.price_3))) {
+            return 100;
+        } else {
+            return -1;
         }
     }
 
@@ -182,6 +197,10 @@ public class FilterDialogFragment extends DialogFragment {
 
         if (getString(R.string.sort_by_category).equals(selected)) {
             return CATEGORY;
+        } else if (getString(R.string.sort_by_points).equals(selected)) {
+            return POINTS;
+        } else if (getString(R.string.sort_by_level).equals(selected)) {
+            return LEVEL;
         }
         return null;
     }

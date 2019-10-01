@@ -22,6 +22,7 @@ import butterknife.OnClick;
 
 import static com.example.user.skillbarter.search.Filters.CATEGORY;
 import static com.example.user.skillbarter.search.Filters.ENABLED;
+import static com.example.user.skillbarter.search.Filters.POINTS;
 import static com.example.user.skillbarter.search.Filters.SKILL;
 
 public class SearchResultActivity extends ActionBarMenuActivity implements FilterDialogFragment.FilterListener {
@@ -134,30 +135,38 @@ public class SearchResultActivity extends ActionBarMenuActivity implements Filte
 
     /*
      * TODO:
-     *  (1) Add Points filter option. See Friendly Eats app for reference.
-     *  (2) Check if there's an option to filter out current user's skills.
-     *  (3) Check the influence of HTML headers
+     *  (1) Check if there's an option to filter out current user's skills.
+     *  (2) Add ListenerRegistration that listens to DB changes (see friendly eats --> codelab.md)
      */
     @Override
     public void onFilter(Filters filters) {
 
-        /* Construct query basic query */
+        // Construct query basic query
         Query query = skillsCollection;
 
-        /* Category (equality filter) */
+        // Category (equality filter)
         if (filters.hasCategory()) {
             query = query.whereEqualTo(CATEGORY, filters.getCategory());
         }
 
-        /* Skill (equality filter) */
+        // Skill (equality filter)
         if (filters.hasSkill()) {
             query = query.whereEqualTo(SKILL, filters.getSkill());
         }
 
-        /* Non-hidden (enabled) Skills */
+        // Points (equality filter)
+        if (filters.hasPoints()) {
+            query = query.whereLessThanOrEqualTo("pointsValue", filters.getPoints());
+
+            // In case of an inequality where filter (whereLessThan(), whereGreaterThan(), etc.)
+            // on field 'pointsValue', the query must also have 'pointsValue' as the first orderBy() field
+            filters.setSortBy(POINTS);
+        }
+
+        // Non-hidden (enabled) Skills
         query = query.whereEqualTo(ENABLED, true);
 
-        /* Sort by (orderBy with direction) */
+        // Sort by (orderBy with direction)
         if (filters.hasSortBy()) {
             query = query.orderBy(filters.getSortBy(), filters.getSortDirection());
         }

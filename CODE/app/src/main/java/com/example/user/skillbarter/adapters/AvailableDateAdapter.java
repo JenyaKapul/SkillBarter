@@ -24,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 
+import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
+import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
+
 public class AvailableDateAdapter extends FirestoreRecyclerAdapter<AvailableDate, AvailableDateAdapter.AvailableDateHolder> {
 //    private OnItemClickListener listener;
 
@@ -46,8 +49,8 @@ public class AvailableDateAdapter extends FirestoreRecyclerAdapter<AvailableDate
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     //TODO: implemet transaction to update availability correctly
-                    FirebaseFirestore.getInstance().collection("User Data")
-                            .document(uID).collection("Available Dates")
+                    FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                            .document(uID).collection(DATES_COLLECTION)
                             .document(docID).update("valid", isChecked);
                 }
             });

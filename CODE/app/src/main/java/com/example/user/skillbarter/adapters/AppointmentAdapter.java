@@ -24,6 +24,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 
+import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
+
 public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, AppointmentAdapter.AppointmentHolder> {
 
     private static final String TAG = "AppointmentAdapter";
@@ -51,14 +53,15 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
 
     private void setDataFromUserData(String uID, @NonNull final AppointmentAdapter.AppointmentHolder holder) {
         Log.v(TAG, "onBindViewHolder: setDataFromUserData");
-        DocumentReference mUserRef = mFirestore.collection("User Data")
+        DocumentReference mUserRef = mFirestore.collection(USERS_COLLECTION)
                 .document(uID);
         mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()){
                     UserData ud = documentSnapshot.toObject(UserData.class);
-                    holder.tvOtherProfileName.setText(ud.getFullName());
+                    String fullName = ud.getFirstName() + " " + ud.getLastName();
+                    holder.tvOtherProfileName.setText(fullName);
                     holder.ivOtherProfilePicture.setImageResource(R.drawable.incognito); //TODO
                 } else {
                     Log.e(TAG, "Document does not exist");
