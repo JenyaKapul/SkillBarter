@@ -2,25 +2,26 @@ package com.example.user.skillbarter;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.user.skillbarter.adapters.ServiceDetailsAdapter;
 import com.example.user.skillbarter.models.Appointment;
+import com.example.user.skillbarter.models.AvailableDate;
 import com.example.user.skillbarter.models.UserData;
 import com.example.user.skillbarter.models.UserSkill;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -29,14 +30,11 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.Query;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -81,21 +79,23 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     @BindView(R.id.details_content_text_view)
     TextView detailsTextView;
 
-    @BindView(R.id.date_picker_spinner)
-    Spinner datePickerSpinner;
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+
 
     private static final String TAG = "SearchItemDetailsAct";
     public static final String SKILL_ID = "key_skill_id";
 
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-    private List<String> datesList;
-    private ArrayAdapter<String> spinnerArrayAdapter;
-    private String spinnerDateSelection;
     private ListenerRegistration currentUserListener;
     private DocumentReference currentUserRef;
     UserData currentUser;
     UserSkill userSkill;
-    String spinnerDateFormatting = "E, dd-MM-yy, HH:mm";
+
+    private ServiceDetailsAdapter adapter;
+    private Query query;
+    private int selectedPosition = -1;
+    private String selectedDate;
 
 
 
@@ -107,32 +107,16 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
 
         setTitle(R.string.service_result_title);
 
-        detailsTextView.setMovementMethod(new ScrollingMovementMethod()); //TODO (NOA): check long text
+        detailsTextView.setMovementMethod(new ScrollingMovementMethod()); //TODO ???
 
-        spinnerDateSelection = getString(R.string.dates_spinner_prompt); // initialization
         currentUserRef = mFirestore.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getUid());
-
-        // Initializing an ArrayAdapter
-        datesList = new ArrayList<>();
-        datesList.add(getString(R.string.dates_spinner_prompt));
-        spinnerArrayAdapter = new ArrayAdapter<>(
-                this, android.R.layout.simple_spinner_item, datesList);
-        datePickerSpinner.setAdapter(spinnerArrayAdapter);
-
-        datePickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerDateSelection = parent.getItemAtPosition(position).toString();
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            loadServiceDetails(extras.getString(SKILL_ID));
+            String skillID = extras.getString(SKILL_ID);
+            loadServiceDetails(skillID);
+            String userID = skillID.split("\\.")[0];
+            initRecyclerView(userID);
         }
     }
 
@@ -140,6 +124,9 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     @Override
     public void onStart() {
         super.onStart();
+        if (adapter != null) {
+            adapter.startListening();
+        }
         if (currentUserRef != null && currentUserListener == null) {
             currentUserListener = currentUserRef.addSnapshotListener(this);
         }
@@ -149,6 +136,9 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     @Override
     public void onStop() {
         super.onStop();
+        if (adapter != null) {
+            adapter.stopListening();
+        }
         if (currentUserListener != null) {
             currentUserListener.remove();
             currentUserListener = null;
@@ -175,6 +165,44 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
         }
     }
 
+    //TODO: query future dates only
+    private void initRecyclerView(String userID) {
+        query = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(userID)
+                .collection(DATES_COLLECTION)
+                .whereEqualTo("booked", false);
+
+
+        FirestoreRecyclerOptions<AvailableDate> options = new FirestoreRecyclerOptions.Builder<AvailableDate>()
+                .setQuery(query, AvailableDate.class)
+                .build();
+
+        if (adapter != null) {
+            adapter.stopListening();
+        }
+
+        adapter = new ServiceDetailsAdapter(options);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+        adapter.setOnItemClickListener(new ServiceDetailsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+
+                RecyclerView.ViewHolder selectedView = recyclerView.findViewHolderForAdapterPosition(position);
+
+                if (selectedPosition != -1) {
+                    RecyclerView.ViewHolder prevSelectedView = recyclerView
+                            .findViewHolderForAdapterPosition(selectedPosition);
+                    prevSelectedView.itemView.setBackgroundResource(R.color.yellow_card);
+                }
+                selectedView.itemView.setBackgroundResource(R.color.colorPrimary);
+                selectedPosition = position;
+                selectedDate = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.timestamp_text_view)).getText().toString();
+
+            }
+        });
+    }
+
 
     private void loadServiceDetails(String skillID) {
         mFirestore.collection(SKILLS_COLLECTION).document(skillID).get()
@@ -194,7 +222,6 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                     detailsTextView.setText(userSkill.getDetails());
 
                     loadProviderUserData(userSkill.getUserID());
-                    loadAvailableDates(userSkill.getUserID());
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
@@ -230,32 +257,10 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     }
 
 
-    private void loadAvailableDates(String uID) {
-        mFirestore.collection(USERS_COLLECTION).document(uID).collection(DATES_COLLECTION)
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot snapshots) {
-                for (QueryDocumentSnapshot availableDate: snapshots) {
-                    boolean isBooked = availableDate.getBoolean("booked");
-                    if (!isBooked) {
-                        Date date = availableDate.getDate("date");
-                        if (isFutureDate(date)) {
-                            String dateFormatted = new SimpleDateFormat(spinnerDateFormatting).format(date);
-                            datesList.add(dateFormatted);
-                        }
-                    }
-                }
-                /* Single refresh for the adapter! */
-                spinnerArrayAdapter.notifyDataSetChanged();
-            }
-        });
-    }
-
-
-    boolean isFutureDate(Date eventDate) {
-        Date today = new Date();
-        return today.before(eventDate);
-    }
+//    boolean isFutureDate(Date eventDate) {
+//        Date today = new Date();
+//        return today.before(eventDate);
+//    }
 
 
     boolean hasEnoughPoints() {
@@ -269,10 +274,9 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     @OnClick(R.id.booking_button)
     public void onBookNowClicked() {
 
-        if (spinnerDateSelection.equals(getString(R.string.dates_spinner_prompt))) {
+        if (selectedPosition == -1) {
             Toast.makeText(this, R.string.date_not_chosen_message, Toast.LENGTH_SHORT).show();
-        }
-        else if (currentUser != null && userSkill != null) {
+        } else if (currentUser != null && userSkill != null) {
 
             /* Check that current user has enough points to ask for the service. */
             if (!hasEnoughPoints()) {
@@ -283,7 +287,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 /* Client user has enough points and date is selected. */
                 Date date = new Date();
                 try {
-                    date = new SimpleDateFormat(spinnerDateFormatting).parse(spinnerDateSelection);
+                    date = new SimpleDateFormat("E dd.MM.yy, HH:mm").parse(selectedDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -292,16 +296,16 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 Appointment appointment = new Appointment(providerUID, clientUID,
                         userSkill.getSkillId(), date, 0, false);
                 mFirestore.collection(APPOINTMENTS_COLLECTION).add(appointment);
-                Toast.makeText(this, R.string.appointment_created_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.date_booked_message, Toast.LENGTH_SHORT).show();
                 decreaseClientPointsForService(userSkill.getPointsValue());
-                setSelectedDateToBooked(date);
+                setSelectedDateBooked(date);
                 finish();
             }
         }
     }
 
 
-    private void setSelectedDateToBooked(Date date) {
+    private void setSelectedDateBooked(Date date) {
         String uID = userSkill.getUserID();
         String dateDocID = new SimpleDateFormat("dd.MM.yy HH:mm").format(date);
         mFirestore.collection(USERS_COLLECTION)

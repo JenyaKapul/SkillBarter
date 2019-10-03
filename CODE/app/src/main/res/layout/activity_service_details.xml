@@ -169,32 +169,15 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="100dp" />
 
-    <!-- Time and Date Spinner -->
-    <RelativeLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="@+id/details_content_text_view"
         app:layout_constraintTop_toBottomOf="@+id/details_content_text_view"
-        android:layout_marginEnd="16dp"
-        >
-
-        <ImageView
-            android:id="@+id/icon_points"
-            style="@style/AppTheme.FilterIcon"
-            android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_time"
-            android:tint="@color/colorPrimary"
-            />
-
-        <Spinner
-            android:id="@+id/date_picker_spinner"
-            style="@style/AppTheme.FilterSpinner"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/icon_points"
-            android:layout_height="50dp"
-             />
-
-    </RelativeLayout>
+        android:layout_marginBottom="150dp"
+        tools:listitem="@layout/service_date_item"/>
 
     <Button
         android:id="@+id/booking_button"
