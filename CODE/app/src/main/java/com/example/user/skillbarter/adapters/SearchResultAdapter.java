@@ -73,7 +73,7 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
         public SearchResultHolder(View itemView) {
             super(itemView);
             textViewProviderName = itemView.findViewById(R.id.provider_name);
-            textViewRating = itemView.findViewById(R.id.rating_value);
+            textViewRating = itemView.findViewById(R.id.rating_value_text_view);
             textViewCategory = itemView.findViewById(R.id.category_text_view);
             textViewSkill = itemView.findViewById(R.id.skill_text_view);
             textViewPointsValue = itemView.findViewById(R.id.value_text_view);

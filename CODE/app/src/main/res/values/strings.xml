@@ -10,7 +10,9 @@
     <string name="collection_user_skill_reviews">Skill Reviews</string>
     <string name="userData_userID_key">userID</string>
 
+    <!--    Titles-->
     <string name="search_result_title">Search Results</string>
+    <string name="service_result_title">Service Details</string>
 
 
 
@@ -81,7 +83,7 @@
     <string name="level">LEVEL:</string>
 
     <!--SEARCH ITEM DETAILS-->
-    <string name="details">Details:</string>
+    <string name="details">DETAILS:</string>
     <string name="location">Location:</string>
     <string name="review">Reviews:</string>
     <string name="booking_button">Book Now</string>

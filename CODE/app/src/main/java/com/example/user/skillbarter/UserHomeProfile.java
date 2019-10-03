@@ -48,10 +48,10 @@ public class UserHomeProfile extends ActionBarMenuActivity
     private ListenerRegistration mListener;
     private boolean currIsProvider = false;
 
-    @BindView(R.id.profile_picture_holder)
+    @BindView(R.id.user_profile_image_view)
     ImageView profilePictureView;
 
-    @BindView(R.id.profile_name)
+    @BindView(R.id.user_name_text_view)
     TextView nameView;
 
     @BindView(R.id.balance)
@@ -157,7 +157,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
 
 
     private void setProfilePictureBackgroundInvisible(){
-        ImageView imageView = findViewById(R.id.profile_picture_holder);
+        ImageView imageView = findViewById(R.id.user_profile_image_view);
         imageView.setBackground(null);
     }
 

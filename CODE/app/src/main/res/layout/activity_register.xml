@@ -221,7 +221,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/profile_picture_holder"
+            android:id="@+id/user_profile_image_view"
             android:layout_width="400px"
             android:layout_height="400px"
             android:layout_gravity="center"
@@ -240,8 +240,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:background="@drawable/gallery_icon"
-            app:layout_constraintStart_toStartOf="@+id/profile_picture_holder"
-            app:layout_constraintTop_toBottomOf="@+id/profile_picture_holder" />
+            app:layout_constraintStart_toStartOf="@+id/user_profile_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/user_profile_image_view" />
 
         <!--Camera Icon Button-->
         <android.support.v7.widget.AppCompatImageView
@@ -251,7 +251,7 @@
             android:layout_gravity="center"
             android:background="@drawable/device_camera_icon"
             app:layout_constraintBottom_toBottomOf="@+id/button_gallery"
-            app:layout_constraintEnd_toEndOf="@+id/profile_picture_holder"
+            app:layout_constraintEnd_toEndOf="@+id/user_profile_image_view"
             app:layout_constraintTop_toTopOf="@+id/button_gallery" />
 
         <Button

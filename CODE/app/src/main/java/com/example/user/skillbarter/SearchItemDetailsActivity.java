@@ -1,6 +1,5 @@
 package com.example.user.skillbarter;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -53,11 +52,15 @@ import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
 import static com.example.user.skillbarter.Constants.SKILLS_COLLECTION;
 import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
+/*
+ * TODO:
+ *  (1) Change dates adapter to HintAdapter.
+ *
+ */
 public class SearchItemDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
     private static final String TAG = "SearchItemDetailsAct";
     public static final String KEY_SKILL_ID = "key_skill_id";
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-    private Activity thisActivity;
     private List<String> datesList;
     private ArrayAdapter<String> spinnerArrayAdapter;
     private String spinnerDateSelection, spinnerDatesTitle = "Choose date and starting time";
@@ -65,46 +68,45 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
     private DocumentReference currentUserRef;
     UserData currentUser;
     ProgressDialog mProgressDialog;
-    UserSkill providingServiceUserSkill;
+    UserSkill userSkill;
 
-    @BindView(R.id.profile_picture_holder)
-    ImageView profilePictureView;
+    @BindView(R.id.user_profile_image_view)
+    ImageView userProfileImageView;
 
-    @BindView(R.id.profile_name)
-    TextView profileNameView;
+    @BindView(R.id.user_name_text_view)
+    TextView userNameTextView;
 
     @BindView(R.id.rating_bar)
-    RatingBar ratingBarView;
+    RatingBar ratingBar;
 
-    @BindView(R.id.rating_value)
-    TextView ratingValueView;
+    @BindView(R.id.rating_value_text_view)
+    TextView ratingValueTextView;
 
-    @BindView(R.id.skill_value)
-    TextView skillValueView;
+    @BindView(R.id.points_text_view)
+    TextView pointsTextView;
 
-    @BindView(R.id.skill_name)
-    TextView skillNameView;
+    @BindView(R.id.skill_text_view)
+    TextView skillTextView;
 
-    @BindView(R.id.skill_level)
-    TextView skillLevelView;
+    @BindView(R.id.level_text_view)
+    TextView levelTextView;
 
-    @BindView(R.id.details_content)
-    TextView skillDetailsView;
+    @BindView(R.id.details_content_text_view)
+    TextView detailsTextView;
 
     @BindView(R.id.date_picker_spinner)
-    Spinner availableDatesSpinner;
+    Spinner datePickerSpinner;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.v(TAG, "onCreate:");
         super.onCreate(savedInstanceState);
-        thisActivity = this;
         setContentView(R.layout.activity_search_item_details);
-        showProgressDialog();
         ButterKnife.bind(this);
-        skillDetailsView.setMovementMethod(new ScrollingMovementMethod());
-        setTitle("Details");
+        detailsTextView.setMovementMethod(new ScrollingMovementMethod());
+        setTitle(R.string.service_result_title);
+
+
         spinnerDateSelection = spinnerDatesTitle; // initialization
         currentUserRef = mFirestore.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getUid());
 
@@ -113,10 +115,9 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
         datesList.add(spinnerDatesTitle);
         spinnerArrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, datesList);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        availableDatesSpinner.setAdapter(spinnerArrayAdapter);
+        datePickerSpinner.setAdapter(spinnerArrayAdapter);
 
-        availableDatesSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        datePickerSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 spinnerDateSelection = parent.getItemAtPosition(position).toString();
@@ -130,9 +131,8 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            this.setDataFromSkillData(extras.getString(KEY_SKILL_ID));
+            this.loadSkillDetails(extras.getString(KEY_SKILL_ID));
         }
-//        showProgressDialog();
     }
 
     @Override
@@ -168,25 +168,27 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
         }
     }
 
-    private void setDataFromUserData(String uID) {
-        Log.v(TAG, "setDataFromUserData");
+    private void loadProviderUserData(String uID) {
         DocumentReference mUserRef = mFirestore.collection(USERS_COLLECTION)
                 .document(uID);
         mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()){
-                    UserData ud = documentSnapshot.toObject(UserData.class);
-                    String fullName = ud.getFirstName() + " " + ud.getLastName();
-                    profileNameView.setText(fullName);
-                    ratingValueView.setText(String.valueOf(ud.getPersonalRating()));
-                    ratingBarView.setRating(ud.getPersonalRating());
+                    UserData user = documentSnapshot.toObject(UserData.class);
+                    String fullName = user.getFirstName() + " " + user.getLastName();
+                    userNameTextView.setText(fullName);
+                    ratingValueTextView.setText(String.format("%.1f", user.getPersonalRating()));
+                    ratingBar.setRating(user.getPersonalRating());
 
-                    if(ud.getProfilePictureURL() != null){
-                        profilePictureView.setBackground(null);
+                    if(user.getProfilePictureURL() != null){
+                        userProfileImageView.setBackground(null);
                     }
-                    Glide.with(thisActivity).load(ud.getProfilePictureURL()).apply(new RequestOptions().centerCrop()
-                            .circleCrop().placeholder(R.drawable.incognito)).into(profilePictureView);
+
+                    Glide.with(userProfileImageView.getContext()).load(user.getProfilePictureURL())
+                            .apply(new RequestOptions().centerCrop()
+                                    .circleCrop().placeholder(R.drawable.incognito)).into(userProfileImageView);
+
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
@@ -200,25 +202,24 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
                 });
     }
 
-    private void setDataFromSkillData(String sID) {
-        Log.v(TAG, "setDataFromSkillData");
+    private void loadSkillDetails(String providerUserID) {
         DocumentReference mSkillRef = mFirestore.collection(SKILLS_COLLECTION)
-                .document(sID);
+                .document(providerUserID);
         mSkillRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()){
-                    providingServiceUserSkill = documentSnapshot.toObject(UserSkill.class);
-                    skillValueView.setText(String.valueOf(providingServiceUserSkill.getPointsValue()));
+                    userSkill = documentSnapshot.toObject(UserSkill.class);
+                    pointsTextView.setText(String.valueOf(userSkill.getPointsValue()));
 
-                    String skillWithCategory = providingServiceUserSkill.getSkill() +
-                            " (" + providingServiceUserSkill.getCategory() + ")";
+                    String skillWithCategory = userSkill.getSkill() +
+                            " (" + userSkill.getCategory() + ")";
 
-                    skillNameView.setText(skillWithCategory);
-                    skillLevelView.setText(String.valueOf(providingServiceUserSkill.getLevel()));
-                    skillDetailsView.setText(providingServiceUserSkill.getDetails());
-                    setDataFromUserData(providingServiceUserSkill.getUserID());
-                    setDataFromUserAvailableDates(providingServiceUserSkill.getUserID());
+                    skillTextView.setText(skillWithCategory);
+                    levelTextView.setText(String.valueOf(userSkill.getLevel()));
+                    detailsTextView.setText(userSkill.getDetails());
+                    loadProviderUserData(userSkill.getUserID());
+                    setDataFromUserAvailableDates(userSkill.getUserID());
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
@@ -259,7 +260,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
     }
 
     boolean hasEnoughPoints() {
-        if (currentUser.getPointsBalance() >= providingServiceUserSkill.getPointsValue()) {
+        if (currentUser.getPointsBalance() >= userSkill.getPointsValue()) {
             return true;
         }
         return false;
@@ -270,7 +271,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
         Log.d(TAG, "****** onBookNowClicked: Booking button clicked");
         if (spinnerDateSelection.equals(spinnerDatesTitle)) {
             Toast.makeText(this, "You must choose date and starting time", Toast.LENGTH_SHORT).show();
-        } else if (currentUser != null && providingServiceUserSkill != null) {
+        } else if (currentUser != null && userSkill != null) {
             /* Check that current user has enough points to ask for the service. */
             if (!hasEnoughPoints()) {
                 Toast.makeText(this, "You don't have enough points", Toast.LENGTH_SHORT).show();
@@ -283,13 +284,13 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
-                String providerUID = providingServiceUserSkill.getUserID();
+                String providerUID = userSkill.getUserID();
                 String clientUID = currentUser.getUserID();
                 Appointment appointment = new Appointment(providerUID, clientUID,
-                        providingServiceUserSkill.getSkillId(), date, 0, false);
+                        userSkill.getSkillId(), date, 0, false);
                 mFirestore.collection(APPOINTMENTS_COLLECTION).add(appointment);
                 Toast.makeText(this, "New appointment is set!", Toast.LENGTH_SHORT).show();
-                decreaseClientPointsForService(providingServiceUserSkill.getPointsValue());
+                decreaseClientPointsForService(userSkill.getPointsValue());
                 setSelectedDateToUnavailable(date);
                 finish();
             }
@@ -297,12 +298,11 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
     }
 
     private void setSelectedDateToUnavailable(Date date) {
-        String uID = providingServiceUserSkill.getUserID();
+        String uID = userSkill.getUserID();
         String dateDocID = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
-        //TODO: update chosen date within transaction
         mFirestore.collection(USERS_COLLECTION)
                 .document(uID).collection(DATES_COLLECTION).document(dateDocID)
-                .update("isAvailable", false);
+                .update("available", false);
     }
 
     private void decreaseClientPointsForService(int pointsValue) {
@@ -316,16 +316,6 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
             currentUser = documentSnapshot.toObject(UserData.class);
             hideProgressDialog();
         }
-    }
-
-    public void showProgressDialog() {
-        if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
-            mProgressDialog.setMessage(getString(R.string.loading));
-            mProgressDialog.setIndeterminate(true);
-        }
-
-        mProgressDialog.show();
     }
 
     public void hideProgressDialog() {
