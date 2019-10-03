@@ -25,7 +25,7 @@ public class SkillsManagerActivity extends ActionBarMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skills_manager);
 
-        FloatingActionButton buttonAdd = findViewById(R.id.button_add);
+        FloatingActionButton buttonAdd = findViewById(R.id.add_button);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -31,6 +31,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected final CollectionReference usersCollection = mFirestore.collection(USERS_COLLECTION);
     protected final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
+    /* fields in database. */
+    protected final String DATE = "date";
+
+    protected static final int LIMIT = 50;
+
 
     @VisibleForTesting
     public ProgressDialog mProgressDialog;

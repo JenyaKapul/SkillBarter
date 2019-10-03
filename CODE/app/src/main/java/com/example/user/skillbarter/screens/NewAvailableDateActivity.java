@@ -21,7 +21,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.timessquare.CalendarPickerView;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -111,9 +110,6 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
 
                 getSupportActionBar().show();
                 calendarPickerView.setVisibility(View.INVISIBLE);
-
-                String dateFormatted = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                Toast.makeText(NewAvailableDateActivity.this, dateFormatted, Toast.LENGTH_SHORT).show();
             }
             @Override
             public void onDateUnselected(Date date) {}

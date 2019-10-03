@@ -4,20 +4,20 @@ import java.util.Date;
 
 public class AvailableDate {
     private Date date;
-    private boolean valid;
+    private boolean available;
     private boolean booked;
 
     public AvailableDate() {}
 
     public AvailableDate(Date date) {
         this.date = date;
-        this.valid = true;
+        this.available = true;
         this.booked = false;
     }
 
-    public AvailableDate(Date date, boolean isValid, boolean isBooked) {
+    public AvailableDate(Date date, boolean isAvailable, boolean isBooked) {
         this.date = date;
-        this.valid = isValid;
+        this.available = isAvailable;
         this.booked = isBooked;
     }
 
@@ -29,12 +29,12 @@ public class AvailableDate {
         this.date = date;
     }
 
-    public boolean isValid() {
-        return valid;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public void setValid(boolean valid) {
-        this.valid = valid;
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public boolean isBooked() {

@@ -43,16 +43,21 @@
             app:layout_constraintTop_toBottomOf="@+id/date_text_view"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Switch
-            android:id="@+id/availability_switch"
+
+        <TextView
+            android:id="@+id/booked_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:layout_editor_absoluteX="206dp"
             tools:layout_editor_absoluteY="-1dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/date_text_view"
-            app:layout_constraintBottom_toBottomOf="@+id/time_text_view"/>
+            app:layout_constraintBottom_toBottomOf="@+id/time_text_view"
+            android:textColor="@color/red"
+            android:textStyle="bold"
+            android:text="BOOKED"
+            />
 
 
     </android.support.constraint.ConstraintLayout>
