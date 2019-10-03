@@ -2,13 +2,10 @@ package com.example.user.skillbarter.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
-import android.widget.Toast;
 
 import com.example.user.skillbarter.ActionBarMenuActivity;
 import com.example.user.skillbarter.R;
@@ -17,72 +14,80 @@ import com.example.user.skillbarter.models.AvailableDate;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
 
+/*
+ * TODO (NOA)
+ *  (1) Add option to delete an item with swipe if the date is not booked!
+ */
+
+
 public class AvailableDatesManagerActivity extends ActionBarMenuActivity {
+
+    @BindView(R.id.add_button)
+    FloatingActionButton addButton;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
+
     private AvailableDateAdapter adapter;
+    private Query query;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_free_time_manager);
+        setContentView(R.layout.activity_available_dates_manager);
+        ButterKnife.bind(this);
+        setTitle(R.string.available_dates_manager_title);
 
-        FloatingActionButton buttonAdd = findViewById(R.id.free_time_button_add);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(AvailableDatesManagerActivity.this, NewAvailableDateActivity.class));
             }
         });
 
-        setUpRecyclerView();
+        initRecyclerView();
     }
 
-    private void setUpRecyclerView() {
 
-        Query query = usersCollection.document(currentUser.getUid()).collection(DATES_COLLECTION)
-                .orderBy("date", Query.Direction.ASCENDING);
+    private void initRecyclerView() {
+        query = usersCollection.document(currentUser.getUid()).collection(DATES_COLLECTION)
+                .orderBy(DATE, Query.Direction.ASCENDING).limit(LIMIT);
 
         FirestoreRecyclerOptions<AvailableDate> options = new FirestoreRecyclerOptions.Builder<AvailableDate>()
                 .setQuery(query, AvailableDate.class)
                 .build();
 
-        adapter = new AvailableDateAdapter(options);
+        if (adapter != null) {
+            adapter.stopListening();
+        }
 
-        RecyclerView recyclerView = findViewById(R.id.free_time_recycler_view);
-        recyclerView.setHasFixedSize(true);
+        adapter = new AvailableDateAdapter(options);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
-                return false;
-            }
-
-            @Override
-            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-                if(!adapter.deleteItem(viewHolder.getAdapterPosition())) {
-                    Toast.makeText(AvailableDatesManagerActivity.this,
-                            "Cannot delete already booked date", Toast.LENGTH_SHORT).show();
-                    //ToDO: think of a better way
-                    adapter.stopListening();
-                    adapter.startListening();
-                }
-            }
-        }).attachToRecyclerView(recyclerView);
+        adapter.startListening();
     }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-        adapter.startListening();
+        if (adapter != null) {
+            adapter.startListening();
+        }
     }
+
 
     @Override
     public void onStop() {
         super.onStop();
-        adapter.stopListening();
+        if (adapter != null) {
+            adapter.stopListening();
+        }
     }
 }
