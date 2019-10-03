@@ -1,7 +1,5 @@
 package com.example.user.skillbarter;
 
-import android.app.ProgressDialog;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -23,7 +21,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.user.skillbarter.models.Appointment;
 import com.example.user.skillbarter.models.UserData;
 import com.example.user.skillbarter.models.UserSkill;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -54,21 +51,11 @@ import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
 /*
  * TODO:
- *  (1) Change dates adapter to HintAdapter.
+ *  (1) Change dates spinner to adapter that listens to the Dates collection and prevent race condition by transferring syncing control to Firebase
+ * (2) Add empty state for adapter indicating no dates are available
  *
  */
 public class ServiceDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
-    private static final String TAG = "SearchItemDetailsAct";
-    public static final String KEY_SKILL_ID = "key_skill_id";
-    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-    private List<String> datesList;
-    private ArrayAdapter<String> spinnerArrayAdapter;
-    private String spinnerDateSelection;
-    private ListenerRegistration currentUserListener;
-    private DocumentReference currentUserRef;
-    UserData currentUser;
-    ProgressDialog mProgressDialog;
-    UserSkill userSkill;
 
     @BindView(R.id.user_profile_image_view)
     ImageView userProfileImageView;
@@ -97,14 +84,30 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     @BindView(R.id.date_picker_spinner)
     Spinner datePickerSpinner;
 
+    private static final String TAG = "SearchItemDetailsAct";
+    public static final String SKILL_ID = "key_skill_id";
+
+    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+    private List<String> datesList;
+    private ArrayAdapter<String> spinnerArrayAdapter;
+    private String spinnerDateSelection;
+    private ListenerRegistration currentUserListener;
+    private DocumentReference currentUserRef;
+    UserData currentUser;
+    UserSkill userSkill;
+    String spinnerDateFormatting = "E, dd-MM-yy, HH:mm";
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_details);
         ButterKnife.bind(this);
-        detailsTextView.setMovementMethod(new ScrollingMovementMethod());
+
         setTitle(R.string.service_result_title);
+
+        detailsTextView.setMovementMethod(new ScrollingMovementMethod()); //TODO (NOA): check long text
 
         spinnerDateSelection = getString(R.string.dates_spinner_prompt); // initialization
         currentUserRef = mFirestore.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getUid());
@@ -121,7 +124,6 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 spinnerDateSelection = parent.getItemAtPosition(position).toString();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -130,15 +132,19 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            this.loadSkillDetails(extras.getString(KEY_SKILL_ID));
+            loadServiceDetails(extras.getString(SKILL_ID));
         }
     }
+
 
     @Override
     public void onStart() {
         super.onStart();
-        currentUserListener = currentUserRef.addSnapshotListener(this);
+        if (currentUserRef != null && currentUserListener == null) {
+            currentUserListener = currentUserRef.addSnapshotListener(this);
+        }
     }
+
 
     @Override
     public void onStop() {
@@ -149,12 +155,14 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.menu.back_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -167,48 +175,45 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
         }
     }
 
-    private void loadSkillDetails(String providerUserID) {
-        DocumentReference mSkillRef = mFirestore.collection(SKILLS_COLLECTION)
-                .document(providerUserID);
-        mSkillRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+    private void loadServiceDetails(String skillID) {
+        mFirestore.collection(SKILLS_COLLECTION).document(skillID).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
+                if (documentSnapshot.exists()) {
                     userSkill = documentSnapshot.toObject(UserSkill.class);
 
                     pointsTextView.setText(String.valueOf(userSkill.getPointsValue()));
 
-                    String skillWithCategory = userSkill.getSkill() +
-                            " (" + userSkill.getCategory() + ")";
-
+                    String skillWithCategory = userSkill.getSkill() + " (" + userSkill.getCategory()
+                            + ")";
                     skillTextView.setText(skillWithCategory);
+
                     levelTextView.setText(String.valueOf(userSkill.getLevel()));
                     detailsTextView.setText(userSkill.getDetails());
+
                     loadProviderUserData(userSkill.getUserID());
                     loadAvailableDates(userSkill.getUserID());
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
             }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: " + e.toString());
-                    }
-                });
+        });
     }
 
+
     private void loadProviderUserData(String uID) {
-        DocumentReference mUserRef = mFirestore.collection(USERS_COLLECTION)
-                .document(uID);
-        mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        mFirestore.collection(USERS_COLLECTION).document(uID).get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
+                if (documentSnapshot.exists()) {
                     UserData user = documentSnapshot.toObject(UserData.class);
+
                     String fullName = user.getFirstName() + " " + user.getLastName();
                     userNameTextView.setText(fullName);
+
                     ratingValueTextView.setText(String.format("%.1f", user.getPersonalRating()));
                     ratingBar.setRating(user.getPersonalRating());
 
@@ -221,31 +226,24 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                     Log.e(TAG, "Document does not exist");
                 }
             }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: " + e.toString());
-                    }
-                });
+        });
     }
+
 
     private void loadAvailableDates(String uID) {
         mFirestore.collection(USERS_COLLECTION).document(uID).collection(DATES_COLLECTION)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot snapshots) {
-                for (QueryDocumentSnapshot doc: snapshots) {
-                    boolean isAvailable = doc.getBoolean("isAvailable") && !doc.getBoolean("isBooked");
-//                    if (doc.getBoolean("available")) {
-                    if (isAvailable) {
-                        Date date = doc.getDate("timestamp");
+                for (QueryDocumentSnapshot availableDate: snapshots) {
+                    boolean isBooked = availableDate.getBoolean("booked");
+                    if (!isBooked) {
+                        Date date = availableDate.getDate("date");
                         if (isFutureDate(date)) {
-                            String dateFormatted = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(date);
+                            String dateFormatted = new SimpleDateFormat(spinnerDateFormatting).format(date);
                             datesList.add(dateFormatted);
                         }
                     }
-
                 }
                 /* Single refresh for the adapter! */
                 spinnerArrayAdapter.notifyDataSetChanged();
@@ -253,10 +251,12 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
         });
     }
 
+
     boolean isFutureDate(Date eventDate) {
         Date today = new Date();
         return today.before(eventDate);
     }
+
 
     boolean hasEnoughPoints() {
         if (currentUser.getPointsBalance() >= userSkill.getPointsValue()) {
@@ -265,21 +265,25 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
         return false;
     }
 
+
     @OnClick(R.id.booking_button)
     public void onBookNowClicked() {
-        Log.d(TAG, "****** onBookNowClicked: Booking button clicked");
+
         if (spinnerDateSelection.equals(getString(R.string.dates_spinner_prompt))) {
-            Toast.makeText(this, "You must choose date and starting time", Toast.LENGTH_SHORT).show();
-        } else if (currentUser != null && userSkill != null) {
+            Toast.makeText(this, R.string.date_not_chosen_message, Toast.LENGTH_SHORT).show();
+        }
+        else if (currentUser != null && userSkill != null) {
+
             /* Check that current user has enough points to ask for the service. */
             if (!hasEnoughPoints()) {
-                Toast.makeText(this, "You don't have enough points", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.missing_points_message, Toast.LENGTH_SHORT).show();
                 onBackPressed();
+
             } else {
-                /* Client user has enough points and date is selected */
+                /* Client user has enough points and date is selected. */
                 Date date = new Date();
                 try {
-                    date = new SimpleDateFormat("dd/MM/yyyy HH:mm").parse(spinnerDateSelection);
+                    date = new SimpleDateFormat(spinnerDateFormatting).parse(spinnerDateSelection);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -288,38 +292,34 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 Appointment appointment = new Appointment(providerUID, clientUID,
                         userSkill.getSkillId(), date, 0, false);
                 mFirestore.collection(APPOINTMENTS_COLLECTION).add(appointment);
-                Toast.makeText(this, "New appointment is set!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.appointment_created_message, Toast.LENGTH_SHORT).show();
                 decreaseClientPointsForService(userSkill.getPointsValue());
-                setSelectedDateToUnavailable(date);
+                setSelectedDateToBooked(date);
                 finish();
             }
         }
     }
 
-    private void setSelectedDateToUnavailable(Date date) {
+
+    private void setSelectedDateToBooked(Date date) {
         String uID = userSkill.getUserID();
-        String dateDocID = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(date);
+        String dateDocID = new SimpleDateFormat("dd.MM.yy HH:mm").format(date);
         mFirestore.collection(USERS_COLLECTION)
                 .document(uID).collection(DATES_COLLECTION).document(dateDocID)
-                .update("available", false);
+                .update("booked", true);
     }
+
 
     private void decreaseClientPointsForService(int pointsValue) {
         int points = currentUser.getPointsBalance() - pointsValue;
         currentUserRef.update("pointsBalance", points);
     }
+    
 
     @Override
     public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
         if (documentSnapshot.getReference().equals(currentUserRef)) {
             currentUser = documentSnapshot.toObject(UserData.class);
-            hideProgressDialog();
-        }
-    }
-
-    public void hideProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
         }
     }
 }

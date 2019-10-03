@@ -209,7 +209,7 @@ public class SearchResultActivity extends ActionBarMenuActivity
                 // Pass skill document id to the next (skill details) activity.
                 String docID = documentSnapshot.getId();
                 Intent intent = new Intent(SearchResultActivity.this, ServiceDetailsActivity.class);
-                intent.putExtra(ServiceDetailsActivity.KEY_SKILL_ID, docID);
+                intent.putExtra(ServiceDetailsActivity.SKILL_ID, docID);
                 startActivity(intent);
             }
         });

@@ -30,6 +30,9 @@ import butterknife.ButterKnife;
 
 import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
 
+/*
+ * TODO (NOA): consider changing calendar picker view to DialogFragment using DatePicker fragment
+ */
 
 
 public class NewAvailableDateActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {

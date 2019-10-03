@@ -230,5 +230,8 @@
     <string name="missing_profile_picture_toast">You must set profile picture</string>
     <string name="date_already_exists_message">This time slot already exists</string>
     <string name="date_booked_message">Cannot delete already booked date</string>
+    <string name="date_not_chosen_message">"You must choose date and starting time"</string>
+    <string name="missing_points_message">"You don\'t have enough points"</string>
+    <string name="appointment_created_message">"New appointment is set!"</string>
 
 </resources>
