@@ -44,8 +44,4 @@ public class AvailableDate {
     public void setBooked(boolean booked) {
         this.booked = booked;
     }
-
-    public boolean isAvailable() {
-        return valid && !booked;
-    }
 }

@@ -9,13 +9,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".screens.NewAvailableDateActivity"></activity>
         <activity android:name=".screens.AvailableDatesManagerActivity" />
         <activity android:name=".search.SearchResultActivity" />
         <activity android:name=".ServiceDetailsActivity" />
         <activity
             android:name=".screens.SkillsManagerActivity"
             android:launchMode="singleTop" />
+        <activity
+            android:name=".screens.NewAvailableDateActivity"
+            android:parentActivityName=".screens.AvailableDatesManagerActivity" />
         <activity
             android:name=".screens.NewSkillActivity"
             android:parentActivityName=".screens.SkillsManagerActivity" />

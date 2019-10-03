@@ -13,15 +13,12 @@ import com.example.user.skillbarter.screens.HistoryActivity;
 import com.example.user.skillbarter.screens.SkillsManagerActivity;
 import com.example.user.skillbarter.search.SearchResultActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class ActionBarMenuActivity extends BaseActivity {
 
 
     private static final String TAG = "ActionBarMenuActivity";
-
-    private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     private boolean enable = true;
 

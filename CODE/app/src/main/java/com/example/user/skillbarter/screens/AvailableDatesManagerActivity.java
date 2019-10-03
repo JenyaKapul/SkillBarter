@@ -15,7 +15,6 @@ import com.example.user.skillbarter.R;
 import com.example.user.skillbarter.adapters.AvailableDateAdapter;
 import com.example.user.skillbarter.models.AvailableDate;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.Query;
 
 import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
@@ -40,8 +39,8 @@ public class AvailableDatesManagerActivity extends ActionBarMenuActivity {
     }
 
     private void setUpRecyclerView() {
-        String uid = FirebaseAuth.getInstance().getUid();
-        Query query = usersCollection.document(uid).collection(DATES_COLLECTION)
+
+        Query query = usersCollection.document(currentUser.getUid()).collection(DATES_COLLECTION)
                 .orderBy("date", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<AvailableDate> options = new FirestoreRecyclerOptions.Builder<AvailableDate>()

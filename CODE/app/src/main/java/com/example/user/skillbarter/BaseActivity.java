@@ -11,6 +11,8 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -27,6 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected final CollectionReference skillsCollection = mFirestore.collection(SKILLS_COLLECTION);
     protected final CollectionReference appointmentsCollection = mFirestore.collection(APPOINTMENTS_COLLECTION);
     protected final CollectionReference usersCollection = mFirestore.collection(USERS_COLLECTION);
+    protected final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
 
     @VisibleForTesting

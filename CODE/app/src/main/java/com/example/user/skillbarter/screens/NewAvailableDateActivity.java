@@ -18,7 +18,6 @@ import com.example.user.skillbarter.models.AvailableDate;
 import com.example.user.skillbarter.utils.TimePickerFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.squareup.timessquare.CalendarPickerView;
@@ -32,66 +31,38 @@ import butterknife.ButterKnife;
 
 import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
 
-public class NewAvailableDateActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener{
 
-    private Date chosenDate = null;
-    private int chosenHour = -1;
-    private int chosenMinute = -1;
 
-    @BindView(R.id.free_time_calendar)
-    CalendarPickerView datePicker;
+public class NewAvailableDateActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
+
+    private Date selectedDate;
+    private boolean isHourSelected = false;
+
+    @BindView(R.id.calendar_picker_view)
+    CalendarPickerView calendarPickerView;
 
     @BindView(R.id.date_picker_text_view)
-    TextView tvDate;
+    TextView datePickerTextView;
 
     @BindView(R.id.time_picker_image)
-    ImageButton timePicker;
+    ImageButton timePickerImage;
 
     @BindView(R.id.time_picker_text_view)
-    TextView tvTime;
+    TextView timePickerTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_free_time);
+        setContentView(R.layout.activity_new_available_date);
+        ButterKnife.bind(this);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-        setTitle("Add Available Time");
+        setTitle(R.string.new_date_title);
 
-        ButterKnife.bind(this);
-        this.initDatePicker();
-        this.initTimePicker();
+        initDatePicker();
     }
 
-    private void initDatePicker() {
-        Date today = new Date();
-        Calendar nextYear = Calendar.getInstance();
-        nextYear.add(Calendar.YEAR, 1);
-        datePicker.init(today, nextYear.getTime()).withSelectedDate(today);
-        datePicker.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(Date date) {
-                chosenDate = date;
-                tvDate.setError(null);
-                String selectedDate = DateFormat.getDateInstance(DateFormat.FULL).format(date);
-                tvDate.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
-                datePicker.setVisibility(View.INVISIBLE);
-                Toast.makeText(NewAvailableDateActivity.this, selectedDate, Toast.LENGTH_SHORT).show();
-            }
-            @Override
-            public void onDateUnselected(Date date) {}
-        });
-    }
-
-    private void initTimePicker() {
-        timePicker.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment timePicker = new TimePickerFragment();
-                timePicker.show(getSupportFragmentManager(), "time picker");
-            }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -100,77 +71,113 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
         return super.onCreateOptionsMenu(menu);
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.save_item:
-                saveFreeTime();
+                saveDate();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private boolean validateInput() {
-        boolean status = true;
-        if (chosenDate == null) {
-            tvDate.setError("Required!");
-            status = false;
-        }
-        if ((chosenHour == -1) || (chosenMinute == -1)) {
-            tvTime.setError("Required!");
-            status = false;
-        }
-        return status;
+
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        isHourSelected = true;
+        selectedDate.setHours(hourOfDay);
+        selectedDate.setMinutes(minute);
+        String timeFormatted = String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute);
+        timePickerTextView.setText(timeFormatted);
     }
 
-    private void saveFreeTime(){
-        String mUserID = FirebaseAuth.getInstance().getUid();
 
-        if (!validateInput()){
+    private void initDatePicker() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.YEAR, 1);
+
+        Date today = new Date();
+        calendarPickerView.init(today, calendar.getTime()).withSelectedDate(today);
+
+        calendarPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
+            @Override
+            public void onDateSelected(Date date) {
+
+                selectedDate = date;
+
+                datePickerTextView.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
+
+                getSupportActionBar().show();
+                calendarPickerView.setVisibility(View.INVISIBLE);
+
+                String dateFormatted = DateFormat.getDateInstance(DateFormat.FULL).format(date);
+                Toast.makeText(NewAvailableDateActivity.this, dateFormatted, Toast.LENGTH_SHORT).show();
+            }
+            @Override
+            public void onDateUnselected(Date date) {}
+        });
+    }
+
+
+    public void OnDatePickerClicked(View v) {
+        getSupportActionBar().hide();
+        calendarPickerView.setVisibility(View.VISIBLE);
+    }
+
+
+    public void OnTimePickerClicked(View v) {
+        DialogFragment timePickerFragment = new TimePickerFragment();
+        timePickerFragment.show(getSupportFragmentManager(), "time picker");
+    }
+
+
+    private boolean validateInput() {
+
+        boolean isValid = true;
+
+        if (selectedDate == null) {
+            datePickerTextView.setError("Required!");
+            isValid = false;
+        }
+
+        if (!isHourSelected) {
+            timePickerTextView.setError("Required!");
+            isValid = false;
+        }
+        return isValid;
+    }
+
+
+    private void saveDate() {
+
+        if (!validateInput()) {
             return;
         }
-        Calendar selectedDate = Calendar.getInstance();
-        selectedDate.setTime(chosenDate);
-        selectedDate.set(Calendar.HOUR_OF_DAY, chosenHour);
-        selectedDate.set(Calendar.MINUTE, chosenMinute);
-        final Date date = selectedDate.getTime();
 
-        final AvailableDate availableDate = new AvailableDate(date);
-        final String docID = new SimpleDateFormat("dd.MM.yy hh:mm").format(date);
+        final String docID = new SimpleDateFormat("dd.MM.yy HH:mm").format(selectedDate);
 
-        final CollectionReference userFreeTimeRef = usersCollection.document(mUserID).
+        final CollectionReference availableDates = usersCollection.document(currentUser.getUid()).
                 collection(DATES_COLLECTION);
 
-        userFreeTimeRef.document(docID)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        availableDates.document(docID).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot documentSnapshot = task.getResult();
                     if (documentSnapshot != null && documentSnapshot.exists()) {
                         Toast.makeText(NewAvailableDateActivity.this,
-                                "This time slot already exists", Toast.LENGTH_SHORT).show();
+                                R.string.date_already_exists_message, Toast.LENGTH_SHORT).show();
                     } else {
                         // add time slot to database.
-                        userFreeTimeRef.document(docID).set(availableDate);
+                        final AvailableDate availableDate = new AvailableDate(selectedDate);
+                        availableDates.document(docID).set(availableDate);
                         finish();
                     }
                 }
             }
         });
-    }
-
-    public void OnDatePickerClicked(View v) {
-        this.datePicker.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        tvTime.setError(null);
-        this.chosenHour = hourOfDay;
-        this.chosenMinute = minute;
-        String time = String.format("%02d", hourOfDay) + ":" + String.format("%02d", minute);
-        tvTime.setText(time);
     }
 }

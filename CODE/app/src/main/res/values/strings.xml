@@ -10,9 +10,10 @@
     <string name="collection_user_skill_reviews">Skill Reviews</string>
     <string name="userData_userID_key">userID</string>
 
-    <!--    Titles-->
+    <!-- SCREEN TITLES -->
     <string name="search_result_title">Search Results</string>
     <string name="service_result_title">Service Details</string>
+    <string name="new_date_title">Add Available Time</string>
 
     <string name="dates_spinner_prompt">Choose date and starting time</string>
 
@@ -210,8 +211,7 @@
     <string name="id_fmt">User ID: %s</string>
     <string name="email_fmt">Email: %s</string>
 
-    <string name="error_toast">Error occurred! </string>
-    <string name="missing_profile_picture_toast">You must set profile picture</string>
+
     <string name="divider_bullet" translatable="false">•</string>
     <string-array name="domains">
         <item>\@campus.technion.ac.il</item>
@@ -223,4 +223,10 @@
         <item>@string/female</item>
         <item>@string/male</item>
     </string-array>
+
+    <!-- TOAST RELATED-->
+    <string name="error_toast">Error occurred! </string>
+    <string name="missing_profile_picture_toast">You must set profile picture</string>
+    <string name="date_already_exists_message">This time slot already exists</string>
+
 </resources>

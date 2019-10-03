@@ -16,10 +16,10 @@
         android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/available_date_text_view"
+            android:id="@+id/date_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DATE_MOCK"
+            tools:text="DATE_MOCK"
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginTop="8dp"
@@ -29,43 +29,30 @@
 
 
         <TextView
-            android:id="@+id/available_time_text_view"
+            android:id="@+id/time_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
-            android:text="TIME_MOCK"
+            tools:text="TIME_MOCK"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/available_date_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/available_date_text_view"
+            app:layout_constraintStart_toStartOf="@+id/date_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/date_text_view"
             app:layout_constraintVertical_bias="0.0" />
 
-<!--        <ImageView-->
-<!--            android:id="@+id/deleteView"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/ic_clear"-->
-<!--            android:layout_alignParentEnd="true"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            android:padding="6dp"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="@+id/available_date_text_view"-->
-<!--            app:layout_constraintBottom_toBottomOf="@+id/available_time_text_view"/>-->
-
         <Switch
-            android:id="@+id/free_time_availability"
+            android:id="@+id/availability_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             tools:layout_editor_absoluteX="206dp"
             tools:layout_editor_absoluteY="-1dp"
             android:layout_marginEnd="32dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/available_date_text_view"
-            app:layout_constraintBottom_toBottomOf="@+id/available_time_text_view"/>
+            app:layout_constraintTop_toTopOf="@+id/date_text_view"
+            app:layout_constraintBottom_toBottomOf="@+id/time_text_view"/>
 
 
     </android.support.constraint.ConstraintLayout>
