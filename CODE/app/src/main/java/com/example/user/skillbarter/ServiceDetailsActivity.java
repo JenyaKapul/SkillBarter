@@ -57,13 +57,13 @@ import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
  *  (1) Change dates adapter to HintAdapter.
  *
  */
-public class SearchItemDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
+public class ServiceDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
     private static final String TAG = "SearchItemDetailsAct";
     public static final String KEY_SKILL_ID = "key_skill_id";
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     private List<String> datesList;
     private ArrayAdapter<String> spinnerArrayAdapter;
-    private String spinnerDateSelection, spinnerDatesTitle = "Choose date and starting time";
+    private String spinnerDateSelection;
     private ListenerRegistration currentUserListener;
     private DocumentReference currentUserRef;
     UserData currentUser;
@@ -101,18 +101,17 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search_item_details);
+        setContentView(R.layout.activity_service_details);
         ButterKnife.bind(this);
         detailsTextView.setMovementMethod(new ScrollingMovementMethod());
         setTitle(R.string.service_result_title);
 
-
-        spinnerDateSelection = spinnerDatesTitle; // initialization
+        spinnerDateSelection = getString(R.string.dates_spinner_prompt); // initialization
         currentUserRef = mFirestore.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getUid());
 
         // Initializing an ArrayAdapter
         datesList = new ArrayList<>();
-        datesList.add(spinnerDatesTitle);
+        datesList.add(getString(R.string.dates_spinner_prompt));
         spinnerArrayAdapter = new ArrayAdapter<>(
                 this, android.R.layout.simple_spinner_item, datesList);
         datePickerSpinner.setAdapter(spinnerArrayAdapter);
@@ -161,11 +160,43 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.back_navigation:
-                this.finish();
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void loadSkillDetails(String providerUserID) {
+        DocumentReference mSkillRef = mFirestore.collection(SKILLS_COLLECTION)
+                .document(providerUserID);
+        mSkillRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()){
+                    userSkill = documentSnapshot.toObject(UserSkill.class);
+
+                    pointsTextView.setText(String.valueOf(userSkill.getPointsValue()));
+
+                    String skillWithCategory = userSkill.getSkill() +
+                            " (" + userSkill.getCategory() + ")";
+
+                    skillTextView.setText(skillWithCategory);
+                    levelTextView.setText(String.valueOf(userSkill.getLevel()));
+                    detailsTextView.setText(userSkill.getDetails());
+                    loadProviderUserData(userSkill.getUserID());
+                    loadAvailableDates(userSkill.getUserID());
+                } else {
+                    Log.e(TAG, "Document does not exist");
+                }
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "onFailure: " + e.toString());
+                    }
+                });
     }
 
     private void loadProviderUserData(String uID) {
@@ -181,14 +212,11 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
                     ratingValueTextView.setText(String.format("%.1f", user.getPersonalRating()));
                     ratingBar.setRating(user.getPersonalRating());
 
-                    if(user.getProfilePictureURL() != null){
-                        userProfileImageView.setBackground(null);
+                    if(user.getProfilePictureURL() != null) {
+                        Glide.with(userProfileImageView.getContext()).load(user.getProfilePictureURL())
+                                .apply(new RequestOptions().centerCrop()
+                                        .circleCrop()).into(userProfileImageView);
                     }
-
-                    Glide.with(userProfileImageView.getContext()).load(user.getProfilePictureURL())
-                            .apply(new RequestOptions().centerCrop()
-                                    .circleCrop().placeholder(R.drawable.incognito)).into(userProfileImageView);
-
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
@@ -202,44 +230,15 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
                 });
     }
 
-    private void loadSkillDetails(String providerUserID) {
-        DocumentReference mSkillRef = mFirestore.collection(SKILLS_COLLECTION)
-                .document(providerUserID);
-        mSkillRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
-                    userSkill = documentSnapshot.toObject(UserSkill.class);
-                    pointsTextView.setText(String.valueOf(userSkill.getPointsValue()));
-
-                    String skillWithCategory = userSkill.getSkill() +
-                            " (" + userSkill.getCategory() + ")";
-
-                    skillTextView.setText(skillWithCategory);
-                    levelTextView.setText(String.valueOf(userSkill.getLevel()));
-                    detailsTextView.setText(userSkill.getDetails());
-                    loadProviderUserData(userSkill.getUserID());
-                    setDataFromUserAvailableDates(userSkill.getUserID());
-                } else {
-                    Log.e(TAG, "Document does not exist");
-                }
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: " + e.toString());
-                    }
-                });
-    }
-
-    private void setDataFromUserAvailableDates(String uID) {
-        mFirestore.collection(USERS_COLLECTION).document(uID).collection("Dates")
+    private void loadAvailableDates(String uID) {
+        mFirestore.collection(USERS_COLLECTION).document(uID).collection(DATES_COLLECTION)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot snapshots) {
                 for (QueryDocumentSnapshot doc: snapshots) {
-                    if (doc.getBoolean("available")) {
+                    boolean isAvailable = doc.getBoolean("isAvailable") && !doc.getBoolean("isBooked");
+//                    if (doc.getBoolean("available")) {
+                    if (isAvailable) {
                         Date date = doc.getDate("timestamp");
                         if (isFutureDate(date)) {
                             String dateFormatted = new SimpleDateFormat("dd/MM/yyyy HH:mm").format(date);
@@ -269,7 +268,7 @@ public class SearchItemDetailsActivity extends AppCompatActivity implements Even
     @OnClick(R.id.booking_button)
     public void onBookNowClicked() {
         Log.d(TAG, "****** onBookNowClicked: Booking button clicked");
-        if (spinnerDateSelection.equals(spinnerDatesTitle)) {
+        if (spinnerDateSelection.equals(getString(R.string.dates_spinner_prompt))) {
             Toast.makeText(this, "You must choose date and starting time", Toast.LENGTH_SHORT).show();
         } else if (currentUser != null && userSkill != null) {
             /* Check that current user has enough points to ask for the service. */

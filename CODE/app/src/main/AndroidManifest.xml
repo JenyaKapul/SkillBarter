@@ -12,7 +12,7 @@
         <activity android:name=".screens.NewAvailableDateActivity"></activity>
         <activity android:name=".screens.AvailableDatesManagerActivity" />
         <activity android:name=".search.SearchResultActivity" />
-        <activity android:name=".SearchItemDetailsActivity" />
+        <activity android:name=".ServiceDetailsActivity" />
         <activity
             android:name=".screens.SkillsManagerActivity"
             android:launchMode="singleTop" />

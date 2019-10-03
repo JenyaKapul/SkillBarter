@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.user.skillbarter.ActionBarMenuActivity;
 import com.example.user.skillbarter.R;
-import com.example.user.skillbarter.SearchItemDetailsActivity;
+import com.example.user.skillbarter.ServiceDetailsActivity;
 import com.example.user.skillbarter.adapters.SearchResultAdapter;
 import com.example.user.skillbarter.models.UserSkill;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -208,8 +208,8 @@ public class SearchResultActivity extends ActionBarMenuActivity
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 // Pass skill document id to the next (skill details) activity.
                 String docID = documentSnapshot.getId();
-                Intent intent = new Intent(SearchResultActivity.this, SearchItemDetailsActivity.class);
-                intent.putExtra(SearchItemDetailsActivity.KEY_SKILL_ID, docID);
+                Intent intent = new Intent(SearchResultActivity.this, ServiceDetailsActivity.class);
+                intent.putExtra(ServiceDetailsActivity.KEY_SKILL_ID, docID);
                 startActivity(intent);
             }
         });

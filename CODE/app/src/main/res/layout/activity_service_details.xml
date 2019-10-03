@@ -5,7 +5,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchItemDetailsActivity">
+    tools:context=".ServiceDetailsActivity">
 
     <TextView
         android:id="@+id/details_content_text_view"
@@ -27,7 +27,7 @@
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/incognito"
+        tools:background="@drawable/incognito"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -169,18 +169,32 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="100dp" />
 
-    <Spinner
-        android:id="@+id/date_picker_spinner"
-        android:layout_width="0dp"
+    <!-- Time and Date Spinner -->
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:dropDownWidth="match_parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details_content_text_view" />
+        app:layout_constraintStart_toStartOf="@+id/details_content_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/details_content_text_view"
+        android:layout_marginEnd="16dp"
+        >
+
+        <ImageView
+            android:id="@+id/icon_points"
+            style="@style/AppTheme.FilterIcon"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/ic_time"
+            android:tint="@color/colorPrimary"
+            />
+
+        <Spinner
+            android:id="@+id/date_picker_spinner"
+            style="@style/AppTheme.FilterSpinner"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/icon_points"
+            android:layout_height="50dp"
+             />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/booking_button"

@@ -4,21 +4,21 @@ import java.util.Date;
 
 public class AvailableDate {
     private Date date;
-    private boolean isValid;
-    private boolean isBooked;
+    private boolean valid;
+    private boolean booked;
 
     public AvailableDate() {}
 
     public AvailableDate(Date date) {
         this.date = date;
-        this.isValid = true;
-        this.isBooked = false;
+        this.valid = true;
+        this.booked = false;
     }
 
     public AvailableDate(Date date, boolean isValid, boolean isBooked) {
         this.date = date;
-        this.isValid = isValid;
-        this.isBooked = isBooked;
+        this.valid = isValid;
+        this.booked = isBooked;
     }
 
     public Date getDate() {
@@ -30,22 +30,22 @@ public class AvailableDate {
     }
 
     public boolean isValid() {
-        return isValid;
+        return valid;
     }
 
     public void setValid(boolean valid) {
-        isValid = valid;
+        this.valid = valid;
     }
 
     public boolean isBooked() {
-        return isBooked;
+        return booked;
     }
 
     public void setBooked(boolean booked) {
-        isBooked = booked;
+        this.booked = booked;
     }
 
     public boolean isAvailable() {
-        return isValid && !isBooked;
+        return valid && !booked;
     }
 }
