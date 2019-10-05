@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -49,8 +51,7 @@ import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
 /*
  * TODO:
- *  (1) Change dates spinner to adapter that listens to the Dates collection and prevent race condition by transferring syncing control to Firebase
- * (2) Add empty state for adapter indicating no dates are available
+ *  (2) Add empty state for adapter indicating no dates are available
  *
  */
 public class ServiceDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
@@ -82,6 +83,9 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.view_empty_dates)
+    ViewGroup emptyView;
+
 
     private static final String TAG = "SearchItemDetailsAct";
     public static final String SKILL_ID = "key_skill_id";
@@ -107,7 +111,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
 
         setTitle(R.string.service_result_title);
 
-        detailsTextView.setMovementMethod(new ScrollingMovementMethod()); //TODO ???
+        detailsTextView.setMovementMethod(new ScrollingMovementMethod());
 
         currentUserRef = mFirestore.collection(USERS_COLLECTION).document(FirebaseAuth.getInstance().getUid());
 
@@ -165,11 +169,15 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
         }
     }
 
-    //TODO: query future dates only
+
     private void initRecyclerView(String userID) {
+        Date today = new Date();
         query = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(userID)
                 .collection(DATES_COLLECTION)
-                .whereEqualTo("booked", false);
+                .whereGreaterThanOrEqualTo("date", today);
+
+        query = query.orderBy("date", Query.Direction.ASCENDING);
+//                .whereEqualTo("booked", false);
 
 
         FirestoreRecyclerOptions<AvailableDate> options = new FirestoreRecyclerOptions.Builder<AvailableDate>()
@@ -180,7 +188,18 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
             adapter.stopListening();
         }
 
-        adapter = new ServiceDetailsAdapter(options);
+        adapter = new ServiceDetailsAdapter(options) {
+            @Override
+            public void onDataChanged() {
+                if (getItemCount() == 0) {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+            }
+        };
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.startListening();
@@ -255,12 +274,6 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
             }
         });
     }
-
-
-//    boolean isFutureDate(Date eventDate) {
-//        Date today = new Date();
-//        return today.before(eventDate);
-//    }
 
 
     boolean hasEnoughPoints() {

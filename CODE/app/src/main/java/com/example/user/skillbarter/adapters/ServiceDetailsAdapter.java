@@ -20,8 +20,6 @@ public class ServiceDetailsAdapter extends FirestoreRecyclerAdapter<AvailableDat
 
     private OnItemClickListener clickListener;
 
-    int checkedPosition = -1;
-
     class ServiceDetailsHolder extends RecyclerView.ViewHolder {
 
         TextView timestampTextView, bookedTextView;
@@ -38,7 +36,12 @@ public class ServiceDetailsAdapter extends FirestoreRecyclerAdapter<AvailableDat
                     if (position != RecyclerView.NO_POSITION && clickListener != null) {
 
                         DocumentSnapshot snapshot = getSnapshots().getSnapshot(position);
-                        clickListener.onItemClick(snapshot, position);
+
+                        boolean isBooked = snapshot.getBoolean("booked");
+                        if (!isBooked) {
+                            clickListener.onItemClick(snapshot, position);
+                        }
+
                     }
                 }
             });
@@ -61,7 +64,6 @@ public class ServiceDetailsAdapter extends FirestoreRecyclerAdapter<AvailableDat
             holder.bookedTextView.setVisibility(View.VISIBLE);
         } else {
             holder.bookedTextView.setVisibility(View.INVISIBLE);
-
         }
     }
 
@@ -74,9 +76,11 @@ public class ServiceDetailsAdapter extends FirestoreRecyclerAdapter<AvailableDat
         return new ServiceDetailsHolder(v);
     }
 
+
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
+
 
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.clickListener = listener;

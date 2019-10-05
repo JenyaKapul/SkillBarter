@@ -192,4 +192,31 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- View for empty dates -->
+    <LinearLayout
+        android:id="@+id/view_empty_dates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintStart_toStartOf="@+id/details_content_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/details_content_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+    <ImageView
+        android:src="@drawable/empty_icon"
+        style="@style/AppTheme.EmptyBox" />
+
+    <TextView
+        style="@style/AppTheme.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_dates_message"
+        android:textColor="@color/greyDisabled" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
