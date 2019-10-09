@@ -17,7 +17,7 @@
         android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/category_and_skill_text_view"
+            android:id="@+id/appointment_category_and_skill_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -27,11 +27,11 @@
             tools:text="Cooking (Culinary)"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/skill_image_view"
+            app:layout_constraintStart_toEndOf="@+id/appointment_skill_image_view"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/skill_image_view"
+            android:id="@+id/appointment_skill_image_view"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -46,19 +46,19 @@
 
 
         <ImageView
-            android:id="@+id/points_icon"
+            android:id="@+id/appointment_points_icon"
             android:layout_width="25dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/star_icon"
-            app:layout_constraintBottom_toBottomOf="@id/skill_image_view"
+            app:layout_constraintBottom_toBottomOf="@id/appointment_skill_image_view"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/skill_image_view" />
+            app:layout_constraintTop_toTopOf="@id/appointment_skill_image_view" />
 
         <TextView
-            android:id="@+id/timestamp_text_view"
+            android:id="@+id/appointment_timestamp_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -67,11 +67,11 @@
             tools:text="Mon 28.10.2019, 18:00"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/category_and_skill_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/category_and_skill_text_view" />
+            app:layout_constraintStart_toStartOf="@+id/appointment_category_and_skill_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/appointment_category_and_skill_text_view" />
 
         <TextView
-            android:id="@+id/points_text_view"
+            android:id="@+id/appointment_points_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -79,12 +79,11 @@
             tools:text="70"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/points_icon"
-            app:layout_constraintEnd_toStartOf="@id/points_icon"
-            app:layout_constraintTop_toTopOf="@id/points_icon" />
+            app:layout_constraintBottom_toBottomOf="@id/appointment_points_icon"
+            app:layout_constraintEnd_toStartOf="@id/appointment_points_icon"
+            app:layout_constraintTop_toTopOf="@id/appointment_points_icon" />
 
 
     </android.support.constraint.ConstraintLayout>
-
 
 </android.support.v7.widget.CardView>

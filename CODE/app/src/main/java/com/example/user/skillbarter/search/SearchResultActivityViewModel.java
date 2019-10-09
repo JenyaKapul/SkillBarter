@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel;
 import com.example.user.skillbarter.search.Filters;
 
 /*
- * ViewModel for {@link com.example.user.skillbarter.search.SearchResultActivity}.
+ * ViewModel for {@link com.example.user.skillbarter.search.SearchSkillsActivity}.
  */
 
 public class SearchResultActivityViewModel extends ViewModel {

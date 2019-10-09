@@ -25,7 +25,7 @@ public class SkillsManagerActivity extends ActionBarMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_skills_manager);
 
-        FloatingActionButton buttonAdd = findViewById(R.id.add_button);
+        FloatingActionButton buttonAdd = findViewById(R.id.skills_manager_add_button);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -46,7 +46,7 @@ public class SkillsManagerActivity extends ActionBarMenuActivity {
 
         adapter = new EditableSkillAdapter(options);
 
-        RecyclerView recyclerView = findViewById(R.id.search_result_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.skills_manager_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 

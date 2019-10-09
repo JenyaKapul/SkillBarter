@@ -19,16 +19,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
         <ImageView
-            android:id="@+id/icon_category"
+            android:id="@+id/dialog_filter_icon_category"
             style="@style/AppTheme.FilterIcon"
             android:layout_centerVertical="true"
             android:tint="@color/greySecondary"
             app:srcCompat="@drawable/category_icon" />
         <Spinner
-            android:id="@+id/spinner_category"
+            android:id="@+id/dialog_filter_spinner_category"
             style="@style/AppTheme.FilterSpinner"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/icon_category"
+            android:layout_toEndOf="@+id/dialog_filter_icon_category"
             android:entries="@array/filter_categories" />
 
     </RelativeLayout>
@@ -38,16 +38,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
-            android:id="@+id/icon_skill"
+            android:id="@+id/dialog_filter_icon_skill"
             style="@style/AppTheme.FilterIcon"
             android:layout_centerVertical="true"
             android:tint="@color/greySecondary"
             app:srcCompat="@drawable/skill_icon" />
         <Spinner
-            android:id="@+id/spinner_skill"
+            android:id="@+id/dialog_filter_spinner_skill"
             style="@style/AppTheme.FilterSpinner"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/icon_skill"
+            android:layout_toEndOf="@+id/dialog_filter_icon_skill"
             android:entries="@array/filter_skills"
             />
 
@@ -59,17 +59,17 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/icon_points"
+            android:id="@+id/dialog_filter_icon_points"
             style="@style/AppTheme.FilterIcon"
             android:layout_centerVertical="true"
             android:tint="@color/greySecondary"
             app:srcCompat="@drawable/ic_monetization_on_white_24px" />
 
         <Spinner
-            android:id="@+id/spinner_points"
+            android:id="@+id/dialog_filter_spinner_points"
             style="@style/AppTheme.FilterSpinner"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/icon_points"
+            android:layout_toEndOf="@+id/dialog_filter_icon_points"
             android:entries="@array/points" />
 
     </RelativeLayout>
@@ -81,17 +81,17 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/icon_sort"
+            android:id="@+id/dialog_filter_icon_sort"
             style="@style/AppTheme.FilterIcon"
             android:layout_centerVertical="true"
             android:tint="@color/greySecondary"
             app:srcCompat="@drawable/ic_sort" />
 
         <Spinner
-            android:id="@+id/spinner_sort"
+            android:id="@+id/dialog_filter_spinner_sort"
             style="@style/AppTheme.FilterSpinner"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/icon_sort"
+            android:layout_toEndOf="@+id/dialog_filter_icon_sort"
             android:entries="@array/sort_by" />
     </RelativeLayout>
 
@@ -107,7 +107,7 @@
             android:layout_weight="1" />
 
         <Button
-            android:id="@+id/button_cancel"
+            android:id="@+id/dialog_filter_button_cancel"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
 
 
         <Button
-            android:id="@+id/button_apply"
+            android:id="@+id/dialog_filter_button_apply"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -16,78 +16,78 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/points_icon"
+            android:id="@+id/editable_skill_image_view"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/star_icon" />
+            tools:src="@drawable/skill_icon_sport" />
 
         <TextView
-            android:id="@+id/categoryView"
+            android:id="@+id/editable_skill_category_text_view"
             style="@style/AppTheme.Subheader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/points_icon"
+            android:layout_alignTop="@+id/editable_skill_image_view"
             android:layout_marginBottom="4dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="-2dp"
-            android:layout_toStartOf="@+id/editView"
-            android:layout_toEndOf="@+id/points_icon"
+            android:layout_toStartOf="@+id/editable_skill_edit_icon"
+            android:layout_toEndOf="@+id/editable_skill_image_view"
             android:ellipsize="end"
             android:maxLines="1"
-            tools:text="Category" />
+            tools:text="Sport" />
 
         <TextView
-            android:id="@+id/skillView"
+            android:id="@+id/editable_skill_text_view"
             style="@style/AppTheme.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/categoryView"
-            android:layout_below="@+id/categoryView"
+            android:layout_alignStart="@+id/editable_skill_category_text_view"
+            android:layout_below="@+id/editable_skill_category_text_view"
             android:layout_marginBottom="4dp"
             tools:text="Skill" />
 
         <TextView
-            android:id="@+id/levelView"
+            android:id="@+id/editable_skill_level_text_view"
             style="@style/AppTheme.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/categoryView"
-            android:layout_below="@+id/skillView"
+            android:layout_alignStart="@+id/editable_skill_category_text_view"
+            android:layout_below="@+id/editable_skill_text_view"
             tools:text="Level: 2" />
 
         <TextView
-            android:id="@+id/dividerView2"
+            android:id="@+id/editable_skill_divider_view"
             style="@style/AppTheme.TextDivider"
-            android:layout_alignTop="@+id/levelView"
-            android:layout_toEndOf="@+id/levelView"
+            android:layout_alignTop="@+id/editable_skill_level_text_view"
+            android:layout_toEndOf="@+id/editable_skill_level_text_view"
             android:text="@string/divider_bullet" />
 
         <TextView
-            android:id="@+id/pointsView"
+            android:id="@+id/editable_skill_points_text_view"
             style="@style/AppTheme.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/levelView"
-            android:layout_toEndOf="@+id/dividerView2"
+            android:layout_alignTop="@+id/editable_skill_level_text_view"
+            android:layout_toEndOf="@+id/editable_skill_divider_view"
             tools:text="30" />
 
         <ImageView
-            android:id="@+id/pointsIconView"
+            android:id="@+id/editable_skill_points_icon"
             style="@style/AppTheme.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/levelView"
-            android:layout_toEndOf="@+id/pointsView"
+            android:layout_alignTop="@+id/editable_skill_level_text_view"
+            android:layout_toEndOf="@+id/editable_skill_points_text_view"
             android:background="@drawable/ic_star"
-            app:layout_constraintBottom_toBottomOf="@id/pointsView"
-            app:layout_constraintStart_toEndOf="@id/pointsView"
+            app:layout_constraintBottom_toBottomOf="@id/editable_skill_points_text_view"
+            app:layout_constraintStart_toEndOf="@id/editable_skill_points_text_view"
             android:layout_marginStart="6dp"
             app:layout_constraintDimensionRatio="1:1"
              />
 
         <ImageView
-            android:id="@+id/editView"
+            android:id="@+id/editable_skill_edit_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_edit"

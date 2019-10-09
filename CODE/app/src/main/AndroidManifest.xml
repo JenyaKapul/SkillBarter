@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".screens.AvailableDatesManagerActivity" />
-        <activity android:name=".search.SearchResultActivity" />
+        <activity android:name=".search.SearchSkillsActivity" />
         <activity android:name=".ServiceDetailsActivity" />
         <activity
             android:name=".screens.SkillsManagerActivity"

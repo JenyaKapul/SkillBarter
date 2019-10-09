@@ -73,14 +73,14 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
 
         public SearchResultHolder(View itemView) {
             super(itemView);
-            textViewProviderName = itemView.findViewById(R.id.provider_name);
-            textViewRating = itemView.findViewById(R.id.rating_value_text_view);
-            textViewCategory = itemView.findViewById(R.id.category_text_view);
-            textViewSkill = itemView.findViewById(R.id.skill_text_view);
-            textViewPointsValue = itemView.findViewById(R.id.value_text_view);
-            textViewLevel = itemView.findViewById(R.id.level_text_view);
-            imageViewProvider = itemView.findViewById(R.id.provider_picture);
-            ratingBar = itemView.findViewById(R.id.stars_rating_bar);
+            textViewProviderName = itemView.findViewById(R.id.search_result_user_name_text_view);
+            textViewRating = itemView.findViewById(R.id.search_result_rating_text_view);
+            textViewCategory = itemView.findViewById(R.id.search_result_category_text_view);
+            textViewSkill = itemView.findViewById(R.id.search_result_skill_text_view);
+            textViewPointsValue = itemView.findViewById(R.id.search_result_points_text_view);
+            textViewLevel = itemView.findViewById(R.id.search_result_level_text_view);
+            imageViewProvider = itemView.findViewById(R.id.search_result_image_view);
+            ratingBar = itemView.findViewById(R.id.search_result_rating_bar);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

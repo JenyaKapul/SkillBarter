@@ -8,7 +8,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/skill_image_view"
+        android:id="@+id/home_profile_image_view"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="8dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/category_and_skill_text_view"
+        android:id="@+id/home_profile_name_text_view"
         android:layout_width="0dp"
         android:layout_height="27dp"
         android:layout_gravity="center"
@@ -30,24 +30,24 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/skill_image_view"
-        app:layout_constraintTop_toTopOf="@+id/skill_image_view" />
+        app:layout_constraintStart_toEndOf="@+id/home_profile_image_view"
+        app:layout_constraintTop_toTopOf="@+id/home_profile_image_view" />
 
     <ImageView
-        android:id="@+id/points_icon"
+        android:id="@+id/home_profile_points_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/star_icon"
-        app:layout_constraintBottom_toTopOf="@+id/stars_rating_bar"
+        app:layout_constraintBottom_toTopOf="@+id/home_profile_rating_bar"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toEndOf="@+id/skill_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/category_and_skill_text_view" />
+        app:layout_constraintStart_toEndOf="@+id/home_profile_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/home_profile_name_text_view" />
 
     <TextView
-        android:id="@+id/points_text_view"
+        android:id="@+id/home_profile_points_text_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center_vertical"
@@ -56,14 +56,14 @@
         tools:text="350"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/points_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/home_profile_points_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/points_icon"
-        app:layout_constraintTop_toTopOf="@+id/points_icon" />
+        app:layout_constraintStart_toEndOf="@+id/home_profile_points_icon"
+        app:layout_constraintTop_toTopOf="@+id/home_profile_points_icon" />
 
 
     <RatingBar
-        android:id="@+id/stars_rating_bar"
+        android:id="@+id/home_profile_rating_bar"
         style="?android:attr/ratingBarStyleIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,10 +76,10 @@
         android:stepSize="0.5"
         android:transformPivotX="0dp"
         android:transformPivotY="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/skill_image_view"
+        app:layout_constraintBottom_toBottomOf="@+id/home_profile_image_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/points_icon" />
+        app:layout_constraintStart_toStartOf="@+id/home_profile_points_icon" />
 
     <TextView
         android:id="@+id/appointments_title_text_view"
@@ -91,8 +91,8 @@
         android:text="@string/up_next"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/skill_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/skill_image_view" />
+        app:layout_constraintStart_toStartOf="@+id/home_profile_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/home_profile_image_view" />
 
     <com.polyak.iconswitch.IconSwitch
         android:id="@+id/appointments_type_switch"
@@ -116,7 +116,7 @@
         app:isw_active_tint_icon_right="#fff" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+        android:id="@+id/home_profile_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -147,7 +147,7 @@
             style="@style/AppTheme.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_dates_message"
+            android:text="@string/no_appointments_message"
             android:textColor="@color/greyDisabled" />
     </LinearLayout>
 

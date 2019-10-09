@@ -52,34 +52,34 @@ import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
 public class ServiceDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
 
-    @BindView(R.id.skill_image_view)
+    @BindView(R.id.service_details_profile_image_view)
     ImageView userProfileImageView;
 
-    @BindView(R.id.category_and_skill_text_view)
+    @BindView(R.id.service_details_user_name_text_view)
     TextView userNameTextView;
 
-    @BindView(R.id.rating_bar)
+    @BindView(R.id.service_details_rating_bar)
     RatingBar ratingBar;
 
-    @BindView(R.id.rating_value_text_view)
+    @BindView(R.id.service_details_rating_text_view)
     TextView ratingValueTextView;
 
-    @BindView(R.id.points_text_view)
+    @BindView(R.id.service_details_points_text_view)
     TextView pointsTextView;
 
-    @BindView(R.id.skill_text_view)
+    @BindView(R.id.service_details_skill_text_view)
     TextView skillTextView;
 
-    @BindView(R.id.level_text_view)
+    @BindView(R.id.service_details_level_text_view)
     TextView levelTextView;
 
     @BindView(R.id.details_content_text_view)
     TextView detailsTextView;
 
-    @BindView(R.id.recycler_view)
+    @BindView(R.id.service_details_recycler_view)
     RecyclerView recyclerView;
 
-    @BindView(R.id.view_empty_dates)
+    @BindView(R.id.service_details_empty_view)
     ViewGroup emptyView;
 
 
@@ -211,7 +211,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 }
                 selectedView.itemView.setBackgroundResource(R.color.colorPrimary);
                 selectedPosition = position;
-                selectedDate = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.timestamp_text_view)).getText().toString();
+                selectedDate = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.service_date_timestamp_text_view)).getText().toString();
 
             }
         });
@@ -279,7 +279,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     }
 
 
-    @OnClick(R.id.booking_button)
+    @OnClick(R.id.service_details_booking_button)
     public void onBookNowClicked() {
 
         if (selectedPosition == -1) {

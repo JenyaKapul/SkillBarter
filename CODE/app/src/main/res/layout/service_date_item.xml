@@ -16,7 +16,7 @@
         android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/timestamp_text_view"
+            android:id="@+id/service_date_timestamp_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -29,7 +29,7 @@
             tools:text="Mon 28.10.19, 10:00" />
 
         <TextView
-            android:id="@+id/booked_text_view"
+            android:id="@+id/service_date_booked_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -41,7 +41,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintStart_toEndOf="@+id/timestamp_text_view"
+            app:layout_constraintStart_toEndOf="@+id/service_date_timestamp_text_view"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.4" />
 

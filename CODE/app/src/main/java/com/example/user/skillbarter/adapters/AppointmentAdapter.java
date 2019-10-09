@@ -29,10 +29,10 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
 
         public AppointmentHolder(View itemView) {
             super(itemView);
-            skillCategoryTextView = itemView.findViewById(R.id.category_and_skill_text_view);
-            skillImageView = itemView.findViewById(R.id.skill_image_view);
-            timestampTextView = itemView.findViewById(R.id.timestamp_text_view);
-            pointsTextView = itemView.findViewById(R.id.points_text_view);
+            skillCategoryTextView = itemView.findViewById(R.id.appointment_category_and_skill_text_view);
+            skillImageView = itemView.findViewById(R.id.appointment_skill_image_view);
+            timestampTextView = itemView.findViewById(R.id.appointment_timestamp_text_view);
+            pointsTextView = itemView.findViewById(R.id.appointment_points_text_view);
 
             //TODO: remove this if no functionality is available for clicking an appointment item
             itemView.setOnClickListener(new View.OnClickListener() {

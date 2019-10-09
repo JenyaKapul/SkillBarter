@@ -11,7 +11,7 @@ import com.example.user.skillbarter.screens.EmailPasswordActivity;
 import com.example.user.skillbarter.screens.AvailableDatesManagerActivity;
 import com.example.user.skillbarter.screens.HistoryActivity;
 import com.example.user.skillbarter.screens.SkillsManagerActivity;
-import com.example.user.skillbarter.search.SearchResultActivity;
+import com.example.user.skillbarter.search.SearchSkillsActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -69,7 +69,7 @@ public class ActionBarMenuActivity extends BaseActivity {
                 intent = new Intent(this, UserHomeProfile.class);
                 break;
             case R.id.app_bar_search:
-                intent = new Intent(this, SearchResultActivity.class);
+                intent = new Intent(this, SearchSkillsActivity.class);
                 break;
             case R.id.menu_edit_profile:
                 intent = new Intent(this, RegisterActivity.class);

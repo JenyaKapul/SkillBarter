@@ -32,22 +32,22 @@ import butterknife.ButterKnife;
 
 public class UserHomeProfile extends ActionBarMenuActivity implements EventListener<DocumentSnapshot> {
 
-    @BindView(R.id.skill_image_view)
+    @BindView(R.id.home_profile_image_view)
     ImageView profileImageView;
 
-    @BindView(R.id.category_and_skill_text_view)
+    @BindView(R.id.home_profile_name_text_view)
     TextView nameTextView;
 
-    @BindView(R.id.points_text_view)
+    @BindView(R.id.home_profile_points_text_view)
     TextView pointsTextView;
 
-    @BindView(R.id.stars_rating_bar)
+    @BindView(R.id.home_profile_rating_bar)
     RatingBar ratingBarView;
 
     @BindView(R.id.appointments_type_switch)
     IconSwitch iconSwitch;
 
-    @BindView(R.id.recycler_view)
+    @BindView(R.id.home_profile_recycler_view)
     RecyclerView recyclerView;
 
     @BindView(R.id.view_empty_appointments)

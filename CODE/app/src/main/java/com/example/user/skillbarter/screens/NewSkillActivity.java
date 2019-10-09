@@ -45,9 +45,9 @@ public class NewSkillActivity extends BaseActivity {
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Add Skill");
 
-        categorySpinner = findViewById(R.id.category_spinner);
-        skillSpinner = findViewById(R.id.skills_spinner);
-        mLevelSeekBar = findViewById(R.id.skillLevelSeekBar);
+        categorySpinner = findViewById(R.id.new_skill_category_spinner);
+        skillSpinner = findViewById(R.id.new_skill_skills_spinner);
+        mLevelSeekBar = findViewById(R.id.new_skill_level_seek_bar);
         mDetailsView = findViewById(R.id.skill_details_text_input);
         mPointsView = findViewById(R.id.points_text_input);
 

@@ -40,7 +40,7 @@ import static com.example.user.skillbarter.search.Filters.SKILL;
  */
 
 
-public class SearchResultActivity extends ActionBarMenuActivity
+public class SearchSkillsActivity extends ActionBarMenuActivity
         implements FilterDialogFragment.FilterListener, EventListener<QuerySnapshot> {
 
     @BindView(R.id.text_current_search)
@@ -49,7 +49,7 @@ public class SearchResultActivity extends ActionBarMenuActivity
     @BindView(R.id.text_current_sort_by)
     TextView mCurrentSortByView;
 
-    @BindView(R.id.search_result_recycler_view)
+    @BindView(R.id.search_skills_recycler_view)
     RecyclerView mSearchResultRecycler;
 
     private static SearchResultAdapter mAdapter;
@@ -65,7 +65,7 @@ public class SearchResultActivity extends ActionBarMenuActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_skills_search_result);
+        setContentView(R.layout.activity_search_skills);
         ButterKnife.bind(this);
         setTitle(R.string.search_result_title);
 
@@ -213,7 +213,7 @@ public class SearchResultActivity extends ActionBarMenuActivity
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
                 // Pass skill document id to the next (skill details) activity.
                 String docID = documentSnapshot.getId();
-                Intent intent = new Intent(SearchResultActivity.this, ServiceDetailsActivity.class);
+                Intent intent = new Intent(SearchSkillsActivity.this, ServiceDetailsActivity.class);
                 intent.putExtra(ServiceDetailsActivity.SKILL_ID, docID);
                 startActivity(intent);
             }

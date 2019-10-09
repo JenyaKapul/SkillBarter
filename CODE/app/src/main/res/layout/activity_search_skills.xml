@@ -87,7 +87,7 @@
 
     <!-- Main Dogs recycler -->
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/search_result_recycler_view"
+        android:id="@+id/search_skills_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/filter_bar_container"

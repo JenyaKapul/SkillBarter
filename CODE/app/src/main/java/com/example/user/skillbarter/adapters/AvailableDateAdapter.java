@@ -26,9 +26,9 @@ public class AvailableDateAdapter extends FirestoreRecyclerAdapter<AvailableDate
 
         public AvailableDateHolder(View itemView) {
             super(itemView);
-            dateTextView = itemView.findViewById(R.id.date_text_view);
-            timeTextView = itemView.findViewById(R.id.time_text_view);
-            bookedTextView = itemView.findViewById(R.id.booked_text_view);
+            dateTextView = itemView.findViewById(R.id.my_date_date_text_view);
+            timeTextView = itemView.findViewById(R.id.my_date_time_text_view);
+            bookedTextView = itemView.findViewById(R.id.my_date_booked_text_view);
         }
     }
 

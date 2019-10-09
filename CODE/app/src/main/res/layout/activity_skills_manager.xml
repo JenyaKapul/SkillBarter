@@ -8,12 +8,13 @@
     tools:context=".screens.SkillsManagerActivity">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/search_result_recycler_view"
+        android:id="@+id/skills_manager_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:listitem="@layout/editable_skill_item"/>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_button"
+        android:id="@+id/skills_manager_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

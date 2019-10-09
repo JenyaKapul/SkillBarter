@@ -46,16 +46,16 @@ public class FilterDialogFragment extends DialogFragment {
 
     private View mRootView;
 
-    @BindView(R.id.spinner_category)
+    @BindView(R.id.dialog_filter_spinner_category)
     Spinner mCategorySpinner;
 
-    @BindView(R.id.spinner_skill)
+    @BindView(R.id.dialog_filter_spinner_skill)
     Spinner mSkillSpinner;
 
-    @BindView(R.id.spinner_points)
+    @BindView(R.id.dialog_filter_spinner_points)
     Spinner mPointsSpinner;
 
-    @BindView(R.id.spinner_sort)
+    @BindView(R.id.dialog_filter_spinner_sort)
     Spinner mSortSpinner;
 
     private FilterListener mFilterListener;
@@ -126,7 +126,7 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
 
-    @OnClick(R.id.button_apply)
+    @OnClick(R.id.dialog_filter_button_apply)
     public void onApplyClicked() {
         if (mFilterListener != null) {
             mFilterListener.onFilter(getFilters());
@@ -135,7 +135,7 @@ public class FilterDialogFragment extends DialogFragment {
     }
 
 
-    @OnClick(R.id.button_cancel)
+    @OnClick(R.id.dialog_filter_button_cancel)
     public void onCancelClicked() {
         dismiss();
     }

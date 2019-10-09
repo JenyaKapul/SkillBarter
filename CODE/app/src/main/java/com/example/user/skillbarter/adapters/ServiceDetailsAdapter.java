@@ -26,8 +26,8 @@ public class ServiceDetailsAdapter extends FirestoreRecyclerAdapter<AvailableDat
 
         public ServiceDetailsHolder(View itemView) {
             super(itemView);
-            timestampTextView = itemView.findViewById(R.id.timestamp_text_view);
-            bookedTextView = itemView.findViewById(R.id.booked_text_view);
+            timestampTextView = itemView.findViewById(R.id.service_date_timestamp_text_view);
+            bookedTextView = itemView.findViewById(R.id.service_date_booked_text_view);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
