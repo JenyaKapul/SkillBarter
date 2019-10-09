@@ -46,7 +46,7 @@ public class AvailableDateAdapter extends FirestoreRecyclerAdapter<AvailableDate
         }
 
         // Set date and time.
-        holder.dateTextView.setText(new SimpleDateFormat("E dd/MM/yyyy").format(availableDate.getDate()));
+        holder.dateTextView.setText(new SimpleDateFormat("E dd.MM.yyyy").format(availableDate.getDate()));
         holder.timeTextView.setText(new SimpleDateFormat("HH:mm").format(availableDate.getDate()));
     }
 

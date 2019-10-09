@@ -56,7 +56,7 @@ public class ServiceDetailsAdapter extends FirestoreRecyclerAdapter<AvailableDat
     @Override
     protected void onBindViewHolder(@NonNull ServiceDetailsHolder holder, int position, @NonNull AvailableDate availableDate) {
 
-        String timestampFormatted = new SimpleDateFormat("E dd.MM.yy, HH:mm").format(availableDate.getDate());
+        String timestampFormatted = new SimpleDateFormat("E dd.MM.yyyy, HH:mm").format(availableDate.getDate());
         holder.timestampTextView.setText(timestampFormatted);
 
         if (availableDate.isBooked()) {

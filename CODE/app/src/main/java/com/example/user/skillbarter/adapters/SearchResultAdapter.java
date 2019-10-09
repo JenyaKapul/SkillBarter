@@ -27,6 +27,7 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
     private static final String TAG = "SearchResultAdapter";
     private OnItemClickListener clickListener;
 
+    //TODO: remove hideMySkills if it is not in use
     /* Set to true if the adapter does not display current user's skills. */
     private boolean hideMySkills;
 

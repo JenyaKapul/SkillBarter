@@ -109,7 +109,7 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
 
                 selectedDate = date;
 
-                datePickerTextView.setText(new SimpleDateFormat("dd/MM/yyyy").format(date));
+                datePickerTextView.setText(new SimpleDateFormat("dd.MM.yyyy").format(date));
 
                 getSupportActionBar().show();
                 calendarPickerView.setVisibility(View.INVISIBLE);

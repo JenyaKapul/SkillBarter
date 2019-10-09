@@ -299,7 +299,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 /* Client user has enough points and date is selected. */
                 Date date = new Date();
                 try {
-                    date = new SimpleDateFormat("E dd.MM.yy, HH:mm").parse(selectedDate);
+                    date = new SimpleDateFormat("E dd.MM.yyyy, HH:mm").parse(selectedDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
