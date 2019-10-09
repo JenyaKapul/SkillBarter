@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -12,16 +13,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.user.skillbarter.adapters.AppointmentAdapter;
+import com.example.user.skillbarter.adapters.ServiceDetailsAdapter;
 import com.example.user.skillbarter.models.Appointment;
+import com.example.user.skillbarter.models.AvailableDate;
 import com.example.user.skillbarter.models.UserData;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
@@ -37,25 +39,20 @@ import javax.annotation.Nullable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
+import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
+
 public class UserHomeProfile extends ActionBarMenuActivity
         implements EventListener<DocumentSnapshot> {
-    private static final String TAG = "UserHomeProfile";
-
-    private FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
-    private DocumentReference mUserRef;
-
-    private AppointmentAdapter adapter;
-    private ListenerRegistration mListener;
-    private boolean currIsProvider = false;
 
     @BindView(R.id.user_profile_image_view)
-    ImageView profilePictureView;
+    ImageView profileImageView;
 
     @BindView(R.id.user_name_text_view)
-    TextView nameView;
+    TextView nameTextView;
 
     @BindView(R.id.balance)
-    TextView balanceView;
+    TextView balanceTextView;
 
     @BindView(R.id.ratingBar)
     RatingBar ratingBarView;
@@ -63,58 +60,117 @@ public class UserHomeProfile extends ActionBarMenuActivity
     @BindView(R.id.home_appointments_type_switch)
     IconSwitch iconSwitch;
 
+
+    private static final String TAG = "UserHomeProfile";
+
+    private DocumentReference currentUserRef;
+    private ListenerRegistration currentUserListener;
+
+    private AppointmentAdapter adapter;
+    private boolean currIsProvider = false;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "***** onCreate");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home_profile);
         ButterKnife.bind(this);
-        mUserRef = usersCollection.document(mUser.getUid());
 
-        iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
-            @Override
-            public void onCheckChanged(IconSwitch.Checked current) {
-                //TODO: remove for production
-                completeTransactions();
-                adapter.stopListening();
-                if(current == IconSwitch.Checked.LEFT){
-                    currIsProvider = false;
-                }
-                else {
-                    currIsProvider = true;
-                }
-                setUpRecyclerView();
-                adapter.startListening();
-            }
-        });
-        completeTransactions();
-        setUpRecyclerView();
+        setTitle(R.string.user_home_profile_title);
+
+        currentUserRef = usersCollection.document(currentUser.getUid());
+
+        initRecyclerView();
+
+//        iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
+//            @Override
+//            public void onCheckChanged(IconSwitch.Checked current) {
+//                //TODO: remove for production
+//                completeTransactions();
+//                adapter.stopListening();
+//                if(current == IconSwitch.Checked.LEFT){
+//                    currIsProvider = false;
+//                }
+//                else {
+//                    currIsProvider = true;
+//                }
+//                setUpRecyclerView();
+//                adapter.startListening();
+//            }
+//        });
+//        completeTransactions();
     }
 
-    private void setUpRecyclerView() {
-        Query query;
-        if (this.currIsProvider) {
-            query = appointmentsCollection.whereEqualTo("providerUID", this.mUser.getUid());
-        }
-        else {
-            query = appointmentsCollection.whereEqualTo("clientUID", this.mUser.getUid());
-        }
-        query = query.whereEqualTo("isProviderPaid", false);
-        query = query.orderBy("date", Query.Direction.ASCENDING);
+    //        Query query;
+//        if (this.currIsProvider) {
+//            query = appointmentsCollection.whereEqualTo("providerUID", this.currentUser.getUid());
+//        }
+//        else {
+//            query = appointmentsCollection.whereEqualTo("clientUID", this.currentUser.getUid());
+//        }
+//        query = query.whereEqualTo("isProviderPaid", false);
+//        query = query.orderBy("date", Query.Direction.ASCENDING);
+//
+//        FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
+//                .setQuery(query, Appointment.class).build();
+//
+
+
+//        adapter = new AppointmentAdapter(options);
+//        RecyclerView recyclerView = findViewById(R.id.home_recycler_view);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        recyclerView.setAdapter(adapter);
+//
+//        adapter.setOnItemClickListener(new AppointmentAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+//                Log.v(TAG, "onItemClick: setOnItemClickListener");
+//            }
+//        });
+
+    private void initRecyclerView() {
+        Query query = appointmentsCollection.whereEqualTo("providerUID", this.currentUser.getUid());
+        query = query.whereEqualTo("providerPaid", false);
+//        query = query.orderBy("date", Query.Direction.ASCENDING);
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class).build();
 
-        adapter = new AppointmentAdapter(options);
-        RecyclerView recyclerView = findViewById(R.id.home_recycler_view);
+        if (adapter != null) {
+            adapter.stopListening();
+        }
+
+        adapter = new ServiceDetailsAdapter(options) {
+            @Override
+            public void onDataChanged() {
+                if (getItemCount() == 0) {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+            }
+        };
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-
-        adapter.setOnItemClickListener(new AppointmentAdapter.OnItemClickListener() {
+        adapter.startListening();
+        adapter.setOnItemClickListener(new ServiceDetailsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
-                Log.v(TAG, "onItemClick: setOnItemClickListener");
+
+                RecyclerView.ViewHolder selectedView = recyclerView.findViewHolderForAdapterPosition(position);
+
+                if (selectedPosition != -1) {
+                    RecyclerView.ViewHolder prevSelectedView = recyclerView
+                            .findViewHolderForAdapterPosition(selectedPosition);
+                    prevSelectedView.itemView.setBackgroundResource(R.color.yellow_card);
+                }
+                selectedView.itemView.setBackgroundResource(R.color.colorPrimary);
+                selectedPosition = position;
+                selectedDate = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.timestamp_text_view)).getText().toString();
+
             }
         });
     }
@@ -123,16 +179,16 @@ public class UserHomeProfile extends ActionBarMenuActivity
     public void onStart() {
         super.onStart();
         hideProgressDialog();
-        mListener = mUserRef.addSnapshotListener(this);
+        currentUserListener = currentUserRef.addSnapshotListener(this);
         adapter.startListening();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (mListener != null) {
-            mListener.remove();
-            mListener = null;
+        if (currentUserListener != null) {
+            currentUserListener.remove();
+            currentUserListener = null;
         }
         adapter.stopListening();
     }
@@ -150,7 +206,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
             return;
         }
 
-        if (documentSnapshot.getReference().equals(mUserRef)) {
+        if (documentSnapshot.getReference().equals(currentUserRef)) {
             onUserLoaded(documentSnapshot.toObject(UserData.class));
         }
     }
@@ -173,11 +229,11 @@ public class UserHomeProfile extends ActionBarMenuActivity
         }
 
         Glide.with(this).load(profilePictureURL).apply(new RequestOptions().centerCrop()
-                .circleCrop().placeholder(R.drawable.incognito)).into(profilePictureView);
+                .circleCrop().placeholder(R.drawable.incognito)).into(profileImageView);
 
-        nameView.setText(userName);
+        nameTextView.setText(userName);
 
-        balanceView.setText(userPoints);
+        balanceTextView.setText(userPoints);
 
         ratingBarView.setRating(userData.getPersonalRating());
     }
@@ -185,7 +241,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
     private void completeTransactions() {
         Timestamp nowDate = new Timestamp(new Date());
         appointmentsCollection
-//                .whereEqualTo("providerUID", this.mUser.getUid())
+//                .whereEqualTo("providerUID", this.currentUser.getUid())
 //                .whereEqualTo("isProviderPaid", false)
 //                .whereLessThan("date", nowDate)
                 .get()
@@ -198,7 +254,7 @@ public class UserHomeProfile extends ActionBarMenuActivity
                             public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
                                 long sumToTransfer = 0;
                                 //all the reads of the transaction
-                                DocumentReference currUserRef = usersCollection.document(mUser.getUid());
+                                DocumentReference currUserRef = usersCollection.document(currentUser.getUid());
                                 long currentUserPoints = transaction.get(currUserRef).getLong("pointsBalance");
                                 for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
                                     String skillID = documentSnapshot.getString("skillID");

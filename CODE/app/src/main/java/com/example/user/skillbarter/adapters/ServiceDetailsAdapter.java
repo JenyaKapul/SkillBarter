@@ -41,7 +41,6 @@ public class ServiceDetailsAdapter extends FirestoreRecyclerAdapter<AvailableDat
                         if (!isBooked) {
                             clickListener.onItemClick(snapshot, position);
                         }
-
                     }
                 }
             });

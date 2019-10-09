@@ -97,7 +97,6 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     UserSkill userSkill;
 
     private ServiceDetailsAdapter adapter;
-    private Query query;
     private int selectedPosition = -1;
     private String selectedDate;
 
@@ -172,7 +171,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
 
     private void initRecyclerView(String userID) {
         Date today = new Date();
-        query = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(userID)
+        Query query = FirebaseFirestore.getInstance().collection(USERS_COLLECTION).document(userID)
                 .collection(DATES_COLLECTION)
                 .whereGreaterThanOrEqualTo("date", today);
 
@@ -309,7 +308,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 Appointment appointment = new Appointment(providerUID, clientUID,
                         userSkill.getSkillId(), date, 0, false);
                 mFirestore.collection(APPOINTMENTS_COLLECTION).add(appointment);
-                Toast.makeText(this, R.string.date_booked_message, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.appointment_created_message, Toast.LENGTH_SHORT).show();
                 decreaseClientPointsForService(userSkill.getPointsValue());
                 setSelectedDateBooked(date);
                 finish();

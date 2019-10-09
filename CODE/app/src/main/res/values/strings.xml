@@ -14,7 +14,8 @@
     <string name="search_result_title">Search Results</string>
     <string name="service_result_title">Service Details</string>
     <string name="new_date_title">Add Available Time</string>
-    <string name="available_dates_manager_title">My Available Dates</string>
+    <string name="available_dates_manager_title">Your Available Dates</string>
+    <string name="user_home_profile_title">Your Details</string>
 
     <string name="dates_spinner_prompt">Choose date and starting time</string>
 
@@ -232,7 +233,6 @@
     <string name="error_toast">Error occurred! </string>
     <string name="missing_profile_picture_toast">You must set profile picture</string>
     <string name="date_already_exists_message">This time slot already exists</string>
-    <string name="date_booked_message">Cannot delete already booked date</string>
     <string name="date_not_chosen_message">"You must choose date and starting time"</string>
     <string name="missing_points_message">"You don\'t have enough points"</string>
     <string name="appointment_created_message">"New appointment is set!"</string>

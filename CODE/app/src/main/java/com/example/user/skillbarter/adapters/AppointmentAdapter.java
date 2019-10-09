@@ -30,29 +30,58 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
 
     private static final String TAG = "AppointmentAdapter";
     private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-    private AppointmentAdapter.OnItemClickListener listener;
+    private OnItemClickListener clickListener;
+
+
+    class AppointmentHolder extends RecyclerView.ViewHolder {
+        TextView nameTextView, dateTextView, skillTextView, categoryTextView, pointsTextView;
+        ImageView profileImageView;
+
+        public AppointmentHolder(View itemView) {
+            super(itemView);
+            nameTextView = itemView.findViewById(R.id.appointment_profile_name);
+            profileImageView = itemView.findViewById(R.id.appointment_profile_picture_holder);
+            dateTextView = itemView.findViewById(R.id.appointment_date_text_view);
+            skillTextView = itemView.findViewById(R.id.appointment_skill_text_view);
+            categoryTextView = itemView.findViewById(R.id.appointment_category_text_view);
+            pointsTextView = itemView.findViewById(R.id.appointment_value_text_view);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION && clickListener != null) {
+                        clickListener.onItemClick(getSnapshots().getSnapshot(position), position);
+                    }
+                }
+            });
+        }
+    }
+
 
     public AppointmentAdapter(@NonNull FirestoreRecyclerOptions<Appointment> options) {
         super(options);
     }
 
+
     @Override
-    protected void onBindViewHolder(@NonNull AppointmentHolder holder, int position, @NonNull Appointment model) {
-        Log.v(TAG, "onBindViewHolder: AppointmentHolder");
-        holder.tvDate.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(model.getDate()));
-        this.setDataFromUserData(this.getOtherUser(FirebaseAuth.getInstance().getUid(), model), holder);
-        this.setDataFromSkillData(model.getSkillID(), holder);
+    protected void onBindViewHolder(@NonNull AppointmentHolder holder, int position, @NonNull Appointment appointment) {
+
+        holder.dateTextView.setText(new SimpleDateFormat("dd/MM/yy HH:mm").format(appointment.getDate()));
+
+        setDataFromUserData(getClientUid(FirebaseAuth.getInstance().getUid(), appointment), holder);
+        setDataFromSkillData(appointment.getSkillID(), holder);
     }
 
-    private String getOtherUser(String currUID, Appointment appointment) {
+    private String getClientUid(String currUID, Appointment appointment) {
         if (currUID.equals(appointment.getProviderUID())) {
             return appointment.getClientUID();
         }
         return appointment.getProviderUID();
     }
 
+
     private void setDataFromUserData(String uID, @NonNull final AppointmentAdapter.AppointmentHolder holder) {
-        Log.v(TAG, "onBindViewHolder: setDataFromUserData");
         DocumentReference mUserRef = mFirestore.collection(USERS_COLLECTION)
                 .document(uID);
         mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -61,8 +90,8 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
                 if (documentSnapshot.exists()){
                     UserData ud = documentSnapshot.toObject(UserData.class);
                     String fullName = ud.getFirstName() + " " + ud.getLastName();
-                    holder.tvOtherProfileName.setText(fullName);
-                    holder.ivOtherProfilePicture.setImageResource(R.drawable.incognito); //TODO
+                    holder.nameTextView.setText(fullName);
+                    holder.profileImageView.setImageResource(R.drawable.incognito); //TODO
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
@@ -85,9 +114,9 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()){
                     UserSkill us = documentSnapshot.toObject(UserSkill.class);
-                    holder.tvSkill.setText(us.getSkill());
-                    holder.tvCategory.setText("(" + us.getCategory() + ")");
-                    holder.tvValue.setText(String.valueOf(us.getPointsValue()));
+                    holder.skillTextView.setText(us.getSkill());
+                    holder.categoryTextView.setText("(" + us.getCategory() + ")");
+                    holder.pointsTextView.setText(String.valueOf(us.getPointsValue()));
                 } else {
                     Log.e(TAG, "Document does not exist");
                 }
@@ -109,36 +138,13 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
         return new AppointmentHolder(v);
     }
 
-    class AppointmentHolder extends RecyclerView.ViewHolder {
-        TextView tvOtherProfileName, tvDate, tvSkill, tvCategory, tvValue;
-        ImageView ivOtherProfilePicture;
 
-        public AppointmentHolder(@NonNull View itemView) {
-            super(itemView);
-            tvOtherProfileName = itemView.findViewById(R.id.appointment_profile_name);
-            ivOtherProfilePicture = itemView.findViewById(R.id.appointment_profile_picture_holder);
-            tvDate = itemView.findViewById(R.id.appointment_date_text_view);
-            tvSkill = itemView.findViewById(R.id.appointment_skill_text_view);
-            tvCategory = itemView.findViewById(R.id.appointment_category_text_view);
-            tvValue = itemView.findViewById(R.id.appointment_value_text_view);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && listener !=null) {
-                        listener.onItemClick(getSnapshots().getSnapshot(position), position);
-                    }
-                }
-            });
-        }
-    }
 
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public void setOnItemClickListener(AppointmentAdapter.OnItemClickListener listener) {
-        this.listener = listener;
+        this.clickListener = listener;
     }
 }
