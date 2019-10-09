@@ -15,6 +15,7 @@ import com.example.user.skillbarter.adapters.AppointmentAdapter;
 import com.example.user.skillbarter.models.Appointment;
 import com.example.user.skillbarter.models.UserData;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,7 +24,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.polyak.iconswitch.IconSwitch;
+
+import java.util.Date;
 
 import javax.annotation.Nullable;
 
@@ -73,6 +78,7 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
         currentUserRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
                 .document(FirebaseAuth.getInstance().getUid());
 
+        updateAppointmentsHistory();
         initRecyclerView();
 
         iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
@@ -87,6 +93,50 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
                         break;
                 }
                 initRecyclerView();
+            }
+        });
+    }
+
+    private void updateAppointmentsHistory() {
+        Date today = new Date();
+
+        FirebaseFirestore.getInstance().collection(APPOINTMENTS_COLLECTION).whereLessThanOrEqualTo("date", today)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot snapshots) {
+                for (QueryDocumentSnapshot doc: snapshots) {
+                    boolean isPaid = doc.getBoolean("providerPaid");
+                    if (!isPaid) {
+                        doc.getReference().update("providerPaid", true);
+                        long points = doc.getLong("points");
+                        int pointsInt = (int) points;
+
+                        String providerUID = (String) doc.get("providerUID");
+                        transferProviderUserPoints(providerUID, pointsInt);
+                    }
+                }
+                /* Single refresh for the adapter! */
+                if (adapter != null) {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+
+    private void transferProviderUserPoints(String providerUID, final int points) {
+
+        DocumentReference userDocRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                .document(providerUID);
+
+        userDocRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+
+                    long balance = documentSnapshot.getLong("pointsBalance");
+                    int newBalance = (int) balance + points;
+                    documentSnapshot.getReference().update("pointsBalance", newBalance);
+                }
             }
         });
     }
