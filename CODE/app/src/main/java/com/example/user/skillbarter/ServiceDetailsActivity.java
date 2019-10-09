@@ -49,17 +49,13 @@ import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
 import static com.example.user.skillbarter.Constants.SKILLS_COLLECTION;
 import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
-/*
- * TODO:
- *  (2) Add empty state for adapter indicating no dates are available
- *
- */
+
 public class ServiceDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
 
-    @BindView(R.id.profile_image_view)
+    @BindView(R.id.skill_image_view)
     ImageView userProfileImageView;
 
-    @BindView(R.id.user_name_text_view)
+    @BindView(R.id.category_and_skill_text_view)
     TextView userNameTextView;
 
     @BindView(R.id.rating_bar)
@@ -95,6 +91,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     private DocumentReference currentUserRef;
     UserData currentUser;
     UserSkill userSkill;
+    String skillID;
 
     private ServiceDetailsAdapter adapter;
     private int selectedPosition = -1;
@@ -116,8 +113,8 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            String skillID = extras.getString(SKILL_ID);
-            loadServiceDetails(skillID);
+            skillID = extras.getString(SKILL_ID);
+            loadServiceDetails();
             String userID = skillID.split("\\.")[0];
             initRecyclerView(userID);
         }
@@ -176,7 +173,6 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 .whereGreaterThanOrEqualTo("date", today);
 
         query = query.orderBy("date", Query.Direction.ASCENDING);
-//                .whereEqualTo("booked", false);
 
 
         FirestoreRecyclerOptions<AvailableDate> options = new FirestoreRecyclerOptions.Builder<AvailableDate>()
@@ -222,7 +218,7 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
     }
 
 
-    private void loadServiceDetails(String skillID) {
+    private void loadServiceDetails() {
         mFirestore.collection(SKILLS_COLLECTION).document(skillID).get()
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -305,8 +301,10 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 }
                 String providerUID = userSkill.getUserID();
                 String clientUID = currentUser.getUserID();
+                int points = userSkill.getPointsValue();
+
                 Appointment appointment = new Appointment(providerUID, clientUID,
-                        userSkill.getSkillId(), date, 0, false);
+                        skillID, date, 0, false, points);
                 mFirestore.collection(APPOINTMENTS_COLLECTION).add(appointment);
                 Toast.makeText(this, R.string.appointment_created_message, Toast.LENGTH_SHORT).show();
                 decreaseClientPointsForService(userSkill.getPointsValue());

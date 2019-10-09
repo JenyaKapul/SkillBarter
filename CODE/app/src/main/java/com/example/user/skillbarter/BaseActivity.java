@@ -161,6 +161,7 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public static String getPointsString(int pointsInt) {
         switch (pointsInt) {
+            //TODO: add description indicating the amount of points
             case 20:
                 return "$";
             case 50:
@@ -169,6 +170,34 @@ public abstract class BaseActivity extends AppCompatActivity {
                 return "$$$";
             default:
                 return "$$$";
+        }
+    }
+
+
+    public static int getSkillImageID(String category, String skill) {
+        switch (category) {
+            case "Tutoring":
+                return R.drawable.skill_icon_tutoring;
+            case "Music":
+                return R.drawable.skill_icon_music;
+            case "Dance":
+                return R.drawable.skill_icon_dance;
+            case "Arts and Crafts":
+                return R.drawable.skill_icon_arts;
+            case "Sport":
+                return R.drawable.skill_icon_sport;
+            case "Household Services":
+                if (skill.equals("Handyman")) {
+                    return R.drawable.skill_icon_handyman;
+                } else {
+                    return R.drawable.skill_icon_household_services;
+                }
+            case "Beauty Care":
+                return R.drawable.skill_icon_beauty_care;
+            case "Culinary":
+                return R.drawable.skill_icon_culinary;
+            default:
+                return 0;
         }
     }
 }

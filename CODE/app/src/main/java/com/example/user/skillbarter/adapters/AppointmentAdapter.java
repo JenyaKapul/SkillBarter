@@ -2,7 +2,6 @@ package com.example.user.skillbarter.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,47 +10,39 @@ import android.widget.TextView;
 
 import com.example.user.skillbarter.R;
 import com.example.user.skillbarter.models.Appointment;
-import com.example.user.skillbarter.models.UserData;
-import com.example.user.skillbarter.models.UserSkill;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
 
-import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
+import static com.example.user.skillbarter.BaseActivity.getSkillImageID;
+
 
 public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, AppointmentAdapter.AppointmentHolder> {
 
-    private static final String TAG = "AppointmentAdapter";
-    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
     private OnItemClickListener clickListener;
 
-
     class AppointmentHolder extends RecyclerView.ViewHolder {
-        TextView userNameTextView, dateTextView, skillTextView, categoryTextView, pointsTextView;
-        ImageView profileImageView;
+        TextView skillCategoryTextView, timestampTextView, pointsTextView;
+        ImageView skillImageView;
 
         public AppointmentHolder(View itemView) {
             super(itemView);
-            userNameTextView = itemView.findViewById(R.id.user_name_text_view);
-            profileImageView = itemView.findViewById(R.id.profile_image_view);
-            dateTextView = itemView.findViewById(R.id.date_text_view);
-            skillTextView = itemView.findViewById(R.id.skill_text_view);
-            categoryTextView = itemView.findViewById(R.id.category_text_view);
+            skillCategoryTextView = itemView.findViewById(R.id.category_and_skill_text_view);
+            skillImageView = itemView.findViewById(R.id.skill_image_view);
+            timestampTextView = itemView.findViewById(R.id.timestamp_text_view);
             pointsTextView = itemView.findViewById(R.id.points_text_view);
 
+            //TODO: remove this if no functionality is available for clicking an appointment item
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION && clickListener != null) {
-                        clickListener.onItemClick(getSnapshots().getSnapshot(position), position);
+
+                        DocumentSnapshot snapshot = getSnapshots().getSnapshot(position);
+                        clickListener.onItemClick(snapshot, position);
                     }
                 }
             });
@@ -67,82 +58,33 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
     @Override
     protected void onBindViewHolder(@NonNull AppointmentHolder holder, int position, @NonNull Appointment appointment) {
 
-        holder.dateTextView.setText(new SimpleDateFormat("dd/MM/yy HH:mm").format(appointment.getDate()));
+        String timestampFormatted = new SimpleDateFormat("E dd.MM.yyyy, HH:mm").format(appointment.getDate());
+        holder.timestampTextView.setText(timestampFormatted);
 
-        setDataFromUserData(getClientUid(FirebaseAuth.getInstance().getUid(), appointment), holder);
-        setDataFromSkillData(appointment.getSkillID(), holder);
+        holder.pointsTextView.setText(String.valueOf(appointment.getPoints()));
+
+        String[] skillID = appointment.getSkillID().split("\\.");
+        String category = skillID[1], skill = skillID[2]; //providerID = skillID[0]
+        String categorySkill = skill + " (" + category + ")";
+
+        holder.skillCategoryTextView.setText(categorySkill);
+        holder.skillImageView.setImageResource(getSkillImageID(category, skill));
     }
 
-    private String getClientUid(String currUID, Appointment appointment) {
-        if (currUID.equals(appointment.getProviderUID())) {
-            return appointment.getClientUID();
-        }
-        return appointment.getProviderUID();
-    }
-
-
-    private void setDataFromUserData(String uID, @NonNull final AppointmentAdapter.AppointmentHolder holder) {
-        DocumentReference mUserRef = mFirestore.collection(USERS_COLLECTION)
-                .document(uID);
-        mUserRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
-                    UserData ud = documentSnapshot.toObject(UserData.class);
-                    String fullName = ud.getFirstName() + " " + ud.getLastName();
-                    holder.userNameTextView.setText(fullName);
-                    holder.profileImageView.setImageResource(R.drawable.incognito); //TODO
-                } else {
-                    Log.e(TAG, "Document does not exist");
-                }
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: " + e.toString());
-                    }
-                });
-    }
-
-    private void setDataFromSkillData(String skillID, @NonNull final AppointmentAdapter.AppointmentHolder holder) {
-        Log.v(TAG, "onBindViewHolder: setDataFromSkillData");
-        DocumentReference mSkillRef = mFirestore.collection("User Skills")
-                .document(skillID);
-        mSkillRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
-                    UserSkill us = documentSnapshot.toObject(UserSkill.class);
-                    holder.skillTextView.setText(us.getSkill());
-                    holder.categoryTextView.setText("(" + us.getCategory() + ")");
-                    holder.pointsTextView.setText(String.valueOf(us.getPointsValue()));
-                } else {
-                    Log.e(TAG, "Document does not exist");
-                }
-            }
-        })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "onFailure: " + e.toString());
-                    }
-                });
-    }
 
     @NonNull
     @Override
-    public AppointmentHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.appointment_item,
-                viewGroup, false);
+    public AppointmentHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.appointment_item,
+                parent, false);
         return new AppointmentHolder(v);
     }
-
 
 
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
     }
+
 
     public void setOnItemClickListener(AppointmentAdapter.OnItemClickListener listener) {
         this.clickListener = listener;

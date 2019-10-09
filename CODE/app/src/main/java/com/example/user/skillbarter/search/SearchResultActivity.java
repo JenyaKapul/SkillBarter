@@ -33,6 +33,13 @@ import static com.example.user.skillbarter.search.Filters.ENABLED;
 import static com.example.user.skillbarter.search.Filters.POINTS;
 import static com.example.user.skillbarter.search.Filters.SKILL;
 
+/*
+ * TODO
+ *  (1) add empty view for search results
+ *  (2) change sort by category to sort by skill
+ */
+
+
 public class SearchResultActivity extends ActionBarMenuActivity
         implements FilterDialogFragment.FilterListener, EventListener<QuerySnapshot> {
 
@@ -49,8 +56,6 @@ public class SearchResultActivity extends ActionBarMenuActivity
 
     private Query mQuery;
     private ListenerRegistration mRegistration;
-
-    private static final int LIMIT = 50;
 
     private SearchResultActivityViewModel mViewModel;
 

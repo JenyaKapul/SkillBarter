@@ -20,11 +20,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import static com.example.user.skillbarter.BaseActivity.getSkillImageID;
 import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
 public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, SearchResultAdapter.SearchResultHolder> {
 
-    private static final String TAG = "SearchResultAdapter";
     private OnItemClickListener clickListener;
 
     //TODO: remove hideMySkills if it is not in use
@@ -100,32 +100,6 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
         }
     }
 
-    private int getSkillImageID(String category, String skill) {
-        switch (category) {
-            case "Tutoring":
-                return R.drawable.skill_icon_tutoring;
-            case "Music":
-                return R.drawable.skill_icon_music;
-            case "Dance":
-                return R.drawable.skill_icon_dance;
-            case "Arts and Crafts":
-                return R.drawable.skill_icon_arts;
-            case "Sport":
-                return R.drawable.skill_icon_sport;
-            case "Household Services":
-                if (skill.equals("Handyman")) {
-                    return R.drawable.skill_icon_handyman;
-                } else {
-                    return R.drawable.skill_icon_household_services;
-                }
-            case "Beauty Care":
-                return R.drawable.skill_icon_beauty_care;
-            case "Culinary":
-                return R.drawable.skill_icon_culinary;
-            default:
-                return 0;
-        }
-    }
 
     private void loadProviderUserData(String uID, @NonNull final SearchResultHolder holder) {
         DocumentReference userDocRef = db.collection(USERS_COLLECTION).document(uID);

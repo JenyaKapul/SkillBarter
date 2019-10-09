@@ -120,7 +120,7 @@ public class NewSkillActivity extends BaseActivity {
         mLevel = mLevelSeekBar.getProgress();
         mDetails = mDetailsView.getText().toString();
         final UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
-        final String docID = userSkill.getSkillId();
+        final String docID = mUserID + "." + mCategory + "." + mSkill;
 
         DocumentReference skillRef = skillsCollection.document(docID);
 

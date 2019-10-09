@@ -16,39 +16,11 @@
     <string name="new_date_title">Add Available Time</string>
     <string name="available_dates_manager_title">Your Available Dates</string>
     <string name="user_home_profile_title">Your Details</string>
+    <string name="user_information_title">User Information</string>
+
 
     <string name="dates_spinner_prompt">Choose date and starting time</string>
 
-
-
-    <!--USER DATA KEYS-->
-    <string name="userData_profilePictureURL_key">profilePictureURL</string>
-    <string name="userData_dateOfBirth_key">dateOfBirth</string>
-    <string name="userData_firstName_key">firstName</string>
-    <string name="userData_lastName_key">lastName</string>
-    <string name="userData_phoneNumber_key">phoneNumber</string>
-    <string name="userData_address_key">address</string>
-    <string name="userData_email_key">email</string>
-    <string name="userData_gender_key">gender</string>
-    <string name="userData_pointsBalance_key">pointsBalance</string>
-    <string name="userData_personalRating_key">personalRating</string>
-    <string name="userData_numOfRatings_key">numOfRatings</string>
-    <string name="userSkill_skillId_key">skillId</string>
-
-    <!--USER SKILL KEYS-->
-    <string name="userSkill_userID_key">userID</string>
-    <string name="userSkill_category_key">category</string>
-    <string name="userSkill_skill_key">skill</string>
-    <string name="userSkill_pointsValue_key">pointsValue</string>
-    <string name="userSkill_level_key">level</string>
-    <string name="review_reviewerName_key">reviewerName</string>
-
-    <!--REVIEW KEYS-->
-    <string name="review_reviewerPicture_key">reviewerPicture</string>
-    <string name="review_dateOfReview_key">dateOfReview</string>
-    <string name="review_rank_key">rank</string>
-    <string name="review_details_key">details</string>
-    <string name="user_information_title">User Information</string>
 
 
     <string name="user_first_name">First Name</string>

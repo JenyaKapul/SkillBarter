@@ -3,11 +3,9 @@ package com.example.user.skillbarter.models;
 
 public class UserSkill {
 
-    //TODO: safely remove skillId
     private String  userID;
     private String category;
     private String skill;
-    private String skillId;
     private int pointsValue;
     private int level;
     private String details;
@@ -20,7 +18,6 @@ public class UserSkill {
         this.userID = userID;
         this.category = category;
         this.skill = skill;
-        this.skillId = userID + "." + category + "." + skill;
         this.pointsValue = pointsValue;
         this.level = level;
         this.details = details;
@@ -31,21 +28,12 @@ public class UserSkill {
         this.userID = userID;
         this.category = category;
         this.skill = skill;
-        this.skillId = userID + "." + category + "." + skill;
         this.pointsValue = pointsValue;
         this.level = level;
         this.details = details;
         this.enabled = enabled;
     }
 
-
-    public String getSkillId() {
-        return skillId;
-    }
-
-    public void setSkillId(String skillId) {
-        this.skillId = category + "." + skill;
-    }
 
     public String getUserID() {
         return userID;

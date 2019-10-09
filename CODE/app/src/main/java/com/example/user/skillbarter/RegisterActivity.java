@@ -81,7 +81,7 @@ public class RegisterActivity extends ActionBarMenuActivity
     @BindView(R.id.input_phone_number)
     EditText phoneNumberView;
 
-    @BindView(R.id.profile_image_view)
+    @BindView(R.id.skill_image_view)
     ImageView profilePictureView;
 
     @BindView(R.id.input_address)
@@ -172,7 +172,7 @@ public class RegisterActivity extends ActionBarMenuActivity
 
 
     private void setProfilePictureBackgroundInvisible(){
-        ImageView imageView = findViewById(R.id.profile_image_view);
+        ImageView imageView = findViewById(R.id.skill_image_view);
         imageView.setBackground(null);
     }
 

@@ -1,10 +1,8 @@
 package com.example.user.skillbarter;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,22 +12,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.user.skillbarter.adapters.AppointmentAdapter;
-import com.example.user.skillbarter.adapters.ServiceDetailsAdapter;
 import com.example.user.skillbarter.models.Appointment;
-import com.example.user.skillbarter.models.AvailableDate;
 import com.example.user.skillbarter.models.UserData;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.Transaction;
 import com.polyak.iconswitch.IconSwitch;
 
 import java.util.Date;
@@ -41,10 +32,10 @@ import butterknife.ButterKnife;
 
 public class UserHomeProfile extends ActionBarMenuActivity implements EventListener<DocumentSnapshot> {
 
-    @BindView(R.id.profile_image_view)
+    @BindView(R.id.skill_image_view)
     ImageView profileImageView;
 
-    @BindView(R.id.user_name_text_view)
+    @BindView(R.id.category_and_skill_text_view)
     TextView nameTextView;
 
     @BindView(R.id.points_text_view)
@@ -66,8 +57,6 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
     private  Query query;
     private ListenerRegistration currentUserListener;
     private DocumentReference currentUserRef;
-    private boolean isClient = true;
-
 
 
     @Override
@@ -79,20 +68,21 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
         setTitle(R.string.user_home_profile_title);
 
         currentUserRef = usersCollection.document(currentUser.getUid());
+        query = appointmentsCollection.whereEqualTo("clientUID", currentUser.getUid());
+        initRecyclerView();
 
         iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
             @Override
             public void onCheckChanged(IconSwitch.Checked current) {
                 switch (current) {
                     case LEFT:
-                        isClient = true;
+                        query = appointmentsCollection.whereEqualTo("clientUID", currentUser.getUid());
                         break;
                     case RIGHT:
-                        isClient = false;
+                        query = appointmentsCollection.whereEqualTo("providerUID", currentUser.getUid());
                         break;
                 }
                 initRecyclerView();
-
             }
         });
     }
@@ -124,16 +114,13 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
 
 
     private void initRecyclerView() {
-        if (isClient) {
-            query = appointmentsCollection.whereEqualTo("clientUID", currentUser.getUid());
-        } else {
-            query = appointmentsCollection.whereEqualTo("providerUID", currentUser.getUid());
-        }
-
-        //TODO: decide if the appointments are fetched by date (greater than or equal to today. see ref in ServiceDetailsActivity)
-        // or by providerPaid field
 //        query = query.whereEqualTo("providerPaid", false);
+
+        Date today = new Date();
+        query = query.whereGreaterThanOrEqualTo("date", today);
+
         query = query.orderBy("date", Query.Direction.ASCENDING);
+
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
                 .setQuery(query, Appointment.class)
@@ -142,7 +129,7 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
         if (adapter != null) {
             adapter.stopListening();
         }
-
+        //TODO: check why empty view does not show
         adapter = new AppointmentAdapter(options) {
             @Override
             public void onDataChanged() {

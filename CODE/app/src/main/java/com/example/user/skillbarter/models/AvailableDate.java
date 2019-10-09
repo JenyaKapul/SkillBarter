@@ -1,7 +1,7 @@
 package com.example.user.skillbarter.models;
 
 import java.util.Date;
-
+//TODO: remove available field
 public class AvailableDate {
     private Date date;
     private boolean available;

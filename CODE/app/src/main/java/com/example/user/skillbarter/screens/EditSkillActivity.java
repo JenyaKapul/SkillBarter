@@ -113,7 +113,7 @@ public class EditSkillActivity extends BaseActivity implements EventListener<Doc
         mDetails = detailsTextInput.getText().toString();
         mIsEnabled = !isEnabledCheckbox.isChecked();
         UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails, mIsEnabled);
-        String docID = userSkill.getSkillId();
+        String docID = mUserID + "." + mCategory + "." + mSkill;;
 
         // add user's skill to database.
         skillsCollection.document(docID).set(userSkill);
