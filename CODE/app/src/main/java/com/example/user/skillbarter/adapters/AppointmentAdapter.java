@@ -24,6 +24,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
     private OnItemClickListener clickListener;
 
     class AppointmentHolder extends RecyclerView.ViewHolder {
+
         TextView skillCategoryTextView, timestampTextView, pointsTextView;
         ImageView skillImageView;
 
@@ -86,7 +87,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
     }
 
 
-    public void setOnItemClickListener(AppointmentAdapter.OnItemClickListener listener) {
-        this.clickListener = listener;
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        clickListener = listener;
     }
 }

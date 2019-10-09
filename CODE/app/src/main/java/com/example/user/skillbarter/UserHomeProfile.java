@@ -15,20 +15,23 @@ import com.example.user.skillbarter.adapters.AppointmentAdapter;
 import com.example.user.skillbarter.models.Appointment;
 import com.example.user.skillbarter.models.UserData;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.polyak.iconswitch.IconSwitch;
 
-import java.util.Date;
-
 import javax.annotation.Nullable;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.user.skillbarter.Constants.APPOINTMENTS_COLLECTION;
+import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
 public class UserHomeProfile extends ActionBarMenuActivity implements EventListener<DocumentSnapshot> {
 
@@ -54,9 +57,10 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
     ViewGroup emptyView;
 
     private AppointmentAdapter adapter;
-    private  Query query;
     private ListenerRegistration currentUserListener;
     private DocumentReference currentUserRef;
+    UserData currentUser;
+    String userType = "clientUID";
 
 
     @Override
@@ -67,8 +71,9 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
 
         setTitle(R.string.user_home_profile_title);
 
-        currentUserRef = usersCollection.document(currentUser.getUid());
-        query = appointmentsCollection.whereEqualTo("clientUID", currentUser.getUid());
+        currentUserRef = FirebaseFirestore.getInstance().collection(USERS_COLLECTION)
+                .document(FirebaseAuth.getInstance().getUid());
+
         initRecyclerView();
 
         iconSwitch.setCheckedChangeListener(new IconSwitch.CheckedChangeListener() {
@@ -76,10 +81,10 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
             public void onCheckChanged(IconSwitch.Checked current) {
                 switch (current) {
                     case LEFT:
-                        query = appointmentsCollection.whereEqualTo("clientUID", currentUser.getUid());
+                        userType = "clientUID";
                         break;
                     case RIGHT:
-                        query = appointmentsCollection.whereEqualTo("providerUID", currentUser.getUid());
+                        userType = "providerUID";
                         break;
                 }
                 initRecyclerView();
@@ -114,12 +119,9 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
 
 
     private void initRecyclerView() {
-//        query = query.whereEqualTo("providerPaid", false);
-
-        Date today = new Date();
-        query = query.whereGreaterThanOrEqualTo("date", today);
-
-        query = query.orderBy("date", Query.Direction.ASCENDING);
+        Query query = FirebaseFirestore.getInstance().collection(APPOINTMENTS_COLLECTION)
+                .whereEqualTo(userType, FirebaseAuth.getInstance().getUid());
+        query = query.whereEqualTo("providerPaid", false);
 
 
         FirestoreRecyclerOptions<Appointment> options = new FirestoreRecyclerOptions.Builder<Appointment>()
@@ -129,7 +131,7 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
         if (adapter != null) {
             adapter.stopListening();
         }
-        //TODO: check why empty view does not show
+
         adapter = new AppointmentAdapter(options) {
             @Override
             public void onDataChanged() {
@@ -183,45 +185,4 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
             onUserLoaded(userData);
         }
     }
-
-
-
-//
-//
-//
-//    private void completeTransactions() {
-//        Timestamp nowDate = new Timestamp(new Date());
-//        appointmentsCollection
-////                .whereEqualTo("providerUID", this.currentUser.getUid())
-////                .whereEqualTo("providerPaid", false)
-////                .whereLessThan("date", nowDate)
-//                .get()
-//                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onSuccess(final QuerySnapshot queryDocumentSnapshots) {
-//                        mFirestore.runTransaction(new Transaction.Function<Void>() {
-//                            @android.support.annotation.Nullable
-//                            @Override
-//                            public Void apply(@NonNull Transaction transaction) throws FirebaseFirestoreException {
-//                                long sumToTransfer = 0;
-//                                //all the reads of the transaction
-//                                DocumentReference currUserRef = usersCollection.document(currentUser.getUid());
-//                                long currentUserPoints = transaction.get(currUserRef).getLong("pointsBalance");
-//                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-//                                    String skillID = documentSnapshot.getString("skillID");
-//                                    DocumentSnapshot skillSnapshot = transaction.get(skillsCollection.document(skillID));
-//                                    sumToTransfer += skillSnapshot.getLong("pointsValue");
-//                                }
-//                                //all the writes of the transaction
-//                                transaction.update(currUserRef, "pointsBalance", currentUserPoints + sumToTransfer);
-//                                for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-//                                    String appointmentID = documentSnapshot.getId();
-//                                    transaction.update(appointmentsCollection.document(appointmentID), "providerPaid", true);
-//                                }
-//                                return null;
-//                            }
-//                        });
-//                    }
-//                });
-//    }
 }
