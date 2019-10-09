@@ -153,6 +153,7 @@
     <string name="label_custom_auth">Custom Authentication</string>
     <string name="desc_custom_auth">Use a custom token signed by your own server to authenticate with Firebase.</string>
     <string name="no_dates_message">Sorry, no available dates for this service</string>
+    <string name="no_appointments_message">No upcoming appointments for you</string>
 
     <string name="label_firebase_ui">FirebaseUI Auth</string>
     <string name="desc_firebase_ui">Use the FirebaseUI-Android library to authenticate with Firebase.</string>

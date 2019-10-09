@@ -56,7 +56,7 @@ import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
  */
 public class ServiceDetailsActivity extends AppCompatActivity implements EventListener<DocumentSnapshot> {
 
-    @BindView(R.id.user_profile_image_view)
+    @BindView(R.id.profile_image_view)
     ImageView userProfileImageView;
 
     @BindView(R.id.user_name_text_view)

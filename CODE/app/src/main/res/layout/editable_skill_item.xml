@@ -16,7 +16,7 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/points_icon"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:scaleType="centerCrop"
@@ -27,12 +27,12 @@
             style="@style/AppTheme.Subheader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/imageView"
+            android:layout_alignTop="@+id/points_icon"
             android:layout_marginBottom="4dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="-2dp"
             android:layout_toStartOf="@+id/editView"
-            android:layout_toEndOf="@+id/imageView"
+            android:layout_toEndOf="@+id/points_icon"
             android:ellipsize="end"
             android:maxLines="1"
             tools:text="Category" />

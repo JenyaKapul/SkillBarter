@@ -22,7 +22,7 @@
         app:layout_constraintTop_toBottomOf="@+id/details_title_text_view" />
 
     <ImageView
-        android:id="@+id/user_profile_image_view"
+        android:id="@+id/profile_image_view"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
@@ -44,8 +44,8 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/user_profile_image_view"
-        app:layout_constraintTop_toTopOf="@+id/user_profile_image_view" />
+        app:layout_constraintStart_toEndOf="@+id/profile_image_view"
+        app:layout_constraintTop_toTopOf="@+id/profile_image_view" />
 
     <RatingBar
         android:id="@+id/rating_bar"
@@ -111,8 +111,8 @@
         android:text="@string/skill"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/user_profile_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/user_profile_image_view" />
+        app:layout_constraintStart_toStartOf="@+id/profile_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/profile_image_view" />
 
     <TextView
         android:id="@+id/skill_text_view"

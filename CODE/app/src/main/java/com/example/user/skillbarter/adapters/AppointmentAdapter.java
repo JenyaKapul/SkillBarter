@@ -34,17 +34,17 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
 
 
     class AppointmentHolder extends RecyclerView.ViewHolder {
-        TextView nameTextView, dateTextView, skillTextView, categoryTextView, pointsTextView;
+        TextView userNameTextView, dateTextView, skillTextView, categoryTextView, pointsTextView;
         ImageView profileImageView;
 
         public AppointmentHolder(View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.appointment_profile_name);
-            profileImageView = itemView.findViewById(R.id.appointment_profile_picture_holder);
-            dateTextView = itemView.findViewById(R.id.appointment_date_text_view);
-            skillTextView = itemView.findViewById(R.id.appointment_skill_text_view);
-            categoryTextView = itemView.findViewById(R.id.appointment_category_text_view);
-            pointsTextView = itemView.findViewById(R.id.appointment_value_text_view);
+            userNameTextView = itemView.findViewById(R.id.user_name_text_view);
+            profileImageView = itemView.findViewById(R.id.profile_image_view);
+            dateTextView = itemView.findViewById(R.id.date_text_view);
+            skillTextView = itemView.findViewById(R.id.skill_text_view);
+            categoryTextView = itemView.findViewById(R.id.category_text_view);
+            pointsTextView = itemView.findViewById(R.id.points_text_view);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -90,7 +90,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
                 if (documentSnapshot.exists()){
                     UserData ud = documentSnapshot.toObject(UserData.class);
                     String fullName = ud.getFirstName() + " " + ud.getLastName();
-                    holder.nameTextView.setText(fullName);
+                    holder.userNameTextView.setText(fullName);
                     holder.profileImageView.setImageResource(R.drawable.incognito); //TODO
                 } else {
                     Log.e(TAG, "Document does not exist");

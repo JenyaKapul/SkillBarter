@@ -79,7 +79,7 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
             textViewPointsValue = itemView.findViewById(R.id.value_text_view);
             textViewLevel = itemView.findViewById(R.id.level_text_view);
             imageViewProvider = itemView.findViewById(R.id.provider_picture);
-            ratingBar = itemView.findViewById(R.id.ratingBar);
+            ratingBar = itemView.findViewById(R.id.stars_rating_bar);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

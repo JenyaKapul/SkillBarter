@@ -88,7 +88,7 @@ public class EditableSkillAdapter extends FirestoreRecyclerAdapter<UserSkill, Ed
             levelTextView = itemView.findViewById(R.id.levelView);
             pointsTextView = itemView.findViewById(R.id.pointsView);
             editImageView = itemView.findViewById(R.id.editView);
-            iconImageView = itemView.findViewById(R.id.imageView);
+            iconImageView = itemView.findViewById(R.id.points_icon);
 
             editImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
