@@ -59,7 +59,6 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
     private AppointmentAdapter adapter;
     private ListenerRegistration currentUserListener;
     private DocumentReference currentUserRef;
-    UserData currentUser;
     String userType = "clientUID";
 
 

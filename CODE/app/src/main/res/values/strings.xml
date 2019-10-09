@@ -17,6 +17,7 @@
     <string name="available_dates_manager_title">Your Available Dates</string>
     <string name="user_home_profile_title">Your Details</string>
     <string name="user_information_title">User Information</string>
+    <string name="history_title">Previous Appointments</string>
 
 
     <string name="dates_spinner_prompt">Choose date and starting time</string>
