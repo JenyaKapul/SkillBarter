@@ -96,7 +96,7 @@ public class HistoryActivity extends ActionBarMenuActivity {
         recyclerView.setAdapter(adapter);
         adapter.startListening();
 
-        //TODO: remove this if no functionality is available for clicking an appointment item
+        // Optional for adding clicks functionality on appointment items
         adapter.setOnItemClickListener(new AppointmentAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {

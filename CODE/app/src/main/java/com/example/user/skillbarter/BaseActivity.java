@@ -161,13 +161,12 @@ public abstract class BaseActivity extends AppCompatActivity {
      */
     public static String getPointsString(int pointsInt) {
         switch (pointsInt) {
-            //TODO: add description indicating the amount of points
             case 20:
-                return "$";
+                return "$   up to 20 points";
             case 50:
-                return "$$";
+                return "$$  up to 50 points";
             case 100:
-                return "$$$";
+                return "$$$ up to 100 points";
             default:
                 return "$$$";
         }

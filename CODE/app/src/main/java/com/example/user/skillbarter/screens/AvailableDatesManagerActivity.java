@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
 
 /*
- * TODO (NOA)
+ * TODO
  *  (1) Add option to delete an item with swipe if the date is not booked!
  */
 

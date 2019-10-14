@@ -1,7 +1,6 @@
 package com.example.user.skillbarter.models;
 
 import java.util.Date;
-//TODO: remove available field
 public class AvailableDate {
     private Date date;
     private boolean available;
@@ -13,12 +12,6 @@ public class AvailableDate {
         this.date = date;
         this.available = true;
         this.booked = false;
-    }
-
-    public AvailableDate(Date date, boolean isAvailable, boolean isBooked) {
-        this.date = date;
-        this.available = isAvailable;
-        this.booked = isBooked;
     }
 
     public Date getDate() {

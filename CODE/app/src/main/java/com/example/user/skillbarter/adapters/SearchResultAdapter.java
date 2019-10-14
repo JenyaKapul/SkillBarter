@@ -27,15 +27,10 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
 
     private OnItemClickListener clickListener;
 
-    //TODO: remove hideMySkills if it is not in use
-    /* Set to true if the adapter does not display current user's skills. */
-    private boolean hideMySkills;
-
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public SearchResultAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options, boolean hideMySkills) {
+    public SearchResultAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options) {
         super(options);
-        this.hideMySkills = hideMySkills;
     }
 
     @Override

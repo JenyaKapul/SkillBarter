@@ -204,7 +204,7 @@ public class SearchSkillsActivity extends ActionBarMenuActivity
             mAdapter.stopListening();
         }
 
-        mAdapter = new SearchResultAdapter(options, false);
+        mAdapter = new SearchResultAdapter(options);
         mSearchResultRecycler.setAdapter(mAdapter);
         mAdapter.startListening();
 

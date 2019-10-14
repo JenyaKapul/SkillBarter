@@ -35,7 +35,7 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
             timestampTextView = itemView.findViewById(R.id.appointment_timestamp_text_view);
             pointsTextView = itemView.findViewById(R.id.appointment_points_text_view);
 
-            //TODO: remove this if no functionality is available for clicking an appointment item
+            // Optional for adding clicks functionality on appointment items
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
