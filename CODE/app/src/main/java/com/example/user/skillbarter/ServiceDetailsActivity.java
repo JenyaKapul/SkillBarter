@@ -207,9 +207,9 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                 if (selectedPosition != -1) {
                     RecyclerView.ViewHolder prevSelectedView = recyclerView
                             .findViewHolderForAdapterPosition(selectedPosition);
-                    prevSelectedView.itemView.setBackgroundResource(R.color.yellow_card);
+                    prevSelectedView.itemView.setBackgroundResource(R.color.cardLight);
                 }
-                selectedView.itemView.setBackgroundResource(R.color.colorPrimary);
+                selectedView.itemView.setBackgroundResource(R.color.cardDark);
                 selectedPosition = position;
                 selectedDate = ((TextView) recyclerView.findViewHolderForAdapterPosition(position).itemView.findViewById(R.id.service_date_timestamp_text_view)).getText().toString();
 

@@ -82,7 +82,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/star_icon"
+        android:background="@drawable/ic_star"
         app:layout_constraintBottom_toBottomOf="@+id/service_details_points_text_view"
         app:layout_constraintTop_toTopOf="@+id/service_details_points_text_view"
         app:layout_constraintDimensionRatio="1:1"

@@ -8,7 +8,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     app:cardCornerRadius="4dp"
-    app:cardBackgroundColor="#FFFFE8">
+    app:cardBackgroundColor="@color/cardLight">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
             android:text="TAKEN"
-            android:textColor="@color/red"
+            android:textColor="@color/iconDark"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

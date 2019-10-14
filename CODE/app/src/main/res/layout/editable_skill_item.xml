@@ -8,7 +8,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="#FFFFE8">
+    app:cardBackgroundColor="@color/cardLight">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -88,12 +88,13 @@
 
         <ImageView
             android:id="@+id/editable_skill_edit_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@drawable/ic_edit"
             android:layout_alignParentEnd="true"
             android:clickable="true"
             android:focusable="true"
+            android:layout_centerVertical="true"
             android:padding="6dp" />
 
     </RelativeLayout>

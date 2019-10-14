@@ -8,7 +8,7 @@
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="#FFFFE8">
+    app:cardBackgroundColor="@color/cardLight">
 
 
     <android.support.constraint.ConstraintLayout
@@ -36,7 +36,7 @@
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/star_icon"
+            android:background="@drawable/ic_star"
             app:layout_constraintBottom_toBottomOf="@id/search_result_image_view"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"

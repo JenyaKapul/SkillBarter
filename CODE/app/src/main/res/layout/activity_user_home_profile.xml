@@ -41,7 +41,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/star_icon"
+        android:background="@drawable/ic_star"
         app:layout_constraintBottom_toTopOf="@+id/home_profile_rating_bar"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toEndOf="@+id/home_profile_image_view"
