@@ -3,6 +3,8 @@ package com.example.user.skillbarter.screens;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.user.skillbarter.ActionBarMenuActivity;
 import com.example.user.skillbarter.R;
@@ -27,6 +29,9 @@ public class HistoryActivity extends ActionBarMenuActivity {
 
     @BindView(R.id.history_recycler_view)
     RecyclerView recyclerView;
+
+    @BindView(R.id.view_empty_history)
+    ViewGroup emptyView;
     
     private AppointmentAdapter adapter;
     String userType = "clientUID";
@@ -91,7 +96,18 @@ public class HistoryActivity extends ActionBarMenuActivity {
             adapter.stopListening();
         }
 
-        adapter = new AppointmentAdapter(options);
+        adapter = new AppointmentAdapter(options) {
+            @Override
+            public void onDataChanged() {
+                if (getItemCount() == 0) {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+            }
+        };
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.startListening();

@@ -29,7 +29,7 @@
     <!-- Ways you can sort skills -->
     <string-array name="sort_by">
         <item>@string/sort_by_points</item>
-        <item>@string/sort_by_category</item>
+        <item>@string/sort_by_skill</item>
         <item>@string/sort_by_level</item>
     </string-array>
 

@@ -5,6 +5,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_background"
     tools:context=".ServiceDetailsActivity">
 
     <TextView
@@ -206,11 +207,11 @@
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
     <ImageView
-        android:src="@drawable/empty_icon"
-        style="@style/AppTheme.EmptyBox" />
+        android:src="@drawable/empty_events"
+        style="@style/AppTheme.EmptyView" />
 
     <TextView
         style="@style/AppTheme.Body1"

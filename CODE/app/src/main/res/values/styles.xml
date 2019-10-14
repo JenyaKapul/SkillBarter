@@ -97,7 +97,7 @@
         <item name="colorButtonNormal">@color/colorPrimary</item>
     </style>
 
-    <style name="AppTheme.EmptyBox">
+    <style name="AppTheme.EmptyView">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">150dp</item>
     </style>

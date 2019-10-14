@@ -25,6 +25,7 @@ import static com.example.user.skillbarter.BaseActivity.getSkillArrayID;
 import static com.example.user.skillbarter.search.Filters.CATEGORY;
 import static com.example.user.skillbarter.search.Filters.LEVEL;
 import static com.example.user.skillbarter.search.Filters.POINTS;
+import static com.example.user.skillbarter.search.Filters.SKILL;
 
 
 /*
@@ -195,8 +196,8 @@ public class FilterDialogFragment extends DialogFragment {
     private String getSelectedSortBy() {
         String selected = (String) mSortSpinner.getSelectedItem();
 
-        if (getString(R.string.sort_by_category).equals(selected)) {
-            return CATEGORY;
+        if (getString(R.string.sort_by_skill).equals(selected)) {
+            return SKILL;
         } else if (getString(R.string.sort_by_points).equals(selected)) {
             return POINTS;
         } else if (getString(R.string.sort_by_level).equals(selected)) {

@@ -10,7 +10,8 @@
     <string name="available_dates_manager_title">Your Available Dates</string>
     <string name="user_home_profile_title">Your Details</string>
     <string name="user_information_title">User Information</string>
-    <string name="history_title">Previous Appointments</string>
+    <string name="history_title">Past Events</string>
+    <string name="skills_manager_title">Your Skills</string>
 
 
     <string name="user_first_name">First Name</string>
@@ -42,10 +43,10 @@
     <!--FILTER DIALOG-->
     <string name="filter_header" translatable="false">Filter</string>
     <string name="all_categories" translatable="false">All Categories</string>
-    <string name="sorted_by_category" translatable="false">sorted by category</string>
+    <string name="sorted_by_skill" translatable="false">sorted by skill</string>
     <string name="sorted_by_points" translatable="false">sorted by points</string>
     <string name="sorted_by_level" translatable="false">sorted by level</string>
-    <string name="sort_by_category" translatable="false">Sort by Category</string>
+    <string name="sort_by_skill" translatable="false">Sort by Skill</string>
     <string name="sort_by_points" translatable="false">Sort by Points</string>
     <string name="sort_by_level" translatable="false">Sort by Level</string>
     <string name="value_any_category" translatable="false">All Categories</string>
@@ -77,6 +78,9 @@
 
     <string name="no_dates_message">Sorry, no available dates for this service</string>
     <string name="no_appointments_message">No upcoming appointments for you</string>
+    <string name="no_history_appointments_message">Past events will show up here,\nso you can easily view them here later.</string>
+    <string name="no_skills_message">Oooh oh, looks like you don\'t have any skills…\nTap the + icon and show us what you\'ve got.</string>
+    <string name="missing_user_dates_message">Tap the + icon to add available dates.</string>
 
     <string name="sign_in">Sign In</string>
     <string name="create_account">Create Account</string>

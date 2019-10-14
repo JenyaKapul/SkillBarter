@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.user.skillbarter.ActionBarMenuActivity;
 import com.example.user.skillbarter.R;
@@ -33,6 +34,9 @@ public class AvailableDatesManagerActivity extends ActionBarMenuActivity {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.view_empty_dates_manager)
+    ViewGroup emptyView;
+
     private AvailableDateAdapter adapter;
     private Query query;
 
@@ -42,6 +46,7 @@ public class AvailableDatesManagerActivity extends ActionBarMenuActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_dates_manager);
         ButterKnife.bind(this);
+
         setTitle(R.string.available_dates_manager_title);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +72,18 @@ public class AvailableDatesManagerActivity extends ActionBarMenuActivity {
             adapter.stopListening();
         }
 
-        adapter = new AvailableDateAdapter(options);
+        adapter = new AvailableDateAdapter(options) {
+            @Override
+            public void onDataChanged() {
+                if (getItemCount() == 0) {
+                    recyclerView.setVisibility(View.GONE);
+                    emptyView.setVisibility(View.VISIBLE);
+                } else {
+                    recyclerView.setVisibility(View.VISIBLE);
+                    emptyView.setVisibility(View.GONE);
+                }
+            }
+        };
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         adapter.startListening();

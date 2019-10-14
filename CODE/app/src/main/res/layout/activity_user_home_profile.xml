@@ -5,6 +5,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_background"
     android:padding="16dp">
 
     <ImageView
@@ -124,10 +125,10 @@
         app:layout_constraintTop_toBottomOf="@id/appointments_type_switch"
         tools:listitem="@layout/appointment_item"/>
 
-    <!-- View for empty dates -->
+    <!-- View for empty dates left toggle -->
     <LinearLayout
-        android:id="@+id/view_empty_appointments"
-        android:layout_width="wrap_content"
+        android:id="@+id/view_empty_appointments_left"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:layout_constraintStart_toStartOf="@+id/appointments_title_text_view"
@@ -137,20 +138,35 @@
         android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <ImageView
-            android:src="@drawable/empty_icon"
-            style="@style/AppTheme.EmptyBox" />
-
-        <TextView
-            style="@style/AppTheme.Body1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_appointments_message"
-            android:textColor="@color/greyDisabled" />
+            android:layout_width="228dp"
+            android:layout_height="238dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/empty_user_home_left" />
     </LinearLayout>
 
+    <!-- View for empty dates left toggle -->
+    <LinearLayout
+        android:id="@+id/view_empty_appointments_right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintStart_toStartOf="@+id/appointments_title_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/appointments_title_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
 
+        <ImageView
+            android:layout_width="228dp"
+            android:layout_height="238dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/empty_user_home_right" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

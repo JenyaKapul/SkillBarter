@@ -137,22 +137,14 @@ public class Filters {
             if (!POINTS.equals(sortBy)) {
                 orderDescription = orderDescription.concat(", " + sortBy);
             }
-        } else if (CATEGORY.equals(sortBy)) {
-            orderDescription = context.getString(R.string.sorted_by_category);
+        } else if (SKILL.equals(sortBy)) {
+            orderDescription = context.getString(R.string.sorted_by_skill);
         } else if (POINTS.equals(sortBy)){
             orderDescription = context.getString(R.string.sorted_by_points);
         } else if (LEVEL.equals(sortBy)){
             orderDescription = context.getString(R.string.sorted_by_level);
         }
         return orderDescription;
-
-//        if (CATEGORY.equals(sortBy)) {
-//            return context.getString(R.string.sorted_by_category);
-//        } else if (POINTS.equals(sortBy)){
-//            return context.getString(R.string.sorted_by_points);
-//        } else if (LEVEL.equals(sortBy)){
-//            return context.getString(R.string.sorted_by_level);
-//        }
     }
 }
 

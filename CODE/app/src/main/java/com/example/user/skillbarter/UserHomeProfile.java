@@ -58,8 +58,11 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
     @BindView(R.id.home_profile_recycler_view)
     RecyclerView recyclerView;
 
-    @BindView(R.id.view_empty_appointments)
-    ViewGroup emptyView;
+    @BindView(R.id.view_empty_appointments_left)
+    ViewGroup emptyViewLeft;
+
+    @BindView(R.id.view_empty_appointments_right)
+    ViewGroup emptyViewRight;
 
     private AppointmentAdapter adapter;
     private ListenerRegistration currentUserListener;
@@ -96,6 +99,7 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
             }
         });
     }
+
 
     private void updateAppointmentsHistory() {
         Date today = new Date();
@@ -186,10 +190,11 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
             public void onDataChanged() {
                 if (getItemCount() == 0) {
                     recyclerView.setVisibility(View.GONE);
-                    emptyView.setVisibility(View.VISIBLE);
+                    setEmptyView();
                 } else {
                     recyclerView.setVisibility(View.VISIBLE);
-                    emptyView.setVisibility(View.GONE);
+                    emptyViewLeft.setVisibility(View.GONE);
+                    emptyViewRight.setVisibility(View.GONE);
                 }
             }
         };
@@ -203,6 +208,16 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
             public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
             }
         });
+    }
+
+    private void setEmptyView() {
+        if (userType.equals("clientUID")) {
+            emptyViewLeft.setVisibility(View.VISIBLE);
+            emptyViewRight.setVisibility(View.GONE);
+        } else {
+            emptyViewLeft.setVisibility(View.GONE);
+            emptyViewRight.setVisibility(View.VISIBLE);
+        }
     }
 
 

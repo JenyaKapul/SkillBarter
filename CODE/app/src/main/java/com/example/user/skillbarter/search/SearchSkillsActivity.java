@@ -33,12 +33,6 @@ import static com.example.user.skillbarter.search.Filters.ENABLED;
 import static com.example.user.skillbarter.search.Filters.POINTS;
 import static com.example.user.skillbarter.search.Filters.SKILL;
 
-/*
- * TODO
- *  (1) add empty view for search results
- *  (2) change sort by category to sort by skill
- */
-
 
 public class SearchSkillsActivity extends ActionBarMenuActivity
         implements FilterDialogFragment.FilterListener, EventListener<QuerySnapshot> {
@@ -78,10 +72,11 @@ public class SearchSkillsActivity extends ActionBarMenuActivity
         mFilterDialog = new FilterDialogFragment();
     }
 
+
     private void initRecyclerView() {
         mSearchResultRecycler.setLayoutManager(new LinearLayoutManager(this));
-        /* Query the categories to be displayed in the search results screen. */
-        Query query = skillsCollection.orderBy(CATEGORY, Query.Direction.ASCENDING).limit(LIMIT);
+        /* Query the skills to be displayed in the search results screen. */
+        Query query = skillsCollection.orderBy(SKILL, Query.Direction.ASCENDING).limit(LIMIT);
 
         setQuery(query);
     }
@@ -140,10 +135,6 @@ public class SearchSkillsActivity extends ActionBarMenuActivity
     }
 
 
-    /*
-     * TODO:
-     *  (1) Check if there's an option to filter out current user's skills.
-     */
     @Override
     public void onFilter(Filters filters) {
 
