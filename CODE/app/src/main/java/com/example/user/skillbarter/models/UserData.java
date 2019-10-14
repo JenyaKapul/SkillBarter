@@ -1,12 +1,12 @@
 package com.example.user.skillbarter.models;
 
-import com.google.firebase.Timestamp;
+import java.util.Date;
 
 public class UserData {
 
     private String userID;
     private String profilePictureURL;
-    private Timestamp dateOfBirth;
+    private Date dateOfBirth;
     private String firstName;
     private String lastName;
     private String phoneNumber;
@@ -18,7 +18,7 @@ public class UserData {
     private int numOfRatings;
 
     public UserData(String userID, String profilePictureURL,
-                    Timestamp dateOfBirth, String firstName, String lastName,
+                    Date dateOfBirth, String firstName, String lastName,
                     String phoneNumber, String address, String email,
                     String gender, int pointsBalance) {
         this.userID = userID;
@@ -53,11 +53,11 @@ public class UserData {
         this.profilePictureURL = profilePictureURL;
     }
 
-    public Timestamp getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Timestamp dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

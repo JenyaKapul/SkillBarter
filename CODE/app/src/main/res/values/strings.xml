@@ -12,6 +12,7 @@
     <string name="user_information_title">User Information</string>
     <string name="history_title">Past Events</string>
     <string name="skills_manager_title">Your Skills</string>
+    <string name="email_password_title">Welcome to Skill Barter App!</string>
 
 
     <string name="user_first_name">First Name</string>
@@ -71,11 +72,6 @@
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
 
-    <!--ADD AVAILABLE DATES-->
-    <string name="date_hint">DD/MM/YYYY</string>
-    <string name="time_hint">HH:MM</string>
-
-
     <string name="no_dates_message">Sorry, no available dates for this service</string>
     <string name="no_appointments_message">No upcoming appointments for you</string>
     <string name="no_history_appointments_message">Past events will show up here,\nso you can easily view them here later.</string>
@@ -87,9 +83,6 @@
     <string name="loading">Loading…</string>
     <string name="hint_email">Username</string>
     <string name="hint_password">Password</string>
-
-    <string name="emailpassword_title_text">Email and Password</string>
-
 
     <string name="divider_bullet" translatable="false">•</string>
 

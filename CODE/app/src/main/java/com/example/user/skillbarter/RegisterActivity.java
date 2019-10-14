@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -21,7 +20,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.user.skillbarter.models.UserData;
 import com.example.user.skillbarter.services.CameraService;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -34,8 +32,9 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,19 +45,6 @@ import javax.annotation.Nullable;
 public class RegisterActivity extends ActionBarMenuActivity
         implements DatePickerDialog.OnDateSetListener, EventListener<DocumentSnapshot> {
 
-    //TODO: implement 2 different cases: 1.first registration 2. edit profile.
-    //TODO: remove calendar picker when 2
-    //TODO: force phone's next button to move to the next editText input
-
-    private static final String TAG = "RegisterActivity";
-
-    public static final String KEY_USER_ID = "key_user_id";
-
-    private static final int AGE_LIMIT = 17;
-
-    private static final int INITIAL_POINTS_BALANCE = 50;
-
-    private Calendar userBirthDay = null;
 
     @BindView(R.id.input_first_name)
     EditText firstNameView;
@@ -81,20 +67,19 @@ public class RegisterActivity extends ActionBarMenuActivity
     @BindView(R.id.input_phone_number)
     EditText phoneNumberView;
 
-    @BindView(R.id.skill_image_view)
+    @BindView(R.id.user_profile_image_view)
     ImageView profilePictureView;
 
     @BindView(R.id.input_address)
     EditText addressView;
 
-    @BindView(R.id.date_picker)
-    ImageButton datePickerButton;
+    private static final String TAG = "RegisterActivity";
+    public static final String KEY_USER_ID = "key_user_id";
 
     private FirebaseAuth mAuth;
-
     private String signedInUserID;
 
-    /* indicate if user's info needs to be loaded from database */
+    // Indicate if user's info needs to be loaded from database.
     private boolean shouldLoadUser = false;
 
     // listener to signed-in user's document from database.
@@ -103,8 +88,7 @@ public class RegisterActivity extends ActionBarMenuActivity
     private DocumentReference mUserRef;
 
     private String userID, profilePictureURL, firstName, lastName, phoneNumber, address, email, gender;
-
-    Timestamp dateOfBirth;
+    private Date birthDate;
 
     int pointsBalance = INITIAL_POINTS_BALANCE;
 
@@ -115,11 +99,13 @@ public class RegisterActivity extends ActionBarMenuActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d(TAG, "***** onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 
+        setTitle(R.string.user_information_title);
+
+        cameraService = new CameraService(this, this);
         mAuth = FirebaseAuth.getInstance();
 
         // Get user ID from extras
@@ -134,14 +120,12 @@ public class RegisterActivity extends ActionBarMenuActivity
             // disable all options menu bar except for sign out.
             setEnable(false);
         }
-        cameraService = new CameraService(this, this);
         hideSoftKeyboard();
     }
 
 
     @Override
     public void onStart() {
-        Log.d(TAG, "***** onStart");
         super.onStart();
         if (mUserRef != null) {
             mListener = mUserRef.addSnapshotListener(this);
@@ -156,24 +140,6 @@ public class RegisterActivity extends ActionBarMenuActivity
             mListener.remove();
             mListener = null;
         }
-    }
-
-
-    @OnClick(R.id.button_gallery)
-    public void  onButtonGalleryClicked() {
-        cameraService.handleUserProfilePicture(false);
-    }
-
-
-    @OnClick(R.id.button_camera)
-    public void onButtonCameraClicked() {
-        cameraService.handleUserProfilePicture(true);
-    }
-
-
-    private void setProfilePictureBackgroundInvisible(){
-        ImageView imageView = findViewById(R.id.skill_image_view);
-        imageView.setBackground(null);
     }
 
 
@@ -192,7 +158,7 @@ public class RegisterActivity extends ActionBarMenuActivity
                 }
 
                 mUri =  Uri.fromFile(cameraService.getmPhotoFile());
-                setProfilePictureBackgroundInvisible();
+                profilePictureView.setBackground(null);
                 Glide.with(this).load(cameraService.getmPhotoFile())
                         .apply(new RequestOptions().centerCrop().circleCrop()
                                 .placeholder(R.drawable.incognito)).into(profilePictureView);
@@ -205,7 +171,7 @@ public class RegisterActivity extends ActionBarMenuActivity
                     e.printStackTrace();
                 }
                 mUri =  Uri.fromFile(cameraService.getmPhotoFile());
-                setProfilePictureBackgroundInvisible();
+                profilePictureView.setBackground(null);
                 Glide.with(this).load(cameraService.getmPhotoFile())
                         .apply(new RequestOptions().centerCrop().circleCrop()
                                 .placeholder(R.drawable.incognito)).into(profilePictureView);
@@ -214,55 +180,34 @@ public class RegisterActivity extends ActionBarMenuActivity
     }
 
 
-    private void saveProfileImageInFirebase(Uri imageUri){
-        showProgressDialog();
-        /* Create a storage reference to the user's profile image */
-        StorageReference storageRef = mStorage.getReference();
-
-        final StorageReference imageRef = storageRef.child("image/" + imageUri.getLastPathSegment());
-        imageRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Log.d(TAG, "successfully uploaded image. uri= "+ uri.toString());
-                        profilePictureURL = uri.toString();
-
-                        createUser();
-                        hideProgressDialog();
-                        if (signedInUserID != null) {
-                            onBackPressed();
-                        } else {
-                            startActivity(new Intent(RegisterActivity.this, UserHomeProfile.class));
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-
-    @OnClick(R.id.date_picker)
-    public void onDatePickerClicked() {
-        if (this.userBirthDay != null){
-            DatePickerFragment.setCalendar(this.userBirthDay);
-        }
-        DialogFragment datePicker = new DatePickerFragment();
-        datePicker.show(getSupportFragmentManager(), "date picker");
-    }
-
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, year);
-        c.set(Calendar.MONTH, month);
-        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        this.userBirthDay = c;
-        String currDateString = DateFormat.getDateInstance().format(c.getTime());
-        birthdayView.setText(currDateString);
-        dateOfBirth = new Timestamp(c.getTime());
-	}
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        birthDate = calendar.getTime();
+        birthdayView.setText(new SimpleDateFormat("dd.MM.yyyy").format(birthDate));
+    }
+
+
+    public void OnCalendarImageClicked(View view) {
+        DialogFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.show(getSupportFragmentManager(), "date picker");
+    }
+
+
+    @OnClick(R.id.button_gallery)
+    public void  onButtonGalleryClicked() {
+        cameraService.handleUserProfilePicture(false);
+    }
+
+
+    @OnClick(R.id.button_camera)
+    public void onButtonCameraClicked() {
+        cameraService.handleUserProfilePicture(true);
+    }
 
 
     @OnClick(R.id.button_next)
@@ -272,7 +217,6 @@ public class RegisterActivity extends ActionBarMenuActivity
         lastName = lastNameView.getText().toString();
         address = addressView.getText().toString();
         email = mAuth.getCurrentUser().getEmail();
-
         phoneNumber = phoneNumberView.getText().toString();
 
         int checkedId = genderRadioGroup.getCheckedRadioButtonId();
@@ -291,6 +235,13 @@ public class RegisterActivity extends ActionBarMenuActivity
     }
 
 
+    @OnClick(R.id.button_prev2)
+    public void onPrev2Clicked() {
+        findViewById(R.id.register_page_1).setVisibility(View.VISIBLE);
+        findViewById(R.id.register_page_2).setVisibility(View.GONE);
+    }
+
+
     @OnClick(R.id.button_save)
     public void onSaveClicked() {
         if (mUri == null) {
@@ -304,21 +255,50 @@ public class RegisterActivity extends ActionBarMenuActivity
     }
 
 
-    private boolean validateBirthDay(){
-        Calendar currentDate = Calendar.getInstance();
-        int yearDiff = currentDate.get(Calendar.YEAR) - this.userBirthDay.get(Calendar.YEAR);
-        int monthDiff = currentDate.get(Calendar.MONTH) - this.userBirthDay.get(Calendar.MONTH);
-        int dayDiff = currentDate.get(Calendar.DAY_OF_MONTH) - this.userBirthDay.get(Calendar.DAY_OF_MONTH);
-        if ((yearDiff > AGE_LIMIT) ||
-                ((yearDiff == AGE_LIMIT) && (monthDiff > 0)) ||
-                ((yearDiff == AGE_LIMIT) && (monthDiff == 0) && (dayDiff > 0))) {
-            return true;
-        }
-        return false;
+    private void saveProfileImageInFirebase(Uri imageUri) {
+
+        showProgressDialog();
+
+        /* Create a storage reference to the user's profile image. */
+        StorageReference storageRef = mStorage.getReference();
+
+        final StorageReference imageRef = storageRef.child("image/" + imageUri.getLastPathSegment());
+        imageRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        Log.d(TAG, "successfully uploaded image. uri= "+ uri.toString());
+
+                        profilePictureURL = uri.toString();
+                        createUser();
+
+                        hideProgressDialog();
+
+                        if (signedInUserID != null) {
+                            onBackPressed();
+                        } else {
+                            startActivity(new Intent(RegisterActivity.this, UserHomeProfile.class));
+                        }
+                    }
+                });
+            }
+        });
     }
 
+
+    private boolean validateBirthDay() {
+        if (birthDate == null) {
+            return false;
+        } else {
+            Date today = new Date();
+            return birthDate.before(today);
+        }
+    }
+
+
     private boolean validateForm() {
-        Log.d(TAG, "***** validateForm");
         boolean valid = true;
 
         if (TextUtils.isEmpty(firstName)) {
@@ -355,15 +335,14 @@ public class RegisterActivity extends ActionBarMenuActivity
             addressView.setError(null);
         }
 
+        if (!validateBirthDay()) {
+            birthdayView.setError("Invalid.");
+            valid = false;
+        } else {
+            birthdayView.setError(null);
+        }
+
         return valid;
-    }
-
-
-    @OnClick(R.id.button_prev2)
-    public void onPrev2Clicked() {
-        Log.d(TAG, "***** onPrev2Clicked");
-        findViewById(R.id.register_page_1).setVisibility(View.VISIBLE);
-        findViewById(R.id.register_page_2).setVisibility(View.GONE);
     }
 
 
@@ -371,7 +350,7 @@ public class RegisterActivity extends ActionBarMenuActivity
      * create a new User instance and add current user to database.
      */
     private void createUser() {
-        UserData userData = new UserData(userID, profilePictureURL, dateOfBirth, firstName,
+        UserData userData = new UserData(userID, profilePictureURL, birthDate, firstName,
                 lastName, phoneNumber, address, email, gender, pointsBalance);
 
         DocumentReference userRef = mFirestore.collection(getString(R.string.collection_user_data))
@@ -387,7 +366,6 @@ public class RegisterActivity extends ActionBarMenuActivity
      * let him edit his profile.
      */
     private void loadUserData(UserData userData) {
-        Log.d(TAG, "***** loadUserData");
 
         firstNameView.setText(userData.getFirstName());
         lastNameView.setText(userData.getLastName());
@@ -404,17 +382,14 @@ public class RegisterActivity extends ActionBarMenuActivity
             maleRadioButton.setChecked(true);
         }
 
-        dateOfBirth = userData.getDateOfBirth();
-
-        if (dateOfBirth != null) {
-            String dateString = DateFormat.getDateInstance().format(dateOfBirth.toDate());
-            birthdayView.setText(dateString);
+        birthDate = userData.getDateOfBirth();
+        if (birthDate != null) {
+            birthdayView.setText(new SimpleDateFormat("dd.MM.yyyy").format(birthDate));
         }
 
         profilePictureURL = userData.getProfilePictureURL();
 
         if (profilePictureURL != null) {
-            setProfilePictureBackgroundInvisible();
             Glide.with(this).load(profilePictureURL)
                     .apply(new RequestOptions().centerCrop().circleCrop()
                             .placeholder(R.drawable.incognito)).into(profilePictureView);
@@ -429,7 +404,7 @@ public class RegisterActivity extends ActionBarMenuActivity
             return;
         }
 
-        if (documentSnapshot.getReference().equals(mUserRef)) {
+        if (documentSnapshot != null && documentSnapshot.getReference().equals(mUserRef)) {
             if (shouldLoadUser) {
                 loadUserData(documentSnapshot.toObject(UserData.class));
                 shouldLoadUser = false;

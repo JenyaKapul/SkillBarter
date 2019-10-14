@@ -35,6 +35,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected final String DATE = "date";
 
     protected static final int LIMIT = 50;
+    protected static final int INITIAL_POINTS_BALANCE = 50;
+
 
 
     @VisibleForTesting
