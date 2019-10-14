@@ -1,5 +1,6 @@
 package com.example.user.skillbarter.screens;
 
+import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,11 +9,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 import com.example.user.skillbarter.BaseActivity;
+import com.example.user.skillbarter.DatePickerFragment;
 import com.example.user.skillbarter.R;
 import com.example.user.skillbarter.models.AvailableDate;
 import com.example.user.skillbarter.utils.TimePickerFragment;
@@ -20,7 +23,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.squareup.timessquare.CalendarPickerView;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -30,18 +33,12 @@ import butterknife.ButterKnife;
 
 import static com.example.user.skillbarter.Constants.DATES_COLLECTION;
 
-/*
- * TODO (NOA): consider changing calendar picker view to DialogFragment using DatePicker fragment
- */
 
-
-public class NewAvailableDateActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
+public class NewAvailableDateActivity extends BaseActivity
+        implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
     private Date selectedDate;
     private boolean isHourSelected = false;
-
-    @BindView(R.id.calendar_picker_view)
-    CalendarPickerView calendarPickerView;
 
     @BindView(R.id.date_picker_text_view)
     TextView datePickerTextView;
@@ -61,8 +58,6 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle(R.string.new_date_title);
-
-        initDatePicker();
     }
 
 
@@ -87,6 +82,18 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
 
 
     @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        selectedDate = calendar.getTime();
+        datePickerTextView.setText(new SimpleDateFormat("dd.MM.yyyy").format(selectedDate));
+    }
+
+
+    @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
         isHourSelected = true;
         selectedDate.setHours(hourOfDay);
@@ -96,33 +103,9 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
     }
 
 
-    private void initDatePicker() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.YEAR, 1);
-
-        Date today = new Date();
-        calendarPickerView.init(today, calendar.getTime()).withSelectedDate(today);
-
-        calendarPickerView.setOnDateSelectedListener(new CalendarPickerView.OnDateSelectedListener() {
-            @Override
-            public void onDateSelected(Date date) {
-
-                selectedDate = date;
-
-                datePickerTextView.setText(new SimpleDateFormat("dd.MM.yyyy").format(date));
-
-                getSupportActionBar().show();
-                calendarPickerView.setVisibility(View.INVISIBLE);
-            }
-            @Override
-            public void onDateUnselected(Date date) {}
-        });
-    }
-
-
     public void OnDatePickerClicked(View v) {
-        getSupportActionBar().hide();
-        calendarPickerView.setVisibility(View.VISIBLE);
+        DialogFragment datePickerFragment = new DatePickerFragment();
+        datePickerFragment.show(getSupportFragmentManager(), "date picker");
     }
 
 
@@ -145,6 +128,14 @@ public class NewAvailableDateActivity extends BaseActivity implements TimePicker
             timePickerTextView.setError("Required!");
             isValid = false;
         }
+
+        Date today = new Date();
+        if (selectedDate.before(today)) {
+            Toast.makeText(NewAvailableDateActivity.this,
+                    R.string.date_passed_message, Toast.LENGTH_SHORT).show();
+            isValid = false;
+        }
+
         return isValid;
     }
 

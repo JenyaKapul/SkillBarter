@@ -74,11 +74,4 @@
         app:layout_constraintTop_toTopOf="@+id/time_picker_wrapper"
         app:layout_constraintVertical_bias="0.0" />
 
-    <com.squareup.timessquare.CalendarPickerView
-        android:visibility="gone"
-        android:id="@+id/calendar_picker_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </com.squareup.timessquare.CalendarPickerView>
-
 </android.support.constraint.ConstraintLayout>

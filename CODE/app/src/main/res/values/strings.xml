@@ -102,9 +102,10 @@
 
     <!-- TOAST RELATED-->
     <string name="error_toast">Error occurred! </string>
-    <string name="date_not_chosen_message">"You must choose date and starting time"</string>
-    <string name="missing_points_message">"You don\'t have enough points"</string>
-    <string name="appointment_created_message">"New appointment is set!"</string>
+    <string name="date_not_chosen_message">You must choose date and starting time</string>
+    <string name="missing_points_message">You don\'t have enough points</string>
+    <string name="appointment_created_message">New appointment is set!</string>
     <string name="date_already_exists_message">This time slot already exists</string>
+    <string name="date_passed_message">You must choose future date</string>
 
 </resources>
