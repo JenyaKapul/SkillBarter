@@ -8,18 +8,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.example.user.skillbarter.screens.EmailPasswordActivity;
+import com.example.user.skillbarter.screens.AvailableDatesManagerActivity;
 import com.example.user.skillbarter.screens.HistoryActivity;
 import com.example.user.skillbarter.screens.SkillsManagerActivity;
+import com.example.user.skillbarter.search.SearchSkillsActivity;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 
 public class ActionBarMenuActivity extends BaseActivity {
 
 
     private static final String TAG = "ActionBarMenuActivity";
-
-    private FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
     private boolean enable = true;
 
@@ -47,6 +46,7 @@ public class ActionBarMenuActivity extends BaseActivity {
             menu.findItem(R.id.app_bar_search).setEnabled(false);
             menu.findItem(R.id.app_bar_profile).setEnabled(false);
             menu.findItem(R.id.menu_manage_skills).setEnabled(false);
+            menu.findItem(R.id.menu_manage_free_time).setEnabled(false);
             menu.findItem(R.id.menu_history).setEnabled(false);
             menu.findItem(R.id.menu_edit_profile).setEnabled(false);
         }
@@ -61,6 +61,7 @@ public class ActionBarMenuActivity extends BaseActivity {
         if (this.getClass().getSimpleName().equals(item.getTitleCondensed())) {
             return true;
         }
+
         Intent intent;
 
         switch (item.getItemId()) {
@@ -68,7 +69,7 @@ public class ActionBarMenuActivity extends BaseActivity {
                 intent = new Intent(this, UserHomeProfile.class);
                 break;
             case R.id.app_bar_search:
-                intent = new Intent(this, SearchEngineActivity.class);
+                intent = new Intent(this, SearchSkillsActivity.class);
                 break;
             case R.id.menu_edit_profile:
                 intent = new Intent(this, RegisterActivity.class);
@@ -79,6 +80,9 @@ public class ActionBarMenuActivity extends BaseActivity {
                 break;
             case R.id.menu_manage_skills:
                 intent = new Intent(this, SkillsManagerActivity.class);
+                break;
+            case R.id.menu_manage_free_time:
+                intent = new Intent(this, AvailableDatesManagerActivity.class);
                 break;
             case R.id.menu_sign_out:
                 FirebaseAuth.getInstance().signOut();

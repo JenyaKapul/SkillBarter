@@ -25,12 +25,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
 import java.util.List;
-import butterknife.ButterKnife;
 
 public class NewSkillActivity extends BaseActivity {
-
-    public static final String KEY_SKILL_PATH = "key_skill_path";
-
 
     private Spinner categorySpinner, skillSpinner;
     private SeekBar mLevelSeekBar;
@@ -45,16 +41,15 @@ public class NewSkillActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_skill);
-        ButterKnife.bind(this);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
         setTitle("Add Skill");
 
-        categorySpinner = findViewById(R.id.category_spinner);
-        skillSpinner = findViewById(R.id.skills_spinner);
-        mLevelSeekBar = findViewById(R.id.skillLevelSeekBar);
-        mDetailsView = findViewById(R.id.skill_details);
-        mPointsView = findViewById(R.id.points);
+        categorySpinner = findViewById(R.id.new_skill_category_spinner);
+        skillSpinner = findViewById(R.id.new_skill_skills_spinner);
+        mLevelSeekBar = findViewById(R.id.new_skill_level_seek_bar);
+        mDetailsView = findViewById(R.id.skill_details_text_input);
+        mPointsView = findViewById(R.id.points_text_input);
 
         List<CharSequence> categories = Arrays.asList(this.getResources().getTextArray(R.array.skills_categories));
 
@@ -100,7 +95,7 @@ public class NewSkillActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.save_skill:
+            case R.id.save_item:
                 saveUserSkill();
                 return true;
             default:
@@ -125,9 +120,9 @@ public class NewSkillActivity extends BaseActivity {
         mLevel = mLevelSeekBar.getProgress();
         mDetails = mDetailsView.getText().toString();
         final UserSkill userSkill = new UserSkill(mUserID, mCategory, mSkill, mPointsValue, mLevel +1 , mDetails);
-        final String docID = userSkill.getSkillId();
+        final String docID = mUserID + "." + mCategory + "." + mSkill;
 
-        DocumentReference skillRef = skillsCollectionRef.document(docID);
+        DocumentReference skillRef = skillsCollection.document(docID);
 
         skillRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -138,7 +133,7 @@ public class NewSkillActivity extends BaseActivity {
                         Toast.makeText(NewSkillActivity.this, "This skill already exists", Toast.LENGTH_SHORT).show();
                     } else {
                         // add user's skill to database.
-                        skillsCollectionRef.document(docID).set(userSkill);
+                        skillsCollection.document(docID).set(userSkill);
 
                         finish();
                     }

@@ -3,14 +3,13 @@ package com.example.user.skillbarter.models;
 
 public class UserSkill {
 
-    private String skillId;
     private String  userID;
     private String category;
     private String skill;
     private int pointsValue;
     private int level;
     private String details;
-    private boolean isEnabled;
+    private boolean enabled;
 
 
     public UserSkill() {}
@@ -19,32 +18,22 @@ public class UserSkill {
         this.userID = userID;
         this.category = category;
         this.skill = skill;
-        this.skillId = userID + "." + category + "." + skill;
         this.pointsValue = pointsValue;
         this.level = level;
         this.details = details;
-        this.isEnabled = true;
+        this.enabled = true;
     }
 
-    public UserSkill(String userID, String category, String skill, int pointsValue, int level, String details, boolean isEnabled) {
+    public UserSkill(String userID, String category, String skill, int pointsValue, int level, String details, boolean enabled) {
         this.userID = userID;
         this.category = category;
         this.skill = skill;
-        this.skillId = userID + "." + category + "." + skill;
         this.pointsValue = pointsValue;
         this.level = level;
         this.details = details;
-        this.isEnabled = isEnabled;
+        this.enabled = enabled;
     }
 
-
-    public String getSkillId() {
-        return skillId;
-    }
-
-    public void setSkillId(String skillId) {
-        this.skillId = category + "." + skill;
-    }
 
     public String getUserID() {
         return userID;
@@ -95,14 +84,10 @@ public class UserSkill {
     }
 
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
     }
 
     public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
-
-    public String getSkillWithCategory() {
-        return this.skill + " (" + this.category + ")";
+        this.enabled = enabled;
     }
 }

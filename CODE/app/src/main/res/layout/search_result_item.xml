@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginEnd="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="#FFFFE8">
+    app:cardBackgroundColor="@color/cardLight">
 
 
     <android.support.constraint.ConstraintLayout
@@ -16,7 +17,7 @@
         android:layout_margin="4dp">
 
         <ImageView
-            android:id="@+id/provider_picture_holder"
+            android:id="@+id/search_result_image_view"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
@@ -25,27 +26,28 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
+            tools:background="@drawable/skill_icon_sport"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <ImageView
-            android:id="@+id/points_imageView"
+            android:id="@+id/search_result_points_icon"
             android:layout_width="25dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/star_icon"
-            app:layout_constraintBottom_toBottomOf="@id/provider_picture_holder"
+            android:background="@drawable/ic_star"
+            app:layout_constraintBottom_toBottomOf="@id/search_result_image_view"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/provider_picture_holder" />
+            app:layout_constraintTop_toTopOf="@id/search_result_image_view" />
 
         <RatingBar
-            android:id="@+id/ratingBar"
+            android:id="@+id/search_result_rating_bar"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
+            android:layout_gravity="start"
             android:layout_marginTop="4dp"
             android:isIndicator="true"
             android:numStars="5"
@@ -53,100 +55,100 @@
             android:stepSize="0.1"
             android:transformPivotX="0dp"
             android:transformPivotY="0dp"
-            app:layout_constraintStart_toStartOf="@+id/other_profile_name"
-            app:layout_constraintTop_toBottomOf="@+id/other_profile_name" />
+            app:layout_constraintStart_toStartOf="@+id/search_result_user_name_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/search_result_user_name_text_view" />
 
         <TextView
-            android:id="@+id/rating_value"
+            android:id="@+id/search_result_rating_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:gravity="start"
-            android:text="XX.X"
+            tools:text="2.5"
             style="@style/AppTheme.Subheader"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/ratingBar"
-            app:layout_constraintStart_toEndOf="@+id/ratingBar"
-            app:layout_constraintTop_toTopOf="@+id/ratingBar" />
+            app:layout_constraintBottom_toBottomOf="@+id/search_result_rating_bar"
+            app:layout_constraintStart_toEndOf="@+id/search_result_rating_bar"
+            app:layout_constraintTop_toTopOf="@+id/search_result_rating_bar" />
 
         <TextView
-            android:id="@+id/skill_text_view"
+            android:id="@+id/search_result_skill_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
             android:gravity="start"
-            android:text="SKILL_MOCK"
+            tools:text="Yoga"
             style="@style/AppTheme.Body1"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/ratingBar"
-            app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+            app:layout_constraintStart_toStartOf="@+id/search_result_rating_bar"
+            app:layout_constraintTop_toBottomOf="@+id/search_result_rating_bar" />
 
         <TextView
-            android:id="@+id/category_text_view"
+            android:id="@+id/search_result_category_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
             android:gravity="start"
-            android:text="CATEGORY_MOCK"
+            tools:text="Sport"
             style="@style/AppTheme.Body1"
-            app:layout_constraintStart_toEndOf="@+id/skill_text_view"
-            app:layout_constraintTop_toTopOf="@+id/skill_text_view" />
+            app:layout_constraintStart_toEndOf="@+id/search_result_skill_text_view"
+            app:layout_constraintTop_toTopOf="@+id/search_result_skill_text_view" />
 
         <TextView
             style="@style/AppTheme.Subheader"
-            android:id="@+id/other_profile_name"
+            android:id="@+id/search_result_user_name_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:gravity="center"
-            android:text="PROFILE_NAME_MOCK"
+            tools:text="Noa Glait"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/provider_picture_holder"
+            app:layout_constraintStart_toEndOf="@+id/search_result_image_view"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/value_text_view"
+            android:id="@+id/search_result_points_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:gravity="center_vertical"
-            android:text="XXXX"
+            tools:text="370"
             style="@style/AppTheme.Subheader"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/points_imageView"
-            app:layout_constraintEnd_toStartOf="@id/points_imageView"
-            app:layout_constraintTop_toTopOf="@id/points_imageView" />
+            app:layout_constraintBottom_toBottomOf="@id/search_result_points_icon"
+            app:layout_constraintEnd_toStartOf="@id/search_result_points_icon"
+            app:layout_constraintTop_toTopOf="@id/search_result_points_icon" />
 
 
         <TextView
-            android:id="@+id/level_title_text_view"
+            android:id="@+id/search_result_level_title_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:gravity="center_vertical"
-            android:text="LEVEL:"
+            tools:text="LEVEL:"
             style="@style/AppTheme.Subheader"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/level_value_text_view"
-            app:layout_constraintEnd_toStartOf="@id/level_value_text_view"
-            app:layout_constraintTop_toTopOf="@id/level_value_text_view" />
+            app:layout_constraintBottom_toBottomOf="@id/search_result_level_text_view"
+            app:layout_constraintEnd_toStartOf="@id/search_result_level_text_view"
+            app:layout_constraintTop_toTopOf="@id/search_result_level_text_view" />
 
         <TextView
-            android:id="@+id/level_value_text_view"
+            android:id="@+id/search_result_level_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="X"
+            tools:text="4"
             style="@style/AppTheme.Subheader"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/other_profile_name"
-            app:layout_constraintEnd_toEndOf="@+id/value_text_view"
-            app:layout_constraintTop_toTopOf="@id/other_profile_name" />
+            app:layout_constraintBottom_toBottomOf="@id/search_result_user_name_text_view"
+            app:layout_constraintEnd_toEndOf="@+id/search_result_points_text_view"
+            app:layout_constraintTop_toTopOf="@id/search_result_user_name_text_view" />
 
 
     </android.support.constraint.ConstraintLayout>

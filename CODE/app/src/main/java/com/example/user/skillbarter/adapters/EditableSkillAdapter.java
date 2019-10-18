@@ -15,11 +15,11 @@ import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.DocumentSnapshot;
 
 
-public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapter.SkillHolder> {
+public class EditableSkillAdapter extends FirestoreRecyclerAdapter<UserSkill, EditableSkillAdapter.SkillHolder> {
 
     private OnItemClickListener listener;
 
-    public SkillAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options) {
+    public EditableSkillAdapter(@NonNull FirestoreRecyclerOptions<UserSkill> options) {
         super(options);
     }
 
@@ -64,7 +64,7 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
     @NonNull
     @Override
     public SkillHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.skill_item,
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.editable_skill_item,
                 parent, false);
         return new SkillHolder(v);
     }
@@ -83,12 +83,12 @@ public class SkillAdapter extends FirestoreRecyclerAdapter<UserSkill, SkillAdapt
 
         public SkillHolder(View itemView) {
             super(itemView);
-            categoryTextView = itemView.findViewById(R.id.categoryView);
-            skillTextView = itemView.findViewById(R.id.skillView);
-            levelTextView = itemView.findViewById(R.id.levelView);
-            pointsTextView = itemView.findViewById(R.id.pointsView);
-            editImageView = itemView.findViewById(R.id.editView);
-            iconImageView = itemView.findViewById(R.id.imageView);
+            categoryTextView = itemView.findViewById(R.id.editable_skill_category_text_view);
+            skillTextView = itemView.findViewById(R.id.editable_skill_text_view);
+            levelTextView = itemView.findViewById(R.id.editable_skill_level_text_view);
+            pointsTextView = itemView.findViewById(R.id.editable_skill_points_text_view);
+            editImageView = itemView.findViewById(R.id.editable_skill_edit_icon);
+            iconImageView = itemView.findViewById(R.id.editable_skill_image_view);
 
             editImageView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        Intent intent = new Intent(this, UserHomeProfile.class);
+//        Intent intent = new Intent(this, RegisterActivity.class);
         Intent intent = new Intent(this, EmailPasswordActivity.class);
         startActivity(intent);
     }

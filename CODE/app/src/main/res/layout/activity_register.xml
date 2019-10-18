@@ -1,25 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/register_page_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:text="@string/user_information_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,8 +16,10 @@
         android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_page_title"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone"
+        >
 
         <!--Input First Name-->
         <android.support.design.widget.TextInputLayout
@@ -95,6 +83,7 @@
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/calendar_icon"
+            android:onClick="OnCalendarImageClicked"
             app:layout_constraintBottom_toBottomOf="@+id/textInputLayout3"
             app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
             app:layout_constraintTop_toTopOf="@+id/textInputLayout3" />
@@ -203,9 +192,10 @@
         android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/register_page_title"
+        app:layout_constraintTop_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/textView3"
@@ -222,7 +212,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/profile_picture_holder"
+            android:id="@+id/user_profile_image_view"
             android:layout_width="400px"
             android:layout_height="400px"
             android:layout_gravity="center"
@@ -241,8 +231,8 @@
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:background="@drawable/gallery_icon"
-            app:layout_constraintStart_toStartOf="@+id/profile_picture_holder"
-            app:layout_constraintTop_toBottomOf="@+id/profile_picture_holder" />
+            app:layout_constraintStart_toStartOf="@+id/user_profile_image_view"
+            app:layout_constraintTop_toBottomOf="@+id/user_profile_image_view" />
 
         <!--Camera Icon Button-->
         <android.support.v7.widget.AppCompatImageView
@@ -252,7 +242,7 @@
             android:layout_gravity="center"
             android:background="@drawable/device_camera_icon"
             app:layout_constraintBottom_toBottomOf="@+id/button_gallery"
-            app:layout_constraintEnd_toEndOf="@+id/profile_picture_holder"
+            app:layout_constraintEnd_toEndOf="@+id/user_profile_image_view"
             app:layout_constraintTop_toTopOf="@+id/button_gallery" />
 
         <Button

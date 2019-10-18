@@ -5,50 +5,51 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchItemDetailsActivity">
+    android:background="@color/white_background"
+    tools:context=".ServiceDetailsActivity">
 
     <TextView
-        android:id="@+id/details_content"
+        android:id="@+id/details_content_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:singleLine="false"
         android:maxLines="3"
         android:scrollbars="vertical"
         android:layout_gravity="center"
-        android:text="DETAILS_CONTENT_MOCK"
+        tools:text="DETAILS_CONTENT_MOCK"
         android:textSize="20sp"
         android:layout_marginTop="8dp"
-        app:layout_constraintStart_toStartOf="@+id/details_title"
-        app:layout_constraintTop_toBottomOf="@+id/details_title" />
+        app:layout_constraintStart_toStartOf="@+id/service_details_title_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/service_details_title_text_view" />
 
     <ImageView
-        android:id="@+id/profile_picture_holder"
+        android:id="@+id/service_details_profile_image_view"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/incognito"
+        tools:background="@drawable/incognito"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/profile_name"
+        android:id="@+id/service_details_user_name_text_view"
         android:layout_width="0dp"
         android:layout_height="27dp"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:text="USER_NAME_MOCK"
+        tools:text="Noa Glait"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_picture_holder"
-        app:layout_constraintTop_toTopOf="@+id/profile_picture_holder" />
+        app:layout_constraintStart_toEndOf="@+id/service_details_profile_image_view"
+        app:layout_constraintTop_toTopOf="@+id/service_details_profile_image_view" />
 
     <RatingBar
-        android:id="@+id/rating_bar"
+        android:id="@+id/service_details_rating_bar"
         style="?android:attr/ratingBarStyleIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,51 +60,51 @@
         android:stepSize="0.1"
         android:transformPivotX="0dp"
         android:transformPivotY="0dp"
-        app:layout_constraintStart_toStartOf="@+id/profile_name"
-        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
+        app:layout_constraintStart_toStartOf="@+id/service_details_user_name_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/service_details_user_name_text_view" />
 
     <TextView
-        android:id="@+id/rating_value"
+        android:id="@+id/service_details_rating_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:gravity="start"
-        android:text="X.X"
+        tools:text="2.5"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/rating_bar"
-        app:layout_constraintEnd_toEndOf="@+id/profile_name"
-        app:layout_constraintStart_toEndOf="@+id/rating_bar"
-        app:layout_constraintTop_toTopOf="@+id/rating_bar" />
+        app:layout_constraintBottom_toBottomOf="@+id/service_details_rating_bar"
+        app:layout_constraintEnd_toEndOf="@+id/service_details_user_name_text_view"
+        app:layout_constraintStart_toEndOf="@+id/service_details_rating_bar"
+        app:layout_constraintTop_toTopOf="@+id/service_details_rating_bar" />
 
     <ImageView
-        android:id="@+id/points_icon"
+        android:id="@+id/service_details_points_icon"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/star_icon"
-        app:layout_constraintBottom_toBottomOf="@+id/skill_value"
-        app:layout_constraintTop_toTopOf="@+id/skill_value"
+        android:background="@drawable/ic_star"
+        app:layout_constraintBottom_toBottomOf="@+id/service_details_points_text_view"
+        app:layout_constraintTop_toTopOf="@+id/service_details_points_text_view"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toEndOf="@+id/skill_value"
+        app:layout_constraintStart_toEndOf="@+id/service_details_points_text_view"
         app:layout_constraintVertical_bias="1.0" />
 
     <TextView
-        android:id="@+id/skill_value"
+        android:id="@+id/service_details_points_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
         android:gravity="center_vertical"
-        android:text="COST_MOCK"
+        tools:text="50"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/rating_bar"
-        app:layout_constraintTop_toBottomOf="@+id/rating_bar" />
+        app:layout_constraintStart_toStartOf="@+id/service_details_rating_bar"
+        app:layout_constraintTop_toBottomOf="@+id/service_details_rating_bar" />
 
 
     <TextView
-        android:id="@+id/skill_prefix"
+        android:id="@+id/service_details_skill_title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -111,23 +112,23 @@
         android:text="@string/skill"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/profile_picture_holder"
-        app:layout_constraintTop_toBottomOf="@+id/profile_picture_holder" />
+        app:layout_constraintStart_toStartOf="@+id/service_details_profile_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/service_details_profile_image_view" />
 
     <TextView
-        android:id="@+id/skill_name"
+        android:id="@+id/service_details_skill_text_view"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:gravity="center_vertical"
-        android:text="SKILL_NAME"
+        tools:text="Yoga"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/skill_prefix"
+        app:layout_constraintBottom_toBottomOf="@+id/service_details_skill_title_text_view"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/skill_prefix" />
+        app:layout_constraintTop_toTopOf="@+id/service_details_skill_title_text_view" />
 
     <TextView
-        android:id="@+id/level_title"
+        android:id="@+id/service_details_level_title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -135,23 +136,23 @@
         android:text="@string/level"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/skill_prefix"
-        app:layout_constraintTop_toBottomOf="@+id/skill_prefix" />
+        app:layout_constraintStart_toStartOf="@+id/service_details_skill_title_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/service_details_skill_title_text_view" />
 
     <TextView
-        android:id="@+id/skill_level"
+        android:id="@+id/service_details_level_text_view"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:gravity="center_vertical"
-        android:text="SKILL_LEVEL"
+        tools:text="4"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/level_title"
+        app:layout_constraintBottom_toBottomOf="@+id/service_details_level_title_text_view"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/level_title" />
+        app:layout_constraintTop_toTopOf="@+id/service_details_level_title_text_view" />
 
     <TextView
-        android:id="@+id/details_title"
+        android:id="@+id/service_details_title_text_view"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_width="wrap_content"
@@ -159,8 +160,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:text="@string/details"
-        app:layout_constraintStart_toStartOf="@+id/level_title"
-        app:layout_constraintTop_toBottomOf="@+id/level_title" />
+        app:layout_constraintStart_toStartOf="@+id/service_details_level_title_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/service_details_level_title_text_view" />
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline2"
@@ -169,21 +170,18 @@
         android:orientation="vertical"
         app:layout_constraintGuide_begin="100dp" />
 
-    <Spinner
-        android:id="@+id/date_picker_spinner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:dropDownWidth="match_parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/details_content" />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/service_details_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="@+id/details_content_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/details_content_text_view"
+        android:layout_marginBottom="150dp"
+        tools:listitem="@layout/service_date_item"/>
 
     <Button
-        android:id="@+id/booking_button"
+        android:id="@+id/service_details_booking_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="161dp"
@@ -196,7 +194,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- View for empty dates -->
+    <LinearLayout
+        android:id="@+id/service_details_empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintStart_toStartOf="@+id/details_content_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/details_content_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
 
+    <ImageView
+        android:src="@drawable/empty_events"
+        style="@style/AppTheme.EmptyView" />
 
-
+    <TextView
+        style="@style/AppTheme.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_dates_message"
+        android:textColor="@color/greyDisabled" />
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>

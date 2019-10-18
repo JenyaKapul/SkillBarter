@@ -6,18 +6,20 @@ public class Appointment {
     private String providerUID, clientUID, skillID;
     private Date date;
     private int rating;
-    private boolean isProviderPaid;
+    private boolean providerPaid;
+    private int points;
 
     Appointment() {}
 
     public Appointment(String providerUID, String clientUID, String skillID, Date date,
-                       int rating, boolean isProviderPaid) {
+                       int rating, boolean providerPaid, int points) {
         this.providerUID = providerUID;
         this.clientUID = clientUID;
         this.skillID = skillID;
         this.date = date;
         this.rating = rating;
-        this.isProviderPaid = isProviderPaid;
+        this.providerPaid = providerPaid;
+        this.points = points;
     }
 
     public String getProviderUID() {
@@ -57,11 +59,19 @@ public class Appointment {
     public void setRating(int rating) { this.rating = rating; }
 
     public boolean isProviderPaid() {
-        return isProviderPaid;
+        return providerPaid;
     }
 
     public void setProviderPaid(boolean providerPaid) {
-        isProviderPaid = providerPaid;
+        this.providerPaid = providerPaid;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
     }
 
 }

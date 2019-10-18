@@ -11,18 +11,32 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 
+import static com.example.user.skillbarter.Constants.APPOINTMENTS_COLLECTION;
+import static com.example.user.skillbarter.Constants.SKILLS_COLLECTION;
+import static com.example.user.skillbarter.Constants.USERS_COLLECTION;
 
-public class BaseActivity extends AppCompatActivity {
 
-    protected FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
-    protected FirebaseStorage mStorage = FirebaseStorage.getInstance();
-    protected CollectionReference skillsCollectionRef = mFirestore.collection("User Skills");
-    protected CollectionReference appointmentsCollectionRef = mFirestore.collection("Appointments");
-    protected CollectionReference usersCollectionRef = mFirestore.collection("User Data");
+public abstract class BaseActivity extends AppCompatActivity {
+
+    protected final FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+    protected final FirebaseStorage mStorage = FirebaseStorage.getInstance();
+    protected final CollectionReference skillsCollection = mFirestore.collection(SKILLS_COLLECTION);
+    protected final CollectionReference appointmentsCollection = mFirestore.collection(APPOINTMENTS_COLLECTION);
+    protected final CollectionReference usersCollection = mFirestore.collection(USERS_COLLECTION);
+    protected final FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+    /* fields in database. */
+    protected final String DATE = "date";
+
+    protected static final int LIMIT = 50;
+    protected static final int INITIAL_POINTS_BALANCE = 50;
+
 
 
     @VisibleForTesting
@@ -111,7 +125,7 @@ public class BaseActivity extends AppCompatActivity {
         hideProgressDialog();
     }
 
-    public int getSkillArrayID(String categoryLabel) {
+    public static int getSkillArrayID(String categoryLabel) {
         int skillArrayID;
         switch (categoryLabel) {
             case "Tutoring":
@@ -142,6 +156,50 @@ public class BaseActivity extends AppCompatActivity {
                 skillArrayID = R.array.Empty;
         }
         return skillArrayID;
+    }
+
+    /**
+     * Get points represented as dollar signs.
+     */
+    public static String getPointsString(int pointsInt) {
+        switch (pointsInt) {
+            case 20:
+                return "$   up to 20 points";
+            case 50:
+                return "$$  up to 50 points";
+            case 100:
+                return "$$$ up to 100 points";
+            default:
+                return "$$$";
+        }
+    }
+
+
+    public static int getSkillImageID(String category, String skill) {
+        switch (category) {
+            case "Tutoring":
+                return R.drawable.skill_icon_tutoring;
+            case "Music":
+                return R.drawable.skill_icon_music;
+            case "Dance":
+                return R.drawable.skill_icon_dance;
+            case "Arts and Crafts":
+                return R.drawable.skill_icon_arts;
+            case "Sport":
+                return R.drawable.skill_icon_sport;
+            case "Household Services":
+                if (skill.equals("Handyman")) {
+                    return R.drawable.skill_icon_handyman;
+                } else {
+                    return R.drawable.skill_icon_household_services;
+                }
+            case "Beauty Care":
+                return R.drawable.skill_icon_beauty_care;
+            case "Culinary":
+                return R.drawable.skill_icon_culinary;
+            default:
+                return 0;
+        }
     }
 }
 

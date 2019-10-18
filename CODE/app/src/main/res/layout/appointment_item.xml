@@ -3,113 +3,87 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginEnd="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
     app:cardCornerRadius="12dp"
-    app:cardBackgroundColor="@color/colorPrimaryLight">
+    app:cardBackgroundColor="@color/cardLight">
 
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="73dp"
+        android:layout_height="wrap_content"
         android:layout_margin="4dp">
 
         <TextView
-            android:id="@+id/appointment_profile_name"
+            android:id="@+id/appointment_category_and_skill_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="PROFILE_NAME_MOCK"
+            tools:text="Cooking (Culinary)"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/appointment_profile_picture_holder"
+            app:layout_constraintStart_toEndOf="@+id/appointment_skill_image_view"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/appointment_profile_picture_holder"
+            android:id="@+id/appointment_skill_image_view"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/incognito"
+            tools:background="@drawable/skill_icon_culinary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="TODO" />
 
 
         <ImageView
-            android:id="@+id/appointment_points_imageView"
+            android:id="@+id/appointment_points_icon"
             android:layout_width="25dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/star_icon"
-            app:layout_constraintBottom_toBottomOf="@id/appointment_profile_picture_holder"
+            android:background="@drawable/ic_star"
+            app:layout_constraintBottom_toBottomOf="@id/appointment_skill_image_view"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/appointment_profile_picture_holder" />
+            app:layout_constraintTop_toTopOf="@id/appointment_skill_image_view" />
 
         <TextView
-            android:id="@+id/appointment_date_text_view"
+            android:id="@+id/appointment_timestamp_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
             android:gravity="center"
-            android:text="DD/MM/YY hh:mm"
+            tools:text="Mon 28.10.2019, 18:00"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/appointment_profile_name"
-            app:layout_constraintTop_toBottomOf="@+id/appointment_profile_name" />
+            app:layout_constraintStart_toStartOf="@+id/appointment_category_and_skill_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/appointment_category_and_skill_text_view" />
 
         <TextView
-            android:id="@+id/appointment_skill_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:gravity="start"
-            android:text="SKILL_MOCK"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/appointment_date_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/appointment_date_text_view" />
-
-        <TextView
-            android:id="@+id/appointment_category_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:gravity="start"
-            android:text="CATEGORY_MOCK"
-            android:textSize="12sp"
-            app:layout_constraintStart_toEndOf="@+id/appointment_skill_text_view"
-            app:layout_constraintTop_toTopOf="@+id/appointment_skill_text_view" />
-
-        <TextView
-            android:id="@+id/appointment_value_text_view"
+            android:id="@+id/appointment_points_text_view"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:gravity="center_vertical"
-            android:text="XXXX"
+            tools:text="70"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/appointment_points_imageView"
-            app:layout_constraintEnd_toStartOf="@id/appointment_points_imageView"
-            app:layout_constraintTop_toTopOf="@id/appointment_points_imageView" />
+            app:layout_constraintBottom_toBottomOf="@id/appointment_points_icon"
+            app:layout_constraintEnd_toStartOf="@id/appointment_points_icon"
+            app:layout_constraintTop_toTopOf="@id/appointment_points_icon" />
 
 
     </android.support.constraint.ConstraintLayout>
-
 
 </android.support.v7.widget.CardView>

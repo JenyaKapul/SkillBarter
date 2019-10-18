@@ -5,65 +5,66 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white_background"
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/profile_picture_holder"
+        android:id="@+id/home_profile_image_view"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/incognito"
+        tools:background="@drawable/incognito"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/profile_name"
+        android:id="@+id/home_profile_name_text_view"
         android:layout_width="0dp"
         android:layout_height="27dp"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:gravity="center"
-        android:text="USER_NAME_MOCK"
+        tools:text="Noa Glait"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/profile_picture_holder"
-        app:layout_constraintTop_toTopOf="@+id/profile_picture_holder" />
+        app:layout_constraintStart_toEndOf="@+id/home_profile_image_view"
+        app:layout_constraintTop_toTopOf="@+id/home_profile_image_view" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/home_profile_points_icon"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/star_icon"
-        app:layout_constraintBottom_toTopOf="@+id/ratingBar"
+        android:background="@drawable/ic_star"
+        app:layout_constraintBottom_toTopOf="@+id/home_profile_rating_bar"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toEndOf="@+id/profile_picture_holder"
-        app:layout_constraintTop_toBottomOf="@+id/profile_name" />
+        app:layout_constraintStart_toEndOf="@+id/home_profile_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/home_profile_name_text_view" />
 
     <TextView
-        android:id="@+id/balance"
+        android:id="@+id/home_profile_points_text_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center_vertical"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:text="BALANCE_MOCK"
+        tools:text="350"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintBottom_toBottomOf="@+id/home_profile_points_icon"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintStart_toEndOf="@+id/home_profile_points_icon"
+        app:layout_constraintTop_toTopOf="@+id/home_profile_points_icon" />
 
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/home_profile_rating_bar"
         style="?android:attr/ratingBarStyleIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -76,13 +77,13 @@
         android:stepSize="0.5"
         android:transformPivotX="0dp"
         android:transformPivotY="0dp"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_picture_holder"
+        app:layout_constraintBottom_toBottomOf="@+id/home_profile_image_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="@+id/home_profile_points_icon" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/appointments_title_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -91,11 +92,11 @@
         android:text="@string/up_next"
         android:textSize="30sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="@+id/profile_picture_holder"
-        app:layout_constraintTop_toBottomOf="@+id/profile_picture_holder" />
+        app:layout_constraintStart_toStartOf="@+id/home_profile_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/home_profile_image_view" />
 
     <com.polyak.iconswitch.IconSwitch
-        android:id="@+id/home_appointments_type_switch"
+        android:id="@+id/appointments_type_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
@@ -104,9 +105,9 @@
         app:isw_icon_left="@drawable/ic_incoming"
         app:isw_icon_right="@drawable/ic_outgoing"
         app:isw_icon_size="25dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
+        app:layout_constraintBottom_toBottomOf="@+id/appointments_title_text_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2"
+        app:layout_constraintTop_toTopOf="@+id/appointments_title_text_view"
         app:isw_background_color="@color/colorPrimaryDark"
         app:isw_thumb_color_left="@color/colorPrimary"
         app:isw_thumb_color_right="@color/colorPrimary"
@@ -116,13 +117,56 @@
         app:isw_active_tint_icon_right="#fff" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/home_recycler_view"
+        android:id="@+id/home_profile_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/home_appointments_type_switch" />
+        app:layout_constraintTop_toBottomOf="@id/appointments_type_switch"
+        tools:listitem="@layout/appointment_item"/>
 
+    <!-- View for empty dates left toggle -->
+    <LinearLayout
+        android:id="@+id/view_empty_appointments_left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintStart_toStartOf="@+id/appointments_title_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/appointments_title_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
 
+        <ImageView
+            android:layout_width="228dp"
+            android:layout_height="238dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/empty_user_home_left" />
+    </LinearLayout>
+
+    <!-- View for empty dates left toggle -->
+    <LinearLayout
+        android:id="@+id/view_empty_appointments_right"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintStart_toStartOf="@+id/appointments_title_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/appointments_title_text_view"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="gone">
+
+        <ImageView
+            android:layout_width="228dp"
+            android:layout_height="238dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/empty_user_home_right" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
