@@ -5,14 +5,14 @@ import java.util.Date;
 public class Appointment {
     private String providerUID, clientUID, skillID;
     private Date date;
-    private int rating;
+    private float rating;
     private boolean providerPaid;
     private int points;
 
     Appointment() {}
 
     public Appointment(String providerUID, String clientUID, String skillID, Date date,
-                       int rating, boolean providerPaid, int points) {
+                       float rating, boolean providerPaid, int points) {
         this.providerUID = providerUID;
         this.clientUID = clientUID;
         this.skillID = skillID;
@@ -54,9 +54,9 @@ public class Appointment {
         this.date = date;
     }
 
-    public int getRating() { return rating; }
+    public float getRating() { return rating; }
 
-    public void setRating(int rating) { this.rating = rating; }
+    public void setRating(float rating) { this.rating = rating; }
 
     public boolean isProviderPaid() {
         return providerPaid;

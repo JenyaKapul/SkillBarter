@@ -225,7 +225,7 @@ public class UserHomeProfile extends ActionBarMenuActivity implements EventListe
 
         String name = userData.getFirstName() + " " + userData.getLastName();
         String points = Integer.toString(userData.getPointsBalance());
-        Float rating = userData.getPersonalRating();
+        Float rating = userData.getAvgRating();
 
         String profilePictureURL = userData.getProfilePictureURL();
         if(profilePictureURL != null) {

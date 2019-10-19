@@ -44,6 +44,37 @@
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="TODO" />
 
+        <RatingBar
+            android:id="@+id/appointment_rating_bar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="4dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:rating="2.5"
+            android:stepSize="0.1"
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp"
+            tools:visibility="visible"
+            app:layout_constraintStart_toStartOf="@+id/appointment_category_and_skill_text_view"
+            app:layout_constraintTop_toBottomOf="@+id/appointment_category_and_skill_text_view" />
+
+        <TextView
+            android:id="@+id/appointment_rating_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="8dp"
+            android:gravity="start"
+            tools:text="2.5"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/appointment_rating_bar"
+            app:layout_constraintStart_toEndOf="@+id/appointment_rating_bar"
+            app:layout_constraintTop_toTopOf="@+id/appointment_rating_bar" />
+
 
         <ImageView
             android:id="@+id/appointment_points_icon"
@@ -67,8 +98,8 @@
             tools:text="Mon 28.10.2019, 18:00"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/appointment_category_and_skill_text_view"
-            app:layout_constraintTop_toBottomOf="@+id/appointment_category_and_skill_text_view" />
+            app:layout_constraintStart_toStartOf="@+id/appointment_rating_bar"
+            app:layout_constraintTop_toBottomOf="@+id/appointment_rating_bar" />
 
         <TextView
             android:id="@+id/appointment_points_text_view"

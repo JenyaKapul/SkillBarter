@@ -55,6 +55,11 @@
     <string name="value_any_points">Any Value of Points</string>
     <string name="cancel" translatable="false">Cancel</string>
     <string name="apply" translatable="false">Apply</string>
+    <string name="filter_add_review">Add review</string>
+    <string name="hint_review">How was your experience?</string>
+    <string name="submit">Submit</string>
+
+
 
     <string name="price_1">$ (up to 20 points)</string>
     <string name="price_2">$$  (up to 50 points)</string>

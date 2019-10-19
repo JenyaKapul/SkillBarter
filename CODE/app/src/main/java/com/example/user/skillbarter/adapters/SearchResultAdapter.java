@@ -106,8 +106,8 @@ public class SearchResultAdapter extends FirestoreRecyclerAdapter<UserSkill, Sea
                     UserData user = documentSnapshot.toObject(UserData.class);
                     String fullName = user.getFirstName() + " " + user.getLastName();
                     holder.textViewProviderName.setText(fullName);
-                    holder.textViewRating.setText(String.format("%.1f", user.getPersonalRating()));
-                    holder.ratingBar.setRating(user.getPersonalRating());
+                    holder.textViewRating.setText(String.format("%.1f", user.getAvgRating()));
+                    holder.ratingBar.setRating(user.getAvgRating());
                 }
             }
         });

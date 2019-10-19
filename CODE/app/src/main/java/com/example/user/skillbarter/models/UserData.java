@@ -14,7 +14,7 @@ public class UserData {
     private String email;
     private String gender;
     private int pointsBalance;
-    private float personalRating;
+    private float avgRating;
     private int numOfRatings;
 
     public UserData(String userID, String profilePictureURL,
@@ -31,7 +31,7 @@ public class UserData {
         this.email = email;
         this.gender = gender;
         this.pointsBalance = pointsBalance;
-        this.personalRating = 0;
+        this.avgRating = 0;
         this.numOfRatings = 0;
     }
 
@@ -117,12 +117,12 @@ public class UserData {
         this.pointsBalance = pointsBalance;
     }
 
-    public float getPersonalRating() {
-        return personalRating;
+    public float getAvgRating() {
+        return avgRating;
     }
 
-    public void setPersonalRating(float personalRating) {
-        this.personalRating = personalRating;
+    public void setAvgRating(float personalRating) {
+        this.avgRating = personalRating;
     }
 
     public int getNumOfRatings() {

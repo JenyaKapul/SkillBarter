@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.user.skillbarter.R;
@@ -25,8 +26,9 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
 
     class AppointmentHolder extends RecyclerView.ViewHolder {
 
-        TextView skillCategoryTextView, timestampTextView, pointsTextView;
+        TextView skillCategoryTextView, timestampTextView, pointsTextView, ratingTextView;
         ImageView skillImageView;
+        RatingBar ratingBar;
 
         public AppointmentHolder(View itemView) {
             super(itemView);
@@ -34,6 +36,9 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
             skillImageView = itemView.findViewById(R.id.appointment_skill_image_view);
             timestampTextView = itemView.findViewById(R.id.appointment_timestamp_text_view);
             pointsTextView = itemView.findViewById(R.id.appointment_points_text_view);
+            ratingTextView = itemView.findViewById(R.id.appointment_rating_text_view);
+            ratingBar = itemView.findViewById(R.id.appointment_rating_bar);
+
 
             // Optional for adding clicks functionality on appointment items
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -70,6 +75,18 @@ public class AppointmentAdapter extends FirestoreRecyclerAdapter<Appointment, Ap
 
         holder.skillCategoryTextView.setText(categorySkill);
         holder.skillImageView.setImageResource(getSkillImageID(category, skill));
+
+        // Adjust or hide rating bar
+        if (appointment.getRating() > 0) {
+            holder.ratingTextView.setText(String.format("%.1f", appointment.getRating()));
+            holder.ratingTextView.setVisibility(View.VISIBLE);
+
+            holder.ratingBar.setRating(appointment.getRating());
+            holder.ratingBar.setVisibility(View.VISIBLE);
+        } else {
+            holder.ratingTextView.setVisibility(View.GONE);
+            holder.ratingBar.setVisibility(View.GONE);
+        }
     }
 
 

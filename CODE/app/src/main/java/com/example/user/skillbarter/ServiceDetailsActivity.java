@@ -255,8 +255,8 @@ public class ServiceDetailsActivity extends AppCompatActivity implements EventLi
                     String fullName = user.getFirstName() + " " + user.getLastName();
                     userNameTextView.setText(fullName);
 
-                    ratingValueTextView.setText(String.format("%.1f", user.getPersonalRating()));
-                    ratingBar.setRating(user.getPersonalRating());
+                    ratingValueTextView.setText(String.format("%.1f", user.getAvgRating()));
+                    ratingBar.setRating(user.getAvgRating());
 
                     if(user.getProfilePictureURL() != null) {
                         Glide.with(userProfileImageView.getContext()).load(user.getProfilePictureURL())
